@@ -21,7 +21,10 @@ class MyApp extends StatelessWidget {
       //   // is not restarted.
       //   primarySwatch: Colors.blue,
       // ),
-      home: MyHomePage(title: 'Hello World'),
+      theme: ThemeData(
+        primaryColor: Colors.white
+      ),
+      home: MyHomePage(title: 'Hinoki Calendar'),
       // home: Scaffold(
       //   appBar: AppBar(
       //     title: Text('Dr. Meallo')
@@ -35,12 +38,12 @@ class MyApp extends StatelessWidget {
 }
 
 // TEST WIDGET
-class TableCanlendar extends StatefulWidget {
+class MyTableCalendar extends StatefulWidget {
   @override
-  _TableCanlendarState createState() => _TableCanlendarState();
+  _MyTableCalendarState createState() => _MyTableCalendarState();
 }
 
-class _TableCanlendarState extends State<TableCanlendar> {
+class _MyTableCalendarState extends State<MyTableCalendar> {
 
   CalendarController _calendarController;
 
@@ -99,6 +102,67 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  final _biggerFont = TextStyle(fontSize: 18.0);
+  final _rowItems = [];
+  final _savedSet = <String>{};
+
+  Widget _buildList() {
+    _rowItems.addAll(['Yujin', 'Yongki', 'Yubin', 'Donghyun'].cast<String>());
+
+    return ListView.builder(
+      padding: EdgeInsets.all(16.0),
+      itemBuilder: (context, i) {
+        return i < _rowItems.length ? _buildRow(_rowItems[i]) : null;
+      }
+    );
+  }
+
+  Widget _buildRow(String text) {
+    final alreadySaved = _savedSet.contains(text);
+
+    return ListTile(
+      title: Text(text, style: _biggerFont),
+      trailing: Icon(
+          alreadySaved ? Icons.favorite : Icons.favorite_border,
+          color: alreadySaved ? Colors.red : null,
+      ),
+      onTap: () {
+        setState(() {
+          if (alreadySaved) _savedSet.remove(text);
+          else _savedSet.add(text);
+        });
+      }
+    );
+  }
+
+  void _pushSaved() {
+    Navigator.of(context).push(
+        MaterialPageRoute<void>(
+            builder: (BuildContext context) {
+              final tiles = _savedSet.map((String text) {
+                return ListTile(
+                    title: Text(text)
+                );
+              });
+
+              final divided = ListTile.divideTiles(
+                context: context,
+                tiles: tiles
+              ).toList();
+
+              return Scaffold(
+                appBar: AppBar(
+                  title: Text('Favorites')
+                ),
+                body: ListView(
+                  children: divided,
+                )
+              );
+            }
+        )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -112,38 +176,42 @@ class _MyHomePageState extends State<MyHomePage> {
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
+        actions: [
+          IconButton(icon: Icon(Icons.list), onPressed: _pushSaved)
+        ]
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        // child: Column(
-        //   // Column is also a layout widget. It takes a list of children and
-        //   // arranges them vertically. By default, it sizes itself to fit its
-        //   // children horizontally, and tries to be as tall as its parent.
-        //   //
-        //   // Invoke "debug painting" (press "p" in the console, choose the
-        //   // "Toggle Debug Paint" action from the Flutter Inspector in Android
-        //   // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-        //   // to see the wireframe for each widget.
-        //   //
-        //   // Column has various properties to control how it sizes itself and
-        //   // how it positions its children. Here we use mainAxisAlignment to
-        //   // center the children vertically; the main axis here is the vertical
-        //   // axis because Columns are vertical (the cross axis would be
-        //   // horizontal).
-        //   mainAxisAlignment: MainAxisAlignment.center,
-        //   children: <Widget>[
-        //     Text(
-        //       'You have pushed the button this many times!',
-        //     ),
-        //     Text(
-        //       '$_counter',
-        //       style: Theme.of(context).textTheme.headline4,
-        //     ),
-        //   ],
-        // ),
-        child: TableCanlendar()
-      ),
+      body: _buildList(),
+      // body: Center(
+      //   // Center is a layout widget. It takes a single child and positions it
+      //   // in the middle of the parent.
+      //   // child: Column(
+      //   //   // Column is also a layout widget. It takes a list of children and
+      //   //   // arranges them vertically. By default, it sizes itself to fit its
+      //   //   // children horizontally, and tries to be as tall as its parent.
+      //   //   //
+      //   //   // Invoke "debug painting" (press "p" in the console, choose the
+      //   //   // "Toggle Debug Paint" action from the Flutter Inspector in Android
+      //   //   // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
+      //   //   // to see the wireframe for each widget.
+      //   //   //
+      //   //   // Column has various properties to control how it sizes itself and
+      //   //   // how it positions its children. Here we use mainAxisAlignment to
+      //   //   // center the children vertically; the main axis here is the vertical
+      //   //   // axis because Columns are vertical (the cross axis would be
+      //   //   // horizontal).
+      //   //   mainAxisAlignment: MainAxisAlignment.center,
+      //   //   children: <Widget>[
+      //   //     Text(
+      //   //       'You have pushed the button this many times!',
+      //   //     ),
+      //   //     Text(
+      //   //       '$_counter',
+      //   //       style: Theme.of(context).textTheme.headline4,
+      //   //     ),
+      //   //   ],
+      //   // ),
+      //   child: MyTableCalendar()
+      // ),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
         tooltip: 'Increment',
