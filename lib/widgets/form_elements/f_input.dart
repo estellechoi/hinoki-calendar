@@ -1,73 +1,112 @@
 import 'package:flutter/material.dart';
+import '../texts/input_label.dart';
+import '../styles/colors.dart' as colors;
+import '../styles/textstyles.dart' as textstyles;
+import '../styles/shadows.dart' as shadows;
+import '../styles/borders.dart' as borders;
+import '../styles/paddings.dart' as paddings;
 
-class FInput extends StatelessWidget {
-  final onChanged;
-  final String hintText;
-  final String labelText;
-  final flController = TextEditingController();
-  // flController.addListener(_printInput);
-
+class FInput extends StatefulWidget {
   FInput(
       {Key? key,
+      this.type = 'text',
       required this.onChanged,
       required this.hintText,
       this.labelText = ''})
       : super(key: key);
 
-  // _printInput() {
-  //   print('_printInput by Controller : ${flController.text}');
-  // }
+  final String type; // text, textarea
+  final onChanged;
+  final String hintText;
+  final String labelText;
+
+  @override
+  _FInputState createState() => _FInputState();
+}
+
+class _FInputState extends State<FInput> {
+  // Q : Where to create these in Stateless widget ?
+  final FocusNode focusNode = new FocusNode();
+  final controller = TextEditingController();
+
+  late final TextInputType _keyboardType;
+  late final int? _maxLines;
+
+  // States
+  bool isFocused = false;
+
+  handleFocus() {
+    debugPrint('Focus : ${focusNode.hasFocus.toString()}');
+    setState(() {
+      isFocused = focusNode.hasFocus;
+    });
+  }
+
+  handleChange() {
+    widget.onChanged(controller.text);
+  }
+
+  // Widget Life Cycle Related From Here ...
+  @override
+  void initState() {
+    super.initState();
+    focusNode.addListener(handleFocus);
+    controller.addListener(handleChange);
+
+    switch (widget.type) {
+      case 'text':
+        _keyboardType = TextInputType.text;
+        _maxLines = 1;
+        break;
+      case 'textarea':
+        _keyboardType = TextInputType.multiline;
+        _maxLines = 3;
+        break;
+      default:
+        _keyboardType = TextInputType.text;
+        _maxLines = 1;
+    }
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(children: <Widget>[
       // Label
       Container(
-          padding: const EdgeInsets.only(bottom: 15.0),
+          padding: EdgeInsets.only(bottom: paddings.formFieldLabel),
           child: Row(
             children: <Widget>[
-              Expanded(
-                  child: Text(labelText,
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                          fontSize: 16.0,
-                          height: 1.25,
-                          color: Color(0xff252729))))
+              Expanded(child: InputLabel(text: widget.labelText)),
             ],
           )),
       // Input
       Container(
           padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 15.0),
           decoration: BoxDecoration(
-              color: Color(0xffffffff),
-              border: Border.all(
-                  width: 1.0,
-                  style: BorderStyle.solid,
-                  color: Color(0xfffe4e6e8)),
-              borderRadius: BorderRadius.all(Radius.circular(12.0)),
-              boxShadow: [
-                BoxShadow(
-                    color: Color(0xff000000).withOpacity(0.04),
-                    blurRadius: 25,
-                    spreadRadius: 0,
-                    offset: Offset(0, 5)),
-                BoxShadow(
-                    color: Color(0xff000000).withOpacity(0.08),
-                    blurRadius: 20,
-                    spreadRadius: 0,
-                    offset: Offset(0, 0))
-              ]),
+              color: isFocused ? colors.primaryFocused : colors.white,
+              border: borders.lightgrey,
+              borderRadius: borders.radiusBase,
+              boxShadow: shadows.input),
           child: Row(children: <Widget>[
             Expanded(
                 child: TextFormField(
-              controller: flController,
-              style: TextStyle(
-                  fontSize: 16.0, height: 1.625, color: Color(0xff252729)),
+              keyboardType: _keyboardType,
+              maxLines: _maxLines,
+              autofocus: false,
+              focusNode: focusNode,
+              controller: controller,
+              style: textstyles.inputText,
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.all(0.0),
                 isDense: true,
                 border: InputBorder.none,
-                hintText: hintText,
+                hintText: widget.hintText,
               ),
             ))
           ]))
