@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import './views/home_view.dart';
-import './views/todos_view.dart';
+import './views/index.dart';
 
 // Run App
 void main() {
@@ -94,11 +93,9 @@ class AppRouterDelegate extends RouterDelegate<AppRoutePath>
         key: navigatorKey,
         // transitionDelegate: NoAnimationTransitionDelegate(),
         pages: [
-          MaterialPage(
-              key: ValueKey('HomePage'),
-              child: Home(title: 'Hinoki Calendar', onTabbed: onTabbed)),
+          MaterialPage(key: ValueKey('IndexPage'), child: Views()),
           if (_selectedDate != null)
-            AnimationPage(child: Todos(title: _selectedDate), title: 'todos')
+            AnimationPage(child: Views(), title: 'index')
         ],
         onPopPage: (route, result) {
           if (!route.didPop(result)) {
