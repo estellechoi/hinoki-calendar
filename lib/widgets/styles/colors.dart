@@ -5,12 +5,14 @@ final Color primary = Color(0xff44bbff);
 final Color primaryHigh = Color(0xff00c3fc);
 final Color primaryHighAlpha = Color(0xff00c3fc).withOpacity(0.1);
 final Color primaryFocused = Color(0xffd7f5fe);
+final Color primaryDeco = Color(0xffa1dbfc);
 
 final Color disabled = Color(0xffbdc0c3);
 
 // Text colors
 final Color inputLabel = Color(0xff252729);
 final Color inputText = Color(0xff252729);
+final Color cardTitle = Color(0xff252729);
 final Color helperLabel = Color(0xff848484);
 
 // Basic colors

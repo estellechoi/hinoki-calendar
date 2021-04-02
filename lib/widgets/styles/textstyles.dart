@@ -16,6 +16,30 @@ final TextStyle inputText = TextStyle(
     fontFamily: fonts.primary,
     fontFamilyFallback: fonts.primaryFallbacks);
 
+final TextStyle cardTitle = TextStyle(
+    color: colors.cardTitle,
+    fontSize: fonts.sizeCardTitle,
+    fontWeight: fonts.weightBase,
+    height: fonts.lineHeightBase,
+    fontFamily: fonts.primary,
+    fontFamilyFallback: fonts.primaryFallbacks);
+
+final TextStyle introCardTitle = TextStyle(
+    color: colors.cardTitle,
+    fontSize: fonts.sizeIntroCardTitle,
+    fontWeight: fonts.weightIntroCardTitle,
+    height: fonts.lineHeightIntroCardTitle,
+    fontFamily: fonts.primary,
+    fontFamilyFallback: fonts.primaryFallbacks);
+
+final TextStyle introCardSummary = TextStyle(
+    color: colors.cardTitle,
+    fontSize: fonts.sizeIntroCardSummary,
+    fontWeight: fonts.weightBase,
+    height: fonts.lineHeightIntroCardSummary,
+    fontFamily: fonts.primary,
+    fontFamilyFallback: fonts.primaryFallbacks);
+
 // For Specific Places
 final TextStyle navItem = TextStyle(
     fontSize: fonts.sizeNavItem,

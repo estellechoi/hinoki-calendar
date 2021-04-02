@@ -19,3 +19,13 @@ final double lineHeightInput = 1.625;
 
 // Helper Label Style Set
 final double sizeHelper = 14.0;
+
+// Card Label Style Set
+final double sizeCardTitle = 16.0;
+
+final double sizeIntroCardTitle = 18.0;
+final double lineHeightIntroCardTitle = 1.44;
+final FontWeight weightIntroCardTitle = FontWeight.w900;
+
+final double sizeIntroCardSummary = 15.0;
+final double lineHeightIntroCardSummary = 1.33;
