@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-// import '../widgets/layouts/scaffold_layout.dart';
-// import '../widgets/calendars/table_calendar.dart';
 import '../../widgets/form_elements/f_input.dart';
 import '../../widgets/texts/input_label.dart';
 import '../../widgets/form_elements/f_switch_advanced.dart';
@@ -40,7 +38,8 @@ class _WriteMyBodyState extends State<WriteMyBody> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 15.0),
+      padding: EdgeInsets.symmetric(
+          vertical: paddings.verticalBase, horizontal: paddings.horizontalBase),
       child:
           Column(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
         Container(
