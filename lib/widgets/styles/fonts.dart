@@ -25,7 +25,7 @@ final double sizeCardTitle = 16.0;
 
 final double sizeIntroCardTitle = 18.0;
 final double lineHeightIntroCardTitle = 1.44;
-final FontWeight weightIntroCardTitle = FontWeight.w900;
+final FontWeight weightIntroCardTitle = FontWeight.w800;
 
 final double sizeIntroCardSummary = 15.0;
 final double lineHeightIntroCardSummary = 1.33;
