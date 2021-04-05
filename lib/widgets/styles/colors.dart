@@ -20,6 +20,10 @@ final Color white = Color(0xffffffff);
 final Color black = Color(0xff000000);
 final Color transparent = Color(0x00000000);
 final Color lightgrey = Color(0xfffe4e6e8);
+final Color blue = Color(0xff4880ee);
+final Color blueLight = Color(0xffd6e4ff);
+final Color fountainBlue = Color(0xff5ebcbe);
+final Color fountainBlueHigh = Color(0xff78b7ba);
 
 // Functional Colors
 final Color active = Color(0xff4388fc);
@@ -27,3 +31,8 @@ final Color inactive = Color(0xff707070);
 final Color shadow = black.withOpacity(0.04);
 final Color shadowDeep = black.withOpacity(0.08);
 final Color shadowDark = black.withOpacity(0.2);
+
+// Chart Colors
+final Color sugarChart = Color(0xffeec462);
+final Color bloodChart = Color(0xffed6c60);
+final Color ketonChart = Color(0xffeec462);

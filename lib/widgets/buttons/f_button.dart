@@ -7,13 +7,15 @@ class FButton extends StatefulWidget {
   final String text;
   final bool disabled;
   final bool fullWidth;
+  final String type;
 
   FButton(
       {Key? key,
       required this.onPressed,
       this.text = '',
       this.disabled = false,
-      this.fullWidth = false})
+      this.fullWidth = false,
+      this.type = 'primary'})
       : super(key: key);
 
   @override
@@ -24,12 +26,27 @@ class _FButtonState extends State<FButton> {
   @override
   Widget build(BuildContext context) {
     double _minWidth = widget.fullWidth ? double.infinity : 112.0;
+    Color _color;
+
+    switch (widget.type) {
+      case 'primary':
+        _color = colors.primaryHigh;
+        break;
+      case 'blue':
+        _color = colors.blue;
+        break;
+      case 'fountainBlue':
+        _color = colors.fountainBlue;
+        break;
+      default:
+        _color = colors.primaryHigh;
+    }
 
     return ElevatedButton(
         onPressed: widget.disabled ? null : widget.onPressed,
         child: Text(widget.text),
         style: ElevatedButton.styleFrom(
-            primary: colors.primaryHigh,
+            primary: _color,
             onPrimary: colors.white,
             // onSurface: colors.disabled,
             elevation: 0,

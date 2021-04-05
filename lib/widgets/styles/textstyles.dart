@@ -62,3 +62,10 @@ final TextStyle rangeHelperMaxText = TextStyle(
     fontWeight: fonts.weightBase,
     fontFamily: fonts.primary,
     fontFamilyFallback: fonts.primaryFallbacks);
+
+final TextStyle calendarTodayText = TextStyle(
+  color: colors.black,
+  fontSize: fonts.sizeBase,
+  height: fonts.lineHeightBase,
+  fontWeight: fonts.weightBase,
+);

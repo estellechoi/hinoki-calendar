@@ -3,16 +3,24 @@ import 'f_card.dart';
 import '../buttons/f_button.dart';
 import '../styles/borders.dart' as borders;
 import '../styles/paddings.dart' as paddings;
-import '../styles/icons.dart' as icons;
+import '../styles/sizes.dart' as sizes;
+import '../styles/colors.dart' as colors;
 import '../styles/textstyles.dart' as textstyles;
 
 class IntroCard extends StatefulWidget {
   final String type;
   final String title;
   final String summary;
+  final String buttonType;
+  final String emojiText;
 
   IntroCard(
-      {Key? key, this.type = 'default', this.title = '', this.summary = ''})
+      {Key? key,
+      this.type = 'default',
+      this.title = '',
+      this.summary = '',
+      this.buttonType = 'primary',
+      this.emojiText = '✏️'})
       : super(key: key);
 
   @override
@@ -20,11 +28,15 @@ class IntroCard extends StatefulWidget {
 }
 
 class _IntroCardState extends State<IntroCard> {
-  Border _border = borders.none;
-
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Border _border = borders.none;
+    Color _color = colors.primaryHigh;
 
     switch (widget.type) {
       case 'default':
@@ -36,10 +48,21 @@ class _IntroCardState extends State<IntroCard> {
       default:
         _border = borders.none;
     }
-  }
 
-  @override
-  Widget build(BuildContext context) {
+    switch (widget.buttonType) {
+      case 'primary':
+        _color = colors.primaryHigh;
+        break;
+      case 'blue':
+        _color = colors.blueLight;
+        break;
+      case 'fountainBlue':
+        _color = colors.fountainBlueHigh;
+        break;
+      default:
+        _color = colors.primaryHigh;
+    }
+
     return FCard(
       type: widget.type,
       body: Row(
@@ -58,13 +81,22 @@ class _IntroCardState extends State<IntroCard> {
               Container(
                   padding: EdgeInsets.only(top: paddings.cardTitle),
                   alignment: Alignment.topLeft,
-                  child: FButton(onPressed: () {}, text: '기록하기'))
+                  child: FButton(
+                      onPressed: () {}, text: '기록하기', type: widget.buttonType))
             ],
           )),
           Container(
               padding: EdgeInsets.only(left: paddings.cardTitle),
               alignment: Alignment.topRight,
-              child: icons.home)
+              child: Container(
+                  width: sizes.emojiBox,
+                  height: sizes.emojiBox,
+                  decoration: BoxDecoration(
+                      color: _color, borderRadius: borders.radiusCircle),
+                  child: Align(
+                      alignment: Alignment.center,
+                      child: Text(widget.emojiText,
+                          style: TextStyle(fontSize: 25.0)))))
         ],
       ),
     );

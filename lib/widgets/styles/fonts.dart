@@ -10,6 +10,11 @@ final double lineHeightBase = 1.25;
 final FontWeight weightBase = FontWeight.w600;
 final double sizeSub = 14.0;
 
+// Char Label Font Style Set
+final double sizeChartAxis = 12.0;
+final FontWeight weightChartAxis = FontWeight.w400;
+final double sizeTooltip = 16.0;
+
 // Nav Item Font Style Set
 final double sizeNavItem = 12.0;
 final double lineHeightNavItem = 1.4;

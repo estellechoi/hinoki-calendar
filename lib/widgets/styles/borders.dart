@@ -13,3 +13,4 @@ final Border primaryDeco =
 // Radius
 final BorderRadius radiusBase = BorderRadius.all(Radius.circular(12.0));
 final BorderRadius radiusRound = BorderRadius.circular(20.0);
+final BorderRadius radiusCircle = BorderRadius.circular(50.0);
