@@ -1,119 +1,55 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import './views/index.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
+import 'route/router_delegate.dart';
+import 'route/router_parser.dart';
+import 'route/back_dispatcher.dart';
+import 'route/pages.dart';
+import 'app_state.dart';
+import 'widgets/styles/colors.dart' as colors;
 
-// Run App
-void main() {
+// main()
+Future main() async {
+  await DotEnv.load(fileName: '.env');
   initializeDateFormatting().then((_) => runApp(MyApp()));
 }
 
-// App Stateful
+// Root App
 class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
 }
 
-// App State
+// Root App State
 class _MyAppState extends State<MyApp> {
-  AppRouterDelegate _routerDelegate = AppRouterDelegate();
-  AppRouteInformationParser _routeInformationParser =
+  final AppRouteInformationParser _routeInformationParser =
       AppRouteInformationParser();
+  late final AppBackButtonDispatcher _backButtonDispatcher;
+  late final AppRouterDelegate _routerDelegate;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // create delegate with appState field
+    _routerDelegate = AppRouterDelegate(appState);
+    // set up initial route of this app
+    _routerDelegate.setNewRoutePath(homePageConfig);
+    // link back displatcher with router delegate
+    _backButtonDispatcher = AppBackButtonDispatcher(_routerDelegate);
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
         title: 'Hinoki Calendar',
-        theme: ThemeData(primaryColor: Colors.white),
+        theme: ThemeData(
+          primaryColor: colors.white,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
         routerDelegate: _routerDelegate,
-        routeInformationParser: _routeInformationParser);
-  }
-}
-
-// AppRoutePath
-class AppRoutePath {
-  final String? id;
-
-  AppRoutePath.home() : id = null;
-  AppRoutePath.todos(this.id);
-
-  bool get isHomePage => id == null;
-  bool get isTodosPage => id != null;
-}
-
-// AppRouteInformationParser
-class AppRouteInformationParser extends RouteInformationParser<AppRoutePath> {
-  @override
-  Future<AppRoutePath> parseRouteInformation(
-      RouteInformation routeInformation) async {
-    final uri = Uri.parse(routeInformation.location.toString());
-
-    if (uri.pathSegments.length >= 2) {
-      String pathId = uri.pathSegments[1];
-      return AppRoutePath.todos(pathId);
-    } else {
-      return AppRoutePath.home();
-    }
-  }
-
-  @override
-  RouteInformation? restoreRouteInformation(AppRoutePath path) {
-    if (path.isHomePage) {
-      return RouteInformation(location: '/');
-    }
-
-    if (path.isTodosPage) {
-      return RouteInformation(location: '/todos/${path.id}');
-    }
-
-    return null;
-  }
-}
-
-// AppRouterDelegate
-class AppRouterDelegate extends RouterDelegate<AppRoutePath>
-    with ChangeNotifier, PopNavigatorRouterDelegateMixin<AppRoutePath> {
-  // Navigator Key
-  final GlobalKey<NavigatorState> navigatorKey;
-
-  String? _selectedDate;
-
-  void onTabbed(String _newDate) {
-    _selectedDate = _newDate;
-    notifyListeners();
-  }
-
-  AppRouterDelegate() : navigatorKey = GlobalKey<NavigatorState>();
-
-  AppRoutePath get currentConfiguration =>
-      _selectedDate == null ? AppRoutePath.home() : AppRoutePath.todos('1');
-
-  @override
-  Widget build(BuildContext context) {
-    return Navigator(
-        key: navigatorKey,
-        // transitionDelegate: NoAnimationTransitionDelegate(),
-        pages: [
-          MaterialPage(key: ValueKey('IndexPage'), child: Views()),
-          if (_selectedDate != null)
-            AnimationPage(child: Views(), title: 'index')
-        ],
-        onPopPage: (route, result) {
-          if (!route.didPop(result)) {
-            return false;
-          }
-
-          _selectedDate = null;
-          notifyListeners();
-
-          return true;
-        });
-  }
-
-  @override
-  Future<void> setNewRoutePath(AppRoutePath path) async {
-    if (path.isTodosPage) {
-      _selectedDate = '2021-05-01';
-    }
+        routeInformationParser: _routeInformationParser,
+        backButtonDispatcher: _backButtonDispatcher);
   }
 }
 
@@ -136,27 +72,3 @@ class AnimationPage extends Page {
         });
   }
 }
-
-// routes: Map.fromEntries(routes.map((route) => MapEntry(route.route, route.builder))),
-
-// final routes = [
-//   Route(
-//       name: 'Home',
-//       route: '/home',
-//       builder: (context) => Home(title: 'Hinoki Calendar')
-//   ),
-//   Route(
-//       name: 'Todos',
-//       route: '/todos',
-//       builder: (context) => Todos(title: 'Hinoki Calendar')
-//   ),
-// ];
-//
-// class Route {
-//   final String name;
-//   final String route;
-//   final WidgetBuilder builder;
-//
-//   const Route({ required this.name, required this.route, required this.builder });
-// }
-//

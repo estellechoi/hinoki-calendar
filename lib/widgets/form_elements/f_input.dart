@@ -7,18 +7,20 @@ import '../styles/borders.dart' as borders;
 import '../styles/paddings.dart' as paddings;
 
 class FInput extends StatefulWidget {
-  FInput(
-      {Key? key,
-      this.type = 'text',
-      required this.onChanged,
-      required this.hintText,
-      this.labelText = ''})
-      : super(key: key);
-
   final String type; // text, textarea
-  final onChanged;
   final String hintText;
   final String labelText;
+  final String defaultValue;
+  final onChanged;
+
+  FInput({
+    Key? key,
+    this.type = 'text',
+    required this.hintText,
+    this.labelText = '',
+    required this.defaultValue,
+    required this.onChanged,
+  }) : super(key: key);
 
   @override
   _FInputState createState() => _FInputState();
@@ -52,6 +54,7 @@ class _FInputState extends State<FInput> {
     super.initState();
     focusNode.addListener(handleFocus);
     controller.addListener(handleChange);
+    controller.text = widget.defaultValue;
 
     switch (widget.type) {
       case 'text':

@@ -69,3 +69,21 @@ final TextStyle calendarTodayText = TextStyle(
   height: fonts.lineHeightBase,
   fontWeight: fonts.weightBase,
 );
+
+final TextStyle calendarEvent = TextStyle(
+  color: colors.black,
+  fontSize: fonts.sizeCalendarEvent,
+  height: fonts.lineHeightBase,
+);
+
+final TextStyle calendarStrongCell = TextStyle(
+  color: colors.black,
+  fontSize: fonts.sizeBase,
+  height: fonts.lineHeightBase,
+);
+
+final TextStyle calendarColored = TextStyle(
+  color: colors.calendarColoredCell,
+  fontSize: fonts.sizeBase,
+  height: fonts.lineHeightBase,
+);

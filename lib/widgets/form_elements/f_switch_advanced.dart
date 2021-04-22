@@ -27,10 +27,10 @@ class _FSwitchAdvancedState extends State<FSwitchAdvanced> {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        Expanded(child: InputLabel(text: widget.label, type: 'sub')),
-        Expanded(
-            child: Row(
+        InputLabel(text: widget.label, type: 'sub'),
+        Row(
           children: <Widget>[
             InputLabel(text: widget.inactiveText, type: 'sub'),
             Container(
@@ -41,7 +41,7 @@ class _FSwitchAdvancedState extends State<FSwitchAdvanced> {
                 )),
             InputLabel(text: widget.activeText, type: 'sub'),
           ],
-        )),
+        ),
       ],
     );
   }

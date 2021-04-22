@@ -1,82 +1,86 @@
 import 'package:flutter/material.dart';
 import '../widgets/layouts/scaffold_layout.dart';
-import 'home_view.dart';
-import 'feed_view.dart';
-import 'record_view.dart';
-import 'guides_view.dart';
-import 'menu_view.dart';
 import '../widgets/styles/icons.dart' as icons;
 import '../constants.dart' as constants;
+import '../app_state.dart';
+import '../widgets/layouts/navigation_icon.dart';
 
 class View {
   final Icon icon;
   final String label;
-  final Widget widget;
   final BottomNavigationBarItem navItemWidget;
 
-  View(
-      {Key? key,
-      required this.icon,
-      required this.label,
-      required this.widget,
-      required this.navItemWidget});
+  View({required this.icon, required this.label, required this.navItemWidget});
 }
 
-class Views extends StatefulWidget {
+class NavBarFrame extends StatefulWidget {
   final List<View> views = <View>[
     View(
         icon: icons.home,
         label: constants.home,
-        widget: HomeView(),
-        navItemWidget:
-            BottomNavigationBarItem(icon: icons.home, label: constants.home)),
+        // page: Pages.Home,
+        navItemWidget: BottomNavigationBarItem(
+            icon: NavigationIcon(
+              icon: icons.home,
+            ),
+            label: constants.home)),
     View(
         icon: icons.feed,
         label: constants.feed,
-        widget: FeedView(),
-        navItemWidget:
-            BottomNavigationBarItem(icon: icons.feed, label: constants.feed)),
+        // page: Pages.Feed,
+        navItemWidget: BottomNavigationBarItem(
+            icon: NavigationIcon(icon: icons.feed), label: constants.feed)),
     View(
         icon: icons.record,
         label: constants.record,
-        widget: RecordView(),
+        // page: Pages.Record,
         navItemWidget: BottomNavigationBarItem(
-            icon: icons.record, label: constants.record)),
+            icon: NavigationIcon(icon: icons.record), label: constants.record)),
     View(
         icon: icons.guides,
         label: constants.guides,
-        widget: GuidesView(),
+        // page: Pages.Guides,
         navItemWidget: BottomNavigationBarItem(
-            icon: icons.guides, label: constants.guides)),
+            icon: NavigationIcon(icon: icons.guides, count: appState.unreadCnt),
+            label: constants.guides)),
     View(
         icon: icons.menu,
         label: constants.menu,
-        widget: MenuView(),
-        navItemWidget:
-            BottomNavigationBarItem(icon: icons.menu, label: constants.menu)),
+        // page: Pages.Menu,
+        navItemWidget: BottomNavigationBarItem(
+            icon: NavigationIcon(icon: icons.menu), label: constants.menu)),
   ];
 
+  final Widget bodyWidget;
+
+  NavBarFrame({required this.bodyWidget});
+
   @override
-  _ViewsState createState() => _ViewsState();
+  _NavBarFrameState createState() => _NavBarFrameState();
 }
 
-class _ViewsState extends State<Views> {
-  int _currentNavIndex = 0;
+class _NavBarFrameState extends State<NavBarFrame> {
   void handleNavTap(int val) {
-    setState(() {
-      _currentNavIndex = val;
-    });
+    if (appState.currentNavIndex == val) return;
+    // url update handling should be here...
+    // appState.currentNavIndex = val;
+    appState.changeNavPage(val);
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return ScaffoldLayout(
         // appBar
-        title: widget.views[_currentNavIndex].label,
+        title: widget.views[appState.currentNavIndex].label,
         // body
-        body: widget.views[_currentNavIndex].widget,
+        body: widget.bodyWidget,
         // bottomNavigationBar
-        currentNavIndex: _currentNavIndex,
+        currentNavIndex: appState.currentNavIndex,
         navItems: widget.views.map((view) => view.navItemWidget).toList(),
         onNavItemTap: handleNavTap);
   }

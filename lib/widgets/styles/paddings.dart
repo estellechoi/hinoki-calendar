@@ -14,3 +14,13 @@ final double horizontalBase = 20.0;
 // Card Padding
 final double verticalCard = 20.0;
 final double horizontalCard = 20.0;
+
+// Calendar
+final double calendarMarkerCommentIcon = 5.0;
+
+// Card Slider
+final double cardSlider = 16.0;
+final double cardCheckIconPosition = 4;
+
+// Modal
+final double modalLabel = 16;

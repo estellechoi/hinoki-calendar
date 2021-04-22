@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'index.dart';
 
 class MenuView extends StatefulWidget {
   @override
@@ -8,6 +9,6 @@ class MenuView extends StatefulWidget {
 class _MenuViewState extends State<MenuView> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return NavBarFrame(bodyWidget: Container());
   }
 }

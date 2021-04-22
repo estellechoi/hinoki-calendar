@@ -147,14 +147,14 @@ class _FLineChartState extends State<FLineChart> {
             show: true,
             getDotPainter: (spot, percent, barData, index) {
               if (index == 0) {
-                debugPrint('getDotPainter - spot');
-                debugPrint(spot.toString());
-                debugPrint('getDotPainter - percent');
-                debugPrint(percent.toString());
-                debugPrint('getDotPainter - barData');
-                debugPrint(barData.toString());
-                debugPrint('getDotPainter - index');
-                debugPrint(index.toString());
+                // debugPrint('getDotPainter - spot');
+                // debugPrint(spot.toString());
+                // debugPrint('getDotPainter - percent');
+                // debugPrint(percent.toString());
+                // debugPrint('getDotPainter - barData');
+                // debugPrint(barData.toString());
+                // debugPrint('getDotPainter - index');
+                // debugPrint(index.toString());
               }
               return FlDotCirclePainter(
                   radius: sizes.lineChartDot,
