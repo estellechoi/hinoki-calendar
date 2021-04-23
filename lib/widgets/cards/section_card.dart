@@ -3,6 +3,7 @@ import '../styles/borders.dart' as borders;
 import '../styles/colors.dart' as colors;
 import '../styles/fonts.dart' as fonts;
 import '../styles/paddings.dart' as paddings;
+import '../../utils/format.dart' as format;
 
 class SectionCard extends StatefulWidget {
   final String title;
@@ -10,6 +11,7 @@ class SectionCard extends StatefulWidget {
   final String imagePath;
   final bool isLock;
   final bool isRead;
+  final String authorizedAt;
   final bool showLabel;
 
   SectionCard(
@@ -18,6 +20,7 @@ class SectionCard extends StatefulWidget {
       required this.imagePath,
       required this.isLock,
       required this.isRead,
+      required this.authorizedAt,
       this.showLabel = true});
 
   @override
@@ -25,6 +28,11 @@ class SectionCard extends StatefulWidget {
 }
 
 class _SectionCardState extends State<SectionCard> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -105,7 +113,23 @@ class _SectionCardState extends State<SectionCard> {
                   borderRadius: borders.radiusLight),
               constraints: BoxConstraints(
                   minWidth: double.infinity, minHeight: double.infinity),
-              child: Icon(Icons.lock, color: colors.whiteAlphaDeep, size: 52))
+              child: Stack(
+                alignment: Alignment.center,
+                children: <Widget>[
+                  Icon(Icons.lock, color: colors.whiteAlphaDeep, size: 52),
+                  widget.authorizedAt.length > 0
+                      ? Positioned(
+                          bottom: 22,
+                          child: Container(
+                              child: Text(
+                                  '${format.getLeftHHMM(widget.authorizedAt)} 후 오픈됩니다',
+                                  style: TextStyle(
+                                      color: colors.white,
+                                      fontSize: 11,
+                                      height: 1.1))))
+                      : Container()
+                ],
+              ))
           : Container()
     ]));
   }

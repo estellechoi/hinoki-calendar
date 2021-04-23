@@ -2,21 +2,15 @@ import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart';
 
 // DateTime to String
-String getYYYYMMDD(DateTime dateTime) {
+String stringifyDateTime(DateTime dateTime) {
   return DateFormat('yyyy-MM-dd').format(dateTime);
 }
 
 // First Day of Month DateTime
-String getYYYYMM01(DateTime dateTime) {
+String stringifyDateTime01(DateTime dateTime) {
   return DateFormat('yyyy-MM-01').format(dateTime);
 }
 
-// String to DateTime
-DateTime getDateTime(String dateTime) {
-  return DateTime.parse(dateTime);
-}
-
-// Fetched String to String
 int getMMfromMonth(String month) {
   if (month.length < 3) return 0;
 
@@ -66,17 +60,54 @@ int getMMfromMonth(String month) {
   return mm;
 }
 
-// require format of yyyy MM dd
-List<int> getYYMMDDSet(String? dateTime) {
-  if (dateTime == null || dateTime.length < 1) return [0, 0, 0];
+// require format of 'Wed, 17 Mar 2021 10:59:44 GMT'
+List<int> listifyFetchedDateTime(String? dateTime) {
+  if (dateTime == null || dateTime.length < 1) return [0, 0, 0, 0, 0, 0];
 
   List<String> splits = dateTime.split(' ');
 
+  // yyyy MM dd
   int date = int.parse(splits[1]);
   int month = getMMfromMonth(splits[2]);
   int year = int.parse(splits[3]);
 
-  return [year, month, date];
+  // hh mm ss
+  List<String> times = splits[4].split(':');
+  int hour = int.parse(times[0]);
+  int min = int.parse(times[1]);
+  int sec = int.parse(times[2]);
+
+  return [year, month, date, hour, min, sec];
+}
+
+// require format of 'Wed, 17 Mar 2021 10:59:44 GMT'
+List<int> getFromNow(String dateTime) {
+  List<int> timeSet = listifyFetchedDateTime(dateTime);
+
+  if (timeSet[0] == 0) return [0, 0, 0];
+
+  var target = Jiffy(timeSet);
+  var now = Jiffy(DateTime.now());
+
+  final int leftSecondes = now.diff(target, Units.SECOND).toInt();
+  final bool isLeft = leftSecondes < 0;
+  final int positive = isLeft ? -leftSecondes : leftSecondes;
+
+  var leftHours = positive ~/ 3600;
+  var leftMins = (positive % 3600).toInt() ~/ 60;
+  var leftSecs = (positive % 60).toInt();
+
+  return [leftHours, leftMins, leftSecs];
+}
+
+// require format of 'Wed, 17 Mar 2021 10:59:44 GMT'
+String getLeftHHMM(String dateTime) {
+  List<int> fromNow = getFromNow(dateTime);
+
+  int hour = fromNow[0];
+  int min = fromNow[1];
+
+  return '$hour시간 $min분';
 }
 
 // require format of yyyy-MM-dd
@@ -93,21 +124,25 @@ List<int> getYYMMDDSetFromHyphend(String? dateTime) {
 }
 
 String? getHyphenedYYYYMMDD(String? dateTime) {
-  List<int> set = getYYMMDDSet(dateTime);
-  return set.indexOf(0) > -1 ? null : Jiffy(set).format('yyyy-MM-dd');
+  List<int> timeSet = listifyFetchedDateTime(dateTime);
+  return timeSet.every((item) => item == 0)
+      ? null
+      : Jiffy(timeSet).format('yyyy-MM-dd');
 }
 
 String? getHyphenedYYYYMM01(String? dateTime) {
-  List<int> set = getYYMMDDSet(dateTime);
-  return set.indexOf(0) > -1 ? null : Jiffy(set).format('yyyy-MM-01');
+  List<int> timeSet = listifyFetchedDateTime(dateTime);
+  return timeSet.every((item) => item == 0)
+      ? null
+      : Jiffy(timeSet).format('yyyy-MM-01');
 }
 
 int getLastDayOfMonth(String? dateTime) {
-  List<int> set = getYYMMDDSetFromHyphend(dateTime);
+  List<int> timeSet = getYYMMDDSetFromHyphend(dateTime);
 
-  if (set.indexOf(0) > -1) return 0;
+  if (timeSet.every((item) => item == 0)) return 0;
 
-  DateTime lastDateOfMonth = DateTime(set[0], set[1] + 1, 0);
+  DateTime lastDateOfMonth = DateTime(timeSet[0], timeSet[1] + 1, 0);
   return lastDateOfMonth.day;
 }
 

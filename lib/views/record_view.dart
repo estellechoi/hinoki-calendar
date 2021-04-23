@@ -9,7 +9,7 @@ import '../widgets/styles/paddings.dart' as paddings;
 import '../api/record.dart' as api;
 import '../types/calendar_record.dart';
 import '../types/calendar_menstrual_data.dart';
-import '../utils/format.dart' as date;
+import '../utils/format.dart' as format;
 import '../app_state.dart';
 import '../route/pages.dart';
 import 'index.dart';
@@ -27,7 +27,7 @@ class _RecordViewState extends State<RecordView> {
       LinkedHashMap<String, String>();
   LinkedHashMap<String, String> _pmsData = LinkedHashMap<String, String>();
   LinkedHashMap<String, String> _goldenData = LinkedHashMap<String, String>();
-  String _currentYYYYMM01 = date.getYYYYMM01(DateTime.now());
+  String _currentYYYYMM01 = format.stringifyDateTime01(DateTime.now());
 
   Future getMyCalendarData() async {
     try {
@@ -60,7 +60,7 @@ class _RecordViewState extends State<RecordView> {
 
       // prev
       final String? prevMenstrualStartDate =
-          date.getHyphenedYYYYMMDD(menstrualData.prevMenstrualStartDate);
+          format.getHyphenedYYYYMMDD(menstrualData.prevMenstrualStartDate);
       String? prevMenstrualEndDate;
       String? prevPmsStartDate;
       String? prevPmsEndDate;
@@ -69,20 +69,20 @@ class _RecordViewState extends State<RecordView> {
 
       if (prevMenstrualStartDate != null) {
         prevMenstrualEndDate =
-            date.getHyphenedYYYYMMDD(menstrualData.prevMenstrualEndDate);
-        prevPmsStartDate = date.manipulateHyphenedYYYYMMDD(
+            format.getHyphenedYYYYMMDD(menstrualData.prevMenstrualEndDate);
+        prevPmsStartDate = format.manipulateHyphenedYYYYMMDD(
             prevMenstrualStartDate, -(menstrualData.pmsPeriod.toInt() + 1));
         prevPmsEndDate =
-            date.manipulateHyphenedYYYYMMDD(prevPmsStartDate, pmsEndDiff);
-        prevGoldenStartDate =
-            date.manipulateHyphenedYYYYMMDD(prevPmsStartDate, goldenStartDiff);
+            format.manipulateHyphenedYYYYMMDD(prevPmsStartDate, pmsEndDiff);
+        prevGoldenStartDate = format.manipulateHyphenedYYYYMMDD(
+            prevPmsStartDate, goldenStartDiff);
         prevGoldenEndDate =
-            date.manipulateHyphenedYYYYMMDD(prevPmsStartDate, goldenEndDiff);
+            format.manipulateHyphenedYYYYMMDD(prevPmsStartDate, goldenEndDiff);
       }
 
       // next
       final String? nextMenstrualStartDate =
-          date.getHyphenedYYYYMMDD(menstrualData.nextMenstrualStartDate);
+          format.getHyphenedYYYYMMDD(menstrualData.nextMenstrualStartDate);
       String? nextMenstrualEndDate;
       String? nextPmsStartDate;
       String? nextPmsEndDate;
@@ -91,15 +91,15 @@ class _RecordViewState extends State<RecordView> {
 
       if (nextMenstrualStartDate != null) {
         nextMenstrualEndDate =
-            date.getHyphenedYYYYMMDD(menstrualData.nextMenstrualEndDate);
-        nextPmsStartDate = date.manipulateHyphenedYYYYMMDD(
+            format.getHyphenedYYYYMMDD(menstrualData.nextMenstrualEndDate);
+        nextPmsStartDate = format.manipulateHyphenedYYYYMMDD(
             nextMenstrualStartDate, -(menstrualData.pmsPeriod.toInt() + 1));
         nextPmsEndDate =
-            date.manipulateHyphenedYYYYMMDD(nextPmsStartDate, pmsEndDiff);
-        nextGoldenStartDate =
-            date.manipulateHyphenedYYYYMMDD(nextPmsStartDate, goldenStartDiff);
+            format.manipulateHyphenedYYYYMMDD(nextPmsStartDate, pmsEndDiff);
+        nextGoldenStartDate = format.manipulateHyphenedYYYYMMDD(
+            nextPmsStartDate, goldenStartDiff);
         nextGoldenEndDate =
-            date.manipulateHyphenedYYYYMMDD(nextPmsStartDate, goldenEndDiff);
+            format.manipulateHyphenedYYYYMMDD(nextPmsStartDate, goldenEndDiff);
       }
 
       if (prevMenstrualStartDate != null &&
@@ -116,14 +116,14 @@ class _RecordViewState extends State<RecordView> {
           nextGoldenEndDate != null) {
         // prev golden & next pms duplication handling
         if (prevMenstrualStartDate != nextMenstrualStartDate &&
-            date.isBackward(prevGoldenEndDate, nextPmsStartDate)) {
+            format.isBackward(prevGoldenEndDate, nextPmsStartDate)) {
           // if next pms covers prev golden period
-          if (date.isBackward(prevGoldenStartDate, nextPmsStartDate)) {
+          if (format.isBackward(prevGoldenStartDate, nextPmsStartDate)) {
             prevGoldenStartDate = null;
             prevGoldenEndDate = null;
           } else {
             prevGoldenEndDate =
-                date.manipulateHyphenedYYYYMMDD(nextPmsStartDate, -1);
+                format.manipulateHyphenedYYYYMMDD(nextPmsStartDate, -1);
           }
         }
       }

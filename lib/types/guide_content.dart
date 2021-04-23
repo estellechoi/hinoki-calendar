@@ -6,6 +6,7 @@ class GuideContent {
   final String contentTitle;
   final String imagePath;
   final int orderNum;
+  final String authorizedAt;
 
   // for component use
   final int id;
@@ -23,6 +24,7 @@ class GuideContent {
       required this.contentTitle,
       required this.imagePath,
       required this.orderNum,
+      required this.authorizedAt,
       required this.id,
       required this.title,
       required this.isLock,
@@ -38,6 +40,7 @@ class GuideContent {
         // imagePath: json['image_path'],
         imagePath: 'https://picsum.photos/250?image=9',
         orderNum: json['order_num'].toInt(),
+        authorizedAt: json['authorized_at'] ?? '',
         id: json['content_id'].toInt(),
         title: json['content_title'],
         isLock: json['content_is_lock'],

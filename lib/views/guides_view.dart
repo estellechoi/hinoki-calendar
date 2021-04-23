@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/types/guide_category.dart';
 import 'index.dart';
-import '../widgets/buttons/f_button.dart';
 import '../app_state.dart';
 import '../route/pages.dart';
 import '../widgets/sliders/card_slider.dart';
@@ -13,10 +12,8 @@ import '../widgets/styles/borders.dart' as borders;
 import '../api/guides.dart' as api;
 import '../types/guides_tree_data.dart';
 import '../app_state.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import '../widgets/modals/guide_notify.dart';
-
-// getGuideCategories
+import '../types/guide_content.dart';
+import 'mixins/guides.dart' as mixins;
 
 class GuidesView extends StatefulWidget {
   @override
@@ -33,13 +30,9 @@ class _GuidesViewState extends State<GuidesView> {
       GuidesTreeData record = GuidesTreeData.fromJson(data);
       print(record);
 
-      appState.unreadCnt = record.unreadContentCount;
-
       setState(() {
         _categorySet1 =
             record.categories.where((item) => item.categoryId < 3).map((item) {
-          // item['label'] = '${item.contents.length}개의 가이드 / 초보자 필독';
-          // return item;
           return GuideCategory(
               categoryId: item.categoryId,
               contents: item.contents,
@@ -61,43 +54,14 @@ class _GuidesViewState extends State<GuidesView> {
     }
   }
 
-  void goArticle() {
-    appState.pushNavigation(fetchGuideArticlePageConfig('25'));
-  }
-
   void goCategoryDetails(int id) {
     print('goCategoryDetails');
     print(id);
     appState.pushNavigation(fetchGuideCategoryPageConfig(id.toString()));
   }
 
-  void _goGuideContent(int id) {
-    print('_goGuideContent');
-    print(id);
-    // ...
-    final RoundedRectangleBorder modalShape =
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0));
-    final RoundedRectangleBorder modalSubShape =
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(0));
-
-    showMaterialModalBottomSheet(
-        context: context,
-        useRootNavigator: true,
-        shape: ShapeBorder.lerp(modalShape, modalSubShape, 0),
-        clipBehavior: Clip.hardEdge,
-        duration: const Duration(milliseconds: 600),
-        builder: (context) {
-          return GuideNotify(
-              title: '키토제닉 꿀팁',
-              description:
-                  '몸이 키토제닉 식단에 적응하고 안정기에 접어들 때 팁을 확인해야 목표달성 확률을 높일 수 있어요.',
-              buttonLabel: '이전 꿀팁을 먼저 읽어보세요',
-              showRecommendation: true,
-              recommendTitle: '순탄수화물 쉽게 계산하기',
-              recommendImagePath: 'https://picsum.photos/250?image=9',
-              showSummary: false,
-              summary: '');
-        });
+  void _goGuideContent(GuideContent content, GuideCategory category) {
+    mixins.goGuideContent(context, content, category, _categorySet1[0]);
   }
 
   @override
@@ -134,7 +98,6 @@ class _GuidesViewState extends State<GuidesView> {
                       onItemTap: goCategoryDetails),
                 ),
                 getCategoires(),
-                FButton(type: 'blue', onPressed: goArticle, text: '테스트')
               ],
             )));
   }
@@ -161,7 +124,9 @@ class _GuidesViewState extends State<GuidesView> {
                         margin: paddings.horizontalBase,
                         showLabel: false,
                         showBottomLabel: true,
-                        onItemTap: _goGuideContent),
+                        onItemTap: (GuideContent content) {
+                          _goGuideContent(content, item);
+                        }),
                   ),
                 ],
               ))

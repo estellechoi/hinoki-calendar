@@ -10,7 +10,7 @@ import '../styles/paddings.dart' as paddings;
 import '../styles/borders.dart' as borders;
 import '../styles/colors.dart' as colors;
 import '../styles/shadows.dart' as shadows;
-import '../../utils/format.dart' as dateUtil;
+import '../../utils/format.dart' as format;
 
 class FTableCalendar extends StatefulWidget {
   final LinkedHashMap<String, List<String>> events;
@@ -38,7 +38,7 @@ class _FTableCalendarState extends State<FTableCalendar> {
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
   DateTime _selectedDay = DateTime.now();
-  String _currentYYYYMM01 = dateUtil.getYYYYMM01(DateTime.now());
+  String _currentYYYYMM01 = format.stringifyDateTime01(DateTime.now());
 
   @override
   Widget build(BuildContext context) {
@@ -70,14 +70,14 @@ class _FTableCalendarState extends State<FTableCalendar> {
               setState(() {
                 _selectedDay = selectedDay;
                 _focusedDay = focusedDay;
-                widget.onDaySelected(dateUtil.getYYYYMMDD(_selectedDay));
+                widget.onDaySelected(format.stringifyDateTime(_selectedDay));
               });
             }
           },
           onPageChanged: (focusedDay) {
             // No need to call setState
             _focusedDay = focusedDay;
-            _currentYYYYMM01 = dateUtil.getYYYYMM01(focusedDay);
+            _currentYYYYMM01 = format.stringifyDateTime01(focusedDay);
             widget.onPageChanged(_currentYYYYMM01);
           },
         )),
@@ -114,7 +114,7 @@ class _FTableCalendarState extends State<FTableCalendar> {
 
   Widget dataBuilder(context, date, event) {
     bool isFirstDay = date.day == 1;
-    bool isLastDay = date.day == dateUtil.getLastDayOfMonth(_currentYYYYMM01);
+    bool isLastDay = date.day == format.getLastDayOfMonth(_currentYYYYMM01);
 
     bool isSaturday = date.weekday == 6;
     bool isSunday = date.weekday == 7;
@@ -125,7 +125,7 @@ class _FTableCalendarState extends State<FTableCalendar> {
     bool isPmsStartDate = false;
     bool isPmsEndDate = false;
 
-    String cellDate = dateUtil.getYYYYMMDD(date);
+    String cellDate = format.stringifyDateTime(date);
     List<String> fetchedEvents = widget.events[cellDate] ?? <String>[''];
 
     String? prevMenstrualStartDate = widget.menstrualData['prevStart'];
@@ -142,36 +142,36 @@ class _FTableCalendarState extends State<FTableCalendar> {
     String? nextPmsEndDate = widget.pmsData['nextEnd'];
 
     if (prevMenstrualStartDate != null && prevMenstrualEndDate != null) {
-      bool isIn1 = dateUtil.isFrontward(prevMenstrualStartDate, cellDate);
-      bool isIn2 = dateUtil.isFrontward(cellDate, prevMenstrualEndDate);
+      bool isIn1 = format.isFrontward(prevMenstrualStartDate, cellDate);
+      bool isIn2 = format.isFrontward(cellDate, prevMenstrualEndDate);
       isMenstrualDate = isIn1 && isIn2;
     }
 
     if (isMenstrualDate == false &&
         nextMenstrualStartDate != null &&
         nextMenstrualEndDate != null) {
-      bool isIn1 = dateUtil.isFrontward(nextMenstrualStartDate, cellDate);
-      bool isIn2 = dateUtil.isFrontward(cellDate, nextMenstrualEndDate);
+      bool isIn1 = format.isFrontward(nextMenstrualStartDate, cellDate);
+      bool isIn2 = format.isFrontward(cellDate, nextMenstrualEndDate);
       isMenstrualDate = isIn1 && isIn2;
     }
 
     if (prevGoldenStartDate != null && prevGoldenEndDate != null) {
-      bool isIn1 = dateUtil.isFrontward(prevGoldenStartDate, cellDate);
-      bool isIn2 = dateUtil.isFrontward(cellDate, prevGoldenEndDate);
+      bool isIn1 = format.isFrontward(prevGoldenStartDate, cellDate);
+      bool isIn2 = format.isFrontward(cellDate, prevGoldenEndDate);
       isGoldenDate = isIn1 && isIn2;
     }
 
     if (isGoldenDate == false &&
         nextGoldenStartDate != null &&
         nextGoldenEndDate != null) {
-      bool isIn1 = dateUtil.isFrontward(nextGoldenStartDate, cellDate);
-      bool isIn2 = dateUtil.isFrontward(cellDate, nextGoldenEndDate);
+      bool isIn1 = format.isFrontward(nextGoldenStartDate, cellDate);
+      bool isIn2 = format.isFrontward(cellDate, nextGoldenEndDate);
       isGoldenDate = isIn1 && isIn2;
     }
 
     if (prevPmsStartDate != null && prevPmsEndDate != null) {
-      bool isIn1 = dateUtil.isFrontward(prevPmsStartDate, cellDate);
-      bool isIn2 = dateUtil.isFrontward(cellDate, prevPmsEndDate);
+      bool isIn1 = format.isFrontward(prevPmsStartDate, cellDate);
+      bool isIn2 = format.isFrontward(cellDate, prevPmsEndDate);
       isPmsDate = isIn1 && isIn2;
       isPmsStartDate = prevPmsStartDate == cellDate;
       isPmsEndDate = prevPmsEndDate == cellDate;
@@ -180,8 +180,8 @@ class _FTableCalendarState extends State<FTableCalendar> {
     if (isPmsDate == false &&
         nextPmsStartDate != null &&
         nextPmsEndDate != null) {
-      bool isIn1 = dateUtil.isFrontward(nextPmsStartDate, cellDate);
-      bool isIn2 = dateUtil.isFrontward(cellDate, nextPmsEndDate);
+      bool isIn1 = format.isFrontward(nextPmsStartDate, cellDate);
+      bool isIn2 = format.isFrontward(cellDate, nextPmsEndDate);
       isPmsDate = isIn1 && isIn2;
 
       if (isPmsStartDate == false) {

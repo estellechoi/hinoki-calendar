@@ -37,6 +37,8 @@ class _MyAppState extends State<MyApp> {
     _routerDelegate.setNewRoutePath(homePageConfig);
     // link back displatcher with router delegate
     _backButtonDispatcher = AppBackButtonDispatcher(_routerDelegate);
+
+    appState.getGuideUnreadCnt();
   }
 
   @override

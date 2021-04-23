@@ -3,6 +3,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_app/route/pages.dart';
 import 'route/pages.dart';
 import 'api/config.dart' as config;
+import 'api/guides.dart' as api;
+import 'types/guide_unread_cnt.dart';
 
 final AppState appState = AppState();
 
@@ -107,6 +109,9 @@ class AppState extends ChangeNotifier {
 
     _loggedIn = false;
     saveLoginState(loggedIn);
+
+    _unreadCnt = 0;
+
     _currentAction =
         PageAction(state: PageState.replaceAll, page: loginPageConfig);
     notifyListeners();
@@ -122,6 +127,16 @@ class AppState extends ChangeNotifier {
     _loggedIn = prefs.getBool('LoggedInKey') ?? false;
     if (_loggedIn == null) {
       _loggedIn = false;
+    }
+  }
+
+  Future getGuideUnreadCnt() async {
+    try {
+      final data = await api.getGuideUnreadCnt();
+      GuideUnreadCnt unreadData = GuideUnreadCnt.fromJson(data);
+      _unreadCnt = unreadData.unreadContentCount;
+    } catch (e) {
+      print(e);
     }
   }
 }

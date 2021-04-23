@@ -31,6 +31,7 @@ class _FInputState extends State<FInput> {
   final FocusNode focusNode = new FocusNode();
   final controller = TextEditingController();
 
+  bool _obscureText = false;
   late final TextInputType _keyboardType;
   late final int? _maxLines;
 
@@ -64,6 +65,11 @@ class _FInputState extends State<FInput> {
       case 'textarea':
         _keyboardType = TextInputType.multiline;
         _maxLines = 3;
+        break;
+      case 'password':
+        _obscureText = true;
+        _keyboardType = TextInputType.text;
+        _maxLines = 1;
         break;
       default:
         _keyboardType = TextInputType.text;
@@ -99,6 +105,7 @@ class _FInputState extends State<FInput> {
           child: Row(children: <Widget>[
             Expanded(
                 child: TextFormField(
+              obscureText: _obscureText,
               keyboardType: _keyboardType,
               maxLines: _maxLines,
               autofocus: false,

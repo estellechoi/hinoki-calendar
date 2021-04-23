@@ -22,7 +22,7 @@ class RecordBody extends StatefulWidget {
 
 class _RecordBodyState extends State<RecordBody> {
   final String _selectedDate =
-      appState.routeParam ?? date.getYYYYMMDD(DateTime.now());
+      appState.routeParam ?? date.stringifyDateTime(DateTime.now());
   late Future<dynamic> _getData;
 
   // fetched/posting states

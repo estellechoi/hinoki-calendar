@@ -19,6 +19,7 @@ class _LoginViewState extends State<LoginView> {
     print(formData.toString());
     try {
       await api.login(formData);
+      await appState.getGuideUnreadCnt();
       appState.login();
     } catch (e) {
       // ...

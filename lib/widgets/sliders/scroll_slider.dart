@@ -49,7 +49,7 @@ class _ScrollSliderState extends State<ScrollSlider> {
                       GestureDetector(
                           onTap: () {
                             if (widget.onItemTap != null)
-                              widget.onItemTap(item.id);
+                              widget.onItemTap(item);
                           },
                           child: Container(
                               clipBehavior: Clip.none,
@@ -64,6 +64,7 @@ class _ScrollSliderState extends State<ScrollSlider> {
                                   color: colors.white,
                                   borderRadius: borders.radiusLight),
                               child: SectionCard(
+                                authorizedAt: item.authorizedAt ?? '',
                                 title: item.title ?? '',
                                 summary: item.label ?? '',
                                 imagePath: 'https://picsum.photos/250?image=9',

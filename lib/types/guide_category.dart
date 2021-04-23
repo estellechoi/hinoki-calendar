@@ -9,6 +9,7 @@ class GuideCategory {
   final String purpose;
   final String summary;
   final String title;
+  final String authorizedAt;
 
   final int id;
   final bool isRead;
@@ -23,6 +24,7 @@ class GuideCategory {
       required this.purpose,
       required this.summary,
       required this.title,
+      this.authorizedAt = '',
       required this.id,
       this.isRead = false,
       this.label});

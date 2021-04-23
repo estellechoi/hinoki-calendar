@@ -1,6 +1,25 @@
 import 'package:dio/dio.dart';
 import 'config.dart' as config;
 
+Future<dynamic> getGuideUnreadCnt() async {
+  try {
+    final String url = '/api/content/unread';
+    final Response response =
+        await config.dio.get(url, options: Options(headers: config.headers));
+
+    print('getGuideUnreadCnt - Success');
+    print(response);
+    print(response.statusCode);
+
+    final data = response.data;
+    return data;
+  } catch (e) {
+    print('getGuideUnreadCnt - Fail');
+    print(e);
+    return e;
+  }
+}
+
 Future<dynamic> getGuideCategories() async {
   try {
     final String url = '/api/content/category';

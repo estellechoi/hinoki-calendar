@@ -40,7 +40,7 @@ class _GuideArticleState extends State<GuideArticle> {
   Future postGuideContentRead() async {
     try {
       await api.postGuideContentRead(_id);
-      _isReadPosted = true;
+      await appState.getGuideUnreadCnt();
     } catch (e) {
       print(e);
     }
@@ -63,6 +63,7 @@ class _GuideArticleState extends State<GuideArticle> {
     // Post read
     if (_isReadPosted == false &&
         offset >= (_scrollController.position.maxScrollExtent * 0.7)) {
+      _isReadPosted = true;
       postGuideContentRead();
     }
   }
