@@ -38,7 +38,7 @@ class _MyAppState extends State<MyApp> {
     // link back displatcher with router delegate
     _backButtonDispatcher = AppBackButtonDispatcher(_routerDelegate);
 
-    appState.getGuideUnreadCnt();
+    if (appState.loggedIn == true) appState.getGuideUnreadCnt();
   }
 
   @override

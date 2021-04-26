@@ -104,8 +104,10 @@ class _FTableCalendarState extends State<FTableCalendar> {
   CalendarBuilders getCalendarBuilder() {
     return CalendarBuilders(
       // dowBuilder: (context, day) => Align(),
-      outsideBuilder: (context, date, events) =>
-          Align(child: Container(height: sizes.calendarMarker)),
+      outsideBuilder: (context, date, events) => Align(
+          child: Container(
+        height: sizes.calendarMarker,
+      )),
       todayBuilder: dataBuilder,
       defaultBuilder: dataBuilder,
       selectedBuilder: dataBuilder,

@@ -251,6 +251,7 @@ class _GuideCategoryDetailsState extends State<GuideCategoryDetails> {
                   alignment: Alignment.centerLeft,
                   // clipBehavior: Clip.hardEdge,
                   child: Text(title,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                           color: colors.guideArticleListLabel,
                           fontSize: 15,
