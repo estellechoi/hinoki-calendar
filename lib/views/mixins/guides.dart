@@ -6,6 +6,7 @@ import '../../route/pages.dart';
 import '../../types/guide_content.dart';
 import '../../types/guide_category.dart';
 import '../../utils/format.dart' as format;
+import './../../widgets/styles/borders.dart' as borders;
 
 const int GUIDE_CATE_HONEYTIP = 4;
 
@@ -67,15 +68,10 @@ void showBottomModal(
     bool showRecommendation,
     String recommendTitle,
     String recommendImagePath) {
-  final RoundedRectangleBorder modalShape =
-      RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0));
-  final RoundedRectangleBorder modalSubShape =
-      RoundedRectangleBorder(borderRadius: BorderRadius.circular(0));
-
   showMaterialModalBottomSheet(
       context: context,
       useRootNavigator: true,
-      shape: ShapeBorder.lerp(modalShape, modalSubShape, 0),
+      shape: ShapeBorder.lerp(borders.modalShape, borders.modalSubShape, 0),
       clipBehavior: Clip.hardEdge,
       duration: const Duration(milliseconds: 600),
       builder: (context) {

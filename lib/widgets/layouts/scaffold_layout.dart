@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import '../styles/colors.dart' as colors;
 import '../styles/textstyles.dart' as textstyles;
+import '../styles/sizes.dart' as sizes;
 
 class ScaffoldLayout extends StatefulWidget {
+  final bool hideAppBar;
   final String title;
   final Widget body;
   // final onMenuPressed;
@@ -13,6 +15,7 @@ class ScaffoldLayout extends StatefulWidget {
 
   ScaffoldLayout({
     Key? key,
+    this.hideAppBar = false,
     required this.title,
     required this.body,
     this.currentNavIndex = 0,
@@ -41,22 +44,35 @@ class _ScaffoldLayoutState extends State<ScaffoldLayout> {
         },
         child: Scaffold(
           resizeToAvoidBottomInset: false,
-          appBar: AppBar(title: Text(widget.title), actions: [
-            // IconButton(icon: Icon(Icons.list), onPressed: widget.onMenuPressed)
-          ]),
+          extendBodyBehindAppBar: widget.hideAppBar,
+          appBar: PreferredSize(
+            preferredSize: Size(double.infinity, sizes.appBar),
+            child: AppBar(
+                elevation: 0,
+                backgroundColor:
+                    widget.hideAppBar ? colors.transparent : colors.white,
+                toolbarOpacity: widget.hideAppBar ? 0 : 1,
+                title: Text(widget.title),
+                actions: [
+                  // IconButton(icon: Icon(Icons.list), onPressed: widget.onMenuPressed)
+                ]),
+          ),
           body: SingleChildScrollView(
             child: widget.body,
           ),
-          bottomNavigationBar: BottomNavigationBar(
-              type: BottomNavigationBarType.fixed,
-              unselectedItemColor: colors.inactive,
-              selectedItemColor: colors.active,
-              selectedLabelStyle: textstyles.navItem,
-              unselectedLabelStyle: textstyles.navItem,
-              showUnselectedLabels: true,
-              currentIndex: widget.currentNavIndex,
-              onTap: widget.onNavItemTap,
-              items: widget.navItems),
+          bottomNavigationBar: SizedBox(
+            height: sizes.bottomNavigationBar,
+            child: BottomNavigationBar(
+                type: BottomNavigationBarType.fixed,
+                unselectedItemColor: colors.inactive,
+                selectedItemColor: colors.active,
+                selectedLabelStyle: textstyles.navItem,
+                unselectedLabelStyle: textstyles.navItem,
+                showUnselectedLabels: true,
+                currentIndex: widget.currentNavIndex,
+                onTap: widget.onNavItemTap,
+                items: widget.navItems),
+          ),
           // floatingActionButton: FloatingActionButton(
           //   onPressed: () {},
           //   tooltip: 'Increment',

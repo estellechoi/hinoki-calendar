@@ -111,126 +111,134 @@ class _RecordBodyState extends State<RecordBody> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: _getData,
-        builder: (BuildContext buildContext, AsyncSnapshot<dynamic> snapshot) {
-          if (snapshot.hasData) {
-            bool isBreath = snapshot.data.measurementType == 'breath';
+    return AppBarLayout(
+        globalKey: GlobalKey(),
+        title: '나의 상태',
+        scrollController: ScrollController(),
+        body: Container(
+            padding: EdgeInsets.symmetric(
+                vertical: paddings.verticalBase,
+                horizontal: paddings.horizontalBase),
+            child: FutureBuilder(
+                future: _getData,
+                builder: (BuildContext buildContext,
+                    AsyncSnapshot<dynamic> snapshot) {
+                  if (snapshot.hasData) {
+                    bool isBreath = snapshot.data.measurementType == 'breath';
 
-            return AppBarLayout(
-                globalKey: GlobalKey(),
-                title: '나의 상태',
-                scrollController: ScrollController(),
-                body: Container(
-                  padding: EdgeInsets.symmetric(
-                      vertical: paddings.verticalBase,
-                      horizontal: paddings.horizontalBase),
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.only(bottom: paddings.formField),
-                          child: FInput(
-                            hintText: '숫자만 입력하세요',
-                            labelText: '체중',
-                            defaultValue: snapshot.data.weight.toString(),
-                            onChanged: _printInput,
+                    return Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            padding:
+                                EdgeInsets.only(bottom: paddings.formField),
+                            child: FInput(
+                              hintText: '숫자만 입력하세요',
+                              labelText: '체중',
+                              defaultValue: snapshot.data.weight.toString(),
+                              onChanged: _printInput,
+                            ),
                           ),
-                        ),
-                        Container(
-                          padding:
-                              EdgeInsets.only(bottom: paddings.formFieldSub),
-                          child: FInput(
-                            hintText: '숫자만 입력하세요',
-                            labelText: '케톤수치',
-                            defaultValue: snapshot.data.ketoneValue.toString(),
-                            onChanged: _printInput,
+                          Container(
+                            padding:
+                                EdgeInsets.only(bottom: paddings.formFieldSub),
+                            child: FInput(
+                              hintText: '숫자만 입력하세요',
+                              labelText: '케톤수치',
+                              defaultValue:
+                                  snapshot.data.ketoneValue.toString(),
+                              onChanged: _printInput,
+                            ),
                           ),
-                        ),
-                        Container(
-                          padding:
-                              EdgeInsets.only(bottom: paddings.formFieldSub),
-                          child: FSwitchAdvanced(
-                              label: '케톤측정 방식은?',
-                              inactiveText: '혈중',
-                              activeText: '호흡',
-                              isActive: isBreath,
-                              onToggle: _changeRecordMethod),
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(bottom: paddings.formField),
-                          child: HelperLabel(
-                              text:
-                                  '* 소변케톤은 트랙킹 목적으로 부정확하여 지원하지 않습니다. 케톤은 아침공복은 피하고식사 전에 재시는것이 정확합니다.'),
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(bottom: paddings.formField),
-                          child: FInput(
-                            hintText: '숫자만 입력하세요',
-                            labelText: '혈당수치',
-                            defaultValue: snapshot.data.bloodSugar.toString(),
-                            onChanged: _printInput,
+                          Container(
+                            padding:
+                                EdgeInsets.only(bottom: paddings.formFieldSub),
+                            child: FSwitchAdvanced(
+                                label: '케톤측정 방식은?',
+                                inactiveText: '혈중',
+                                activeText: '호흡',
+                                isActive: isBreath,
+                                onToggle: _changeRecordMethod),
                           ),
-                        ),
-                        Container(
-                            padding: EdgeInsets.only(
-                                bottom: paddings.formFieldLabel),
-                            child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: InputLabel(text: '식욕'))),
-                        Container(
-                          padding: EdgeInsets.only(bottom: paddings.formField),
-                          child: FRangeAdvanced(
-                              onChanged: _changeAppetite,
-                              rating: snapshot.data.appetite,
-                              max: 10.0,
-                              divisions: 10,
-                              showLabel: true),
-                        ),
-                        Container(
-                            padding: EdgeInsets.only(
-                                bottom: paddings.formFieldLabel),
-                            child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: InputLabel(text: '컨디션'))),
-                        Container(
-                          padding: EdgeInsets.only(bottom: paddings.formField),
-                          child: FRangeAdvanced(
-                              onChanged: _changeAppetite,
-                              rating: snapshot.data.appetite,
-                              max: 10.0,
-                              divisions: 10,
-                              showLabel: true),
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(bottom: paddings.formField),
-                          child: FInput(
-                            type: 'textarea',
-                            hintText: '',
-                            labelText: '따로 섭취한 것',
-                            defaultValue: snapshot.data.intake,
-                            onChanged: _printInput,
+                          Container(
+                            padding:
+                                EdgeInsets.only(bottom: paddings.formField),
+                            child: HelperLabel(
+                                text:
+                                    '* 소변케톤은 트랙킹 목적으로 부정확하여 지원하지 않습니다. 케톤은 아침공복은 피하고식사 전에 재시는것이 정확합니다.'),
                           ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(bottom: paddings.formField),
-                          child: FInput(
-                            type: 'textarea',
-                            hintText: '',
-                            labelText: '메모 (변화, 특이사항 기록)',
-                            defaultValue: snapshot.data.memo,
-                            onChanged: _printInput,
+                          Container(
+                            padding:
+                                EdgeInsets.only(bottom: paddings.formField),
+                            child: FInput(
+                              hintText: '숫자만 입력하세요',
+                              labelText: '혈당수치',
+                              defaultValue: snapshot.data.bloodSugar.toString(),
+                              onChanged: _printInput,
+                            ),
                           ),
-                        ),
-                        buildButtons(snapshot.data.isEditMode)
-                      ]),
-                ));
-          } else {
-            // go back ...
-            // appState.goBack(null);
-            return Container();
-          }
-        });
+                          Container(
+                              padding: EdgeInsets.only(
+                                  bottom: paddings.formFieldLabel),
+                              child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: InputLabel(text: '식욕'))),
+                          Container(
+                            padding:
+                                EdgeInsets.only(bottom: paddings.formField),
+                            child: FRangeAdvanced(
+                                onChanged: _changeAppetite,
+                                rating: snapshot.data.appetite,
+                                max: 10.0,
+                                divisions: 10,
+                                showLabel: true),
+                          ),
+                          Container(
+                              padding: EdgeInsets.only(
+                                  bottom: paddings.formFieldLabel),
+                              child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: InputLabel(text: '컨디션'))),
+                          Container(
+                            padding:
+                                EdgeInsets.only(bottom: paddings.formField),
+                            child: FRangeAdvanced(
+                                onChanged: _changeAppetite,
+                                rating: snapshot.data.appetite,
+                                max: 10.0,
+                                divisions: 10,
+                                showLabel: true),
+                          ),
+                          Container(
+                            padding:
+                                EdgeInsets.only(bottom: paddings.formField),
+                            child: FInput(
+                              type: 'textarea',
+                              hintText: '',
+                              labelText: '따로 섭취한 것',
+                              defaultValue: snapshot.data.intake,
+                              onChanged: _printInput,
+                            ),
+                          ),
+                          Container(
+                            padding:
+                                EdgeInsets.only(bottom: paddings.formField),
+                            child: FInput(
+                              type: 'textarea',
+                              hintText: '',
+                              labelText: '메모 (변화, 특이사항 기록)',
+                              defaultValue: snapshot.data.memo,
+                              onChanged: _printInput,
+                            ),
+                          ),
+                          buildButtons(snapshot.data.isEditMode)
+                        ]);
+                  } else {
+                    // go back ...
+                    // appState.goBack(null);
+                    return Container();
+                  }
+                })));
   }
 
   Widget buildButtons(bool isEditMode) {

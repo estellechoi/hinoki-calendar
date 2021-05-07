@@ -79,6 +79,7 @@ class _GuideArticleState extends State<GuideArticle> {
   Widget build(BuildContext context) {
     return AppBarLayout(
         title: '',
+        extendBodyBehindAppBar: true,
         appBarColor: _appBarColor,
         globalKey: _globalKey,
         scrollController: _scrollController,

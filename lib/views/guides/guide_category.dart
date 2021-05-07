@@ -66,7 +66,6 @@ class _GuideCategoryDetailsState extends State<GuideCategoryDetails> {
         body: Container(
             child: Column(
           children: <Widget>[
-            SizedBox(height: 100),
             AspectRatio(
                 aspectRatio: 75 / 94,
                 child: Container(

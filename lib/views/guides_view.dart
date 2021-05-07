@@ -3,12 +3,9 @@ import 'package:flutter_app/types/guide_category.dart';
 import 'index.dart';
 import '../app_state.dart';
 import '../route/pages.dart';
-import '../widgets/sliders/card_slider.dart';
 import '../widgets/sliders/scroll_slider.dart';
-
 import '../widgets/texts/section_label.dart';
 import '../widgets/styles/paddings.dart' as paddings;
-import '../widgets/styles/borders.dart' as borders;
 import '../api/guides.dart' as api;
 import '../types/guides_tree_data.dart';
 import '../app_state.dart';
@@ -74,6 +71,8 @@ class _GuidesViewState extends State<GuidesView> {
   @override
   Widget build(BuildContext context) {
     return NavBarFrame(
+        refreshable: true,
+        onRefresh: getGuideCategories,
         bodyWidget: Container(
             padding: EdgeInsets.symmetric(
               vertical: paddings.verticalBase,

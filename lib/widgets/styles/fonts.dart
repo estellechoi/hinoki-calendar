@@ -40,7 +40,7 @@ final double sizeIntroCardSummary = 15.0;
 final double lineHeightIntroCardSummary = 1.33;
 
 // Calendar Event Style Set
-final double sizeCalendarEvent = 12.0;
+final double sizeCalendarEvent = 10.0;
 
 // Badge
 final double sizeCountBadge = 9.0;
@@ -55,6 +55,9 @@ final double sizeCardSliderSummary = 13.0;
 final double sizeModalTitle = 22.0;
 final FontWeight weightModalTitle = FontWeight.w700;
 final double lineHeightModalTitle = 1.18;
+
+final double sizeModalIconButton = 22;
+final FontWeight weightModalIconButton = FontWeight.w500;
 
 final double sizeModalSummary = 15.0;
 final FontWeight weightModalSummary = FontWeight.w400;

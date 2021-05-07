@@ -60,6 +60,33 @@ int getMMfromMonth(String month) {
   return mm;
 }
 
+String stringifyWeekday(int weekday, {String type = 'default'}) {
+  if (weekday < 1 || weekday > 7) {
+    return '';
+  }
+
+  bool short = type == 'short';
+
+  switch (weekday) {
+    case 1:
+      return short ? 'M' : 'Mon';
+    case 2:
+      return short ? 'T' : 'Tue';
+    case 3:
+      return short ? 'W' : 'Wed';
+    case 4:
+      return short ? 'T' : 'Thu';
+    case 5:
+      return short ? 'F' : 'Fri';
+    case 6:
+      return short ? 'S' : 'Sat';
+    case 7:
+      return short ? 'S' : 'Sun';
+    default:
+      return '';
+  }
+}
+
 // require format of 'Wed, 17 Mar 2021 10:59:44 GMT'
 List<int> listifyFetchedDateTime(String? dateTime) {
   if (dateTime == null || dateTime.length < 1) return [0, 0, 0, 0, 0, 0];
@@ -78,6 +105,12 @@ List<int> listifyFetchedDateTime(String? dateTime) {
   int sec = int.parse(times[2]);
 
   return [year, month, date, hour, min, sec];
+}
+
+// require format of 'Wed, 17 Mar 2021 10:59:44 GMT'
+String getHHMM(String? dateTime) {
+  List<int> list = listifyFetchedDateTime(dateTime);
+  return '${prefixWithZero(list[3].toString())} : ${prefixWithZero(list[4].toString())}';
 }
 
 // require format of 'Wed, 17 Mar 2021 10:59:44 GMT'

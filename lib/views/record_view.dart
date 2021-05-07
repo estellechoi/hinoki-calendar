@@ -186,16 +186,22 @@ class _RecordViewState extends State<RecordView> {
     // how to get return data when the pushed nav popped ?
   }
 
+  Future getData() async {
+    await getMyCalendarData();
+    await getMyCalendarMenstrualData();
+  }
+
   @override
   void initState() {
     super.initState();
-    getMyCalendarData();
-    getMyCalendarMenstrualData();
+    getData();
   }
 
   @override
   Widget build(BuildContext context) {
     return NavBarFrame(
+        refreshable: true,
+        onRefresh: getData,
         bodyWidget: Container(
             padding: EdgeInsets.symmetric(
                 vertical: paddings.verticalBase,

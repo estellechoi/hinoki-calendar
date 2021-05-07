@@ -1,4 +1,13 @@
+import 'package:flutter/material.dart';
+
 final double emojiBox = 48.0;
+
+final double appBar = 56;
+final double bottomNavigationBar = 82;
+
+double getBodyHeight(BuildContext context) {
+  return MediaQuery.of(context).size.height - appBar - bottomNavigationBar;
+}
 
 // Chart
 final lineChartDot = 4.0;

@@ -43,3 +43,9 @@ final BorderRadius radiusBottomModal = BorderRadius.only(
   topLeft: Radius.circular(15),
   topRight: Radius.circular(15),
 );
+
+final RoundedRectangleBorder modalShape =
+    RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0));
+
+final RoundedRectangleBorder modalSubShape =
+    RoundedRectangleBorder(borderRadius: BorderRadius.circular(0));

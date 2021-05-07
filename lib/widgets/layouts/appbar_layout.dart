@@ -5,6 +5,7 @@ import '../styles/textstyles.dart' as textstyles;
 class AppBarLayout extends StatefulWidget {
   final String title;
   final Widget body;
+  final bool extendBodyBehindAppBar;
   final String appBarColor;
   final GlobalKey globalKey;
   final ScrollController scrollController;
@@ -13,6 +14,7 @@ class AppBarLayout extends StatefulWidget {
       {Key? key,
       required this.title,
       required this.body,
+      this.extendBodyBehindAppBar = false,
       this.appBarColor = 'white',
       required this.scrollController,
       required this.globalKey})
@@ -46,7 +48,7 @@ class _AppBarLayoutState extends State<AppBarLayout> {
         child: Scaffold(
           key: widget.globalKey,
           resizeToAvoidBottomInset: false,
-          extendBodyBehindAppBar: true,
+          extendBodyBehindAppBar: widget.extendBodyBehindAppBar,
           appBar: AppBar(
               title: Text(widget.title),
               backgroundColor: appBarBackgroundColor,

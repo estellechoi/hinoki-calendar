@@ -50,7 +50,7 @@ final Color ketonChart = Color(0xffeec462);
 
 // Calendar
 final Color calendarStrongCell = Color(0xff00a2ff);
-final Color calendarColoredCell = Color(0xffff7373);
+final Color calendarColoredCell = white;
 final Color calendarRangeColoredCell = Color(0xffbce2fc);
 final Color calendarMarkerComment = text;
 

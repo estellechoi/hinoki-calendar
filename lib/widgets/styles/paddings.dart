@@ -23,4 +23,7 @@ final double cardSlider = 16.0;
 final double cardCheckIconPosition = 4;
 
 // Modal
+final double verticallModal = 30;
+final double horizontalModal = 26;
 final double modalLabel = 16;
+final double modalLabelHorizontalSpacing = 12;
