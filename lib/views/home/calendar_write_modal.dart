@@ -4,26 +4,30 @@ import '../../widgets/styles/borders.dart' as borders;
 import '../../widgets/styles/icons.dart' as icons;
 import '../../widgets/styles/colors.dart' as colors;
 import '../../widgets/styles/fonts.dart' as fonts;
+import '../../widgets/styles/shadows.dart' as shadows;
+
 import '../../utils/format.dart' as format;
 import '../../types/calendar_event_item.dart';
 import '../../widgets/modals/bottom_modal_sheet.dart';
 import '../../widgets/buttons/icon_label_button.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'calendar_write_modal.dart';
+import './../../widgets/buttons/text_label_button.dart';
+import './../../widgets/form_elements/linked_input.dart';
+import './../../widgets/form_elements/linked_switch.dart';
 
-class CalendarDailyModal extends StatefulWidget {
+class CalendarWriteModal extends StatefulWidget {
   final String date;
   final int weekday;
   final onDismissed;
 
-  CalendarDailyModal(
+  CalendarWriteModal(
       {required this.date, required this.weekday, required this.onDismissed});
 
   @override
-  _CalendarDailyModalState createState() => _CalendarDailyModalState();
+  _CalendarWriteModalState createState() => _CalendarWriteModalState();
 }
 
-class _CalendarDailyModalState extends State<CalendarDailyModal> {
+class _CalendarWriteModalState extends State<CalendarWriteModal> {
   List<CalendarEventItem> _events = [];
   List<CalendarEventItem> _dismissingEvents = [];
   bool _showDismissAlert = false;
@@ -166,6 +170,10 @@ class _CalendarDailyModalState extends State<CalendarDailyModal> {
             }));
   }
 
+  void _printInput(String text) {
+    print(text);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -180,8 +188,6 @@ class _CalendarDailyModalState extends State<CalendarDailyModal> {
 
   @override
   Widget build(BuildContext context) {
-    String title = '${format.stringifyWeekday(widget.weekday)}, ${widget.date}';
-
     return BottomModalSheet(
         child: Stack(
       children: <Widget>[
@@ -190,103 +196,82 @@ class _CalendarDailyModalState extends State<CalendarDailyModal> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Container(
-              margin: EdgeInsets.only(bottom: paddings.verticalCard),
-              padding:
-                  EdgeInsets.symmetric(horizontal: paddings.horizontalModal),
+              // margin: EdgeInsets.only(bottom: paddings.verticalCard),
+              padding: EdgeInsets.symmetric(vertical: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Text(title,
+                  TextLabelButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      label: 'Cancel'),
+                  Text('New Event',
                       style: TextStyle(
                           color: colors.black,
-                          fontSize: fonts.sizeModalTitle,
+                          fontSize: fonts.sizeBase,
                           fontWeight: fonts.weightModalTitle)),
-                  IconLabelButton(
+                  TextLabelButton(
                       onPressed: () {
-                        showWriteModal(context);
+                        Navigator.pop(context);
                       },
-                      icon: Icon(Icons.add)),
+                      label: 'Save'),
                 ],
               ),
             ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height / 2,
-              child: ListView.builder(
-                padding: EdgeInsets.all(0),
-                itemCount: _events.length,
-                itemBuilder: (context, index) {
-                  final item = _events[index];
-                  return Dismissible(
-                      key: Key(item.id.toString()),
-                      onDismissed: (direction) {
-                        _dismissEvent(index, item);
-                      },
-                      direction: DismissDirection.endToStart,
-                      background: Container(color: item.color),
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: paddings.horizontalModal),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
+            Container(
+                padding: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+                child: SingleChildScrollView(
+                    child: Column(
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(bottom: 30),
+                      decoration: BoxDecoration(boxShadow: shadows.input),
+                      child: LinkedInput(
+                          position: 'single',
+                          labelText: 'Title',
+                          defaultValue: '',
+                          onChanged: _printInput),
+                    ),
+                    Container(
+                        margin: EdgeInsets.only(bottom: 30),
+                        decoration: BoxDecoration(boxShadow: shadows.input),
+                        child: Column(
                           children: <Widget>[
-                            Container(
-                                margin: EdgeInsets.only(
-                                    right:
-                                        paddings.modalLabelHorizontalSpacing),
-                                decoration: BoxDecoration(
-                                    color: colors.transparent,
-                                    borderRadius: borders.radiusCircle),
-                                child: Align(
-                                    alignment: Alignment.center,
-                                    child: Checkbox(
-                                      value: item.isDone,
-                                      checkColor: colors.white,
-                                      activeColor: item.color,
-                                      splashRadius: 5,
-                                      onChanged: (value) {
-                                        print('checkbox');
-                                        print(value);
-                                        if (value != null)
-                                          _toggleEventDone(item.id, value);
-                                      },
-                                    ))),
-                            Expanded(child: Text(item.title)),
-                            Text(format.getHHMM(item.startAt))
+                            LinkedSwitch(
+                              position: 'top',
+                              labelText: 'Date',
+                            ),
+                            LinkedInput(
+                                position: 'bottom',
+                                labelText: 'Notes',
+                                defaultValue: '',
+                                onChanged: _printInput)
                           ],
-                        ),
-                      ));
-                },
-              ),
-            )
+                        )),
+                    Container(
+                        margin: EdgeInsets.only(bottom: 30),
+                        decoration: BoxDecoration(boxShadow: shadows.input),
+                        child: Column(
+                          children: <Widget>[
+                            LinkedInput(
+                                position: 'top',
+                                labelText: 'URL',
+                                defaultValue: '',
+                                onChanged: _printInput),
+                            LinkedInput(
+                                position: 'bottom',
+                                type: 'textarea',
+                                labelText: 'Notes',
+                                defaultValue: '',
+                                onChanged: _printInput)
+                          ],
+                        ))
+                  ],
+                ))),
           ],
         ),
-        _showDismissAlert
-            ? Positioned(
-                bottom: 20,
-                left: 0,
-                right: 0,
-                child: Container(
-                  margin: EdgeInsets.symmetric(
-                      horizontal: paddings.horizontalModal),
-                  padding: EdgeInsets.symmetric(vertical: 16, horizontal: 20),
-                  decoration: BoxDecoration(
-                      color: colors.black, borderRadius: borders.radiusLight),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Text('삭제했습니다', style: TextStyle(color: colors.white)),
-                      GestureDetector(
-                          child: Text('실행취소',
-                              style: TextStyle(color: colors.white)),
-                          onTap: _cancelEventDismiss)
-                    ],
-                  ),
-                ),
-              )
-            : Container()
       ],
     ));
   }

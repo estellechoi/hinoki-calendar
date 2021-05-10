@@ -4,6 +4,9 @@ import '../styles/colors.dart' as colors;
 // Border Styles
 final Border none = Border.fromBorderSide(BorderSide.none);
 
+final Border white =
+    Border.all(width: 1.0, style: BorderStyle.solid, color: colors.white);
+
 final Border lightgrey =
     Border.all(width: 1.0, style: BorderStyle.solid, color: colors.lightgrey);
 

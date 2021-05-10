@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../styles/paddings.dart' as paddings;
+import '../styles/colors.dart' as colors;
+import '../styles/borders.dart' as borders;
 
 class BottomModalSheet extends StatefulWidget {
   final Widget child;
@@ -17,9 +19,12 @@ class _BottomModalSheetState extends State<BottomModalSheet> {
   Widget build(BuildContext context) {
     return IntrinsicHeight(
         child: Container(
-            padding: EdgeInsets.symmetric(
-                vertical: paddings.verticallModal,
-                horizontal: paddings.horizontalModal),
+            padding: EdgeInsets.all(0
+                // vertical: paddings.verticallModal,
+                // horizontal: paddings.horizontalModal
+                ),
+            decoration: BoxDecoration(
+                color: colors.white, borderRadius: borders.radiusBottomModal),
             child: widget.child));
   }
 }

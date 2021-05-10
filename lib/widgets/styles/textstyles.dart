@@ -16,6 +16,13 @@ final TextStyle inputText = TextStyle(
     fontFamily: fonts.primary,
     fontFamilyFallback: fonts.primaryFallbacks);
 
+final TextStyle inputHintText = TextStyle(
+    color: colors.blackAlphaDeep,
+    fontSize: fonts.sizeBase,
+    height: fonts.lineHeightInput,
+    fontFamily: fonts.primary,
+    fontFamilyFallback: fonts.primaryFallbacks);
+
 final TextStyle cardTitle = TextStyle(
     color: colors.cardTitle,
     fontSize: fonts.sizeCardTitle,

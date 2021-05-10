@@ -43,7 +43,7 @@ class _HomeViewState extends State<HomeView> {
         id: 2,
         isDone: true,
         order: 2,
-        title: 'pt수업',
+        title: '🏋🏽‍♀️ pt수업',
         startAt: 'Wed, 17 Mar 2021 10:59:44 GMT',
         date: '2021-05-17',
         color: colors.active,
