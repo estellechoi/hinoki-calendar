@@ -14,6 +14,8 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import './../../widgets/buttons/text_label_button.dart';
 import './../../widgets/form_elements/linked_input.dart';
 import './../../widgets/form_elements/linked_switch.dart';
+import './../../widgets/form_elements/linked_date_picker.dart';
+import './../../widgets/form_elements/linked_time_picker.dart';
 
 class CalendarWriteModal extends StatefulWidget {
   final String date;
@@ -170,6 +172,8 @@ class _CalendarWriteModalState extends State<CalendarWriteModal> {
             }));
   }
 
+  bool _isPeriod = false;
+
   void _printInput(String text) {
     print(text);
   }
@@ -240,14 +244,27 @@ class _CalendarWriteModalState extends State<CalendarWriteModal> {
                         child: Column(
                           children: <Widget>[
                             LinkedSwitch(
-                              position: 'top',
-                              labelText: 'Date',
-                            ),
-                            LinkedInput(
-                                position: 'bottom',
-                                labelText: 'Notes',
-                                defaultValue: '',
-                                onChanged: _printInput)
+                                position: 'top',
+                                labelText: 'Period',
+                                isActive: _isPeriod,
+                                onToggle: (bool val) {
+                                  setState(() {
+                                    _isPeriod = val;
+                                  });
+                                }),
+                            LinkedDatePicker(
+                                position: 'middle',
+                                labelText: _isPeriod ? 'Starts' : 'Date',
+                                defaultDate: widget.date),
+                            _isPeriod
+                                ? LinkedDatePicker(
+                                    position: 'bottom',
+                                    labelText: 'Ends',
+                                    defaultDate: widget.date)
+                                : LinkedTimePicker(
+                                    position: 'bottom',
+                                    labelText: 'Time',
+                                    defaultTime: widget.date)
                           ],
                         )),
                     Container(

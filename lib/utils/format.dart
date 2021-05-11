@@ -1,6 +1,14 @@
 import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart';
 
+// String to DateTime
+// 'yyyy-MM-dd' format param is required.
+DateTime objectifyDate(String date) {
+  List<String> splits = date.split('-');
+  return DateTime(
+      int.parse(splits[0]), int.parse(splits[1]), int.parse(splits[2]));
+}
+
 // DateTime to String
 String stringifyDateTime(DateTime dateTime) {
   return DateFormat('yyyy-MM-dd').format(dateTime);

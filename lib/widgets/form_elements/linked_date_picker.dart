@@ -2,24 +2,25 @@ import 'package:flutter/material.dart';
 import 'linked_block.dart';
 import 'hinoki_switch.dart';
 import './../styles/textstyles.dart' as textstyles;
+import 'hinoki_date_picker.dart';
 
-class LinkedSwitch extends StatefulWidget {
+class LinkedDatePicker extends StatefulWidget {
   final String position;
   final String labelText;
-  final bool isActive;
-  final onToggle;
+  final String defaultDate;
 
-  LinkedSwitch(
+  LinkedDatePicker(
       {required this.position,
       required this.labelText,
-      required this.isActive,
-      required this.onToggle});
+      required this.defaultDate});
 
   @override
-  _LinkedSwitchState createState() => _LinkedSwitchState();
+  _LinkedDatePickerState createState() => _LinkedDatePickerState();
 }
 
-class _LinkedSwitchState extends State<LinkedSwitch> {
+class _LinkedDatePickerState extends State<LinkedDatePicker> {
+  // bool _isActive = false;
+
   @override
   Widget build(BuildContext context) {
     return LinkedBlock(
@@ -30,9 +31,7 @@ class _LinkedSwitchState extends State<LinkedSwitch> {
           children: <Widget>[
             Container(
                 child: Text(widget.labelText, style: textstyles.inputText)),
-            Container(
-                child: HinokiSwitch(
-                    isActive: widget.isActive, onToggle: widget.onToggle))
+            Container(child: HinokiDatePicker(defaultDate: widget.defaultDate))
           ],
         ));
   }

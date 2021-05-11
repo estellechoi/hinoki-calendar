@@ -1,25 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/widgets/form_elements/hinoki_time_picker.dart';
 import 'linked_block.dart';
 import 'hinoki_switch.dart';
 import './../styles/textstyles.dart' as textstyles;
+import 'hinoki_date_picker.dart';
 
-class LinkedSwitch extends StatefulWidget {
+class LinkedTimePicker extends StatefulWidget {
   final String position;
   final String labelText;
-  final bool isActive;
-  final onToggle;
+  final String defaultTime;
 
-  LinkedSwitch(
+  LinkedTimePicker(
       {required this.position,
       required this.labelText,
-      required this.isActive,
-      required this.onToggle});
+      required this.defaultTime});
 
   @override
-  _LinkedSwitchState createState() => _LinkedSwitchState();
+  _LinkedTimePickerState createState() => _LinkedTimePickerState();
 }
 
-class _LinkedSwitchState extends State<LinkedSwitch> {
+class _LinkedTimePickerState extends State<LinkedTimePicker> {
+  // bool _isActive = false;
+
   @override
   Widget build(BuildContext context) {
     return LinkedBlock(
@@ -30,9 +32,7 @@ class _LinkedSwitchState extends State<LinkedSwitch> {
           children: <Widget>[
             Container(
                 child: Text(widget.labelText, style: textstyles.inputText)),
-            Container(
-                child: HinokiSwitch(
-                    isActive: widget.isActive, onToggle: widget.onToggle))
+            Container(child: HinokiTimePicker(defaultTime: widget.defaultTime))
           ],
         ));
   }
