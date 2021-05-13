@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:infinite_listview/infinite_listview.dart';
 import './../styles/colors.dart' as colors;
+import './../styles/fonts.dart' as fonts;
 
 class NumberSpinner extends StatefulWidget {
   final int minValue;
@@ -10,6 +11,7 @@ class NumberSpinner extends StatefulWidget {
   final int value;
   final ValueChanged<int> onChanged;
 
+  final Color scrollingColor;
   final double width;
   final int visibleItemCount;
   final int step;
@@ -23,6 +25,7 @@ class NumberSpinner extends StatefulWidget {
       required this.maxValue,
       required this.value,
       required this.onChanged,
+      required this.scrollingColor,
       this.width = 100,
       this.visibleItemCount = 3,
       this.step = 1,
@@ -73,7 +76,7 @@ class _NumberSpinnerState extends State<NumberSpinner> {
   }
 
   void _handleScroll() {
-    _labelColor = colors.active;
+    _labelColor = widget.scrollingColor;
 
     var indexOfMiddleElement = (_scrollController.offset / itemHeight).round();
 
@@ -113,6 +116,10 @@ class _NumberSpinnerState extends State<NumberSpinner> {
         duration: Duration(milliseconds: 300),
         curve: Curves.easeOutCubic,
       );
+
+      setState(() {
+        _labelColor = colors.black;
+      });
     }
   }
 
@@ -185,8 +192,7 @@ class _NumberSpinnerState extends State<NumberSpinner> {
     final Widget child = isExtra
         ? SizedBox.shrink()
         : Text(getDisplayedValue(value),
-            style:
-                TextStyle(color: isScrolling ? colors.active : colors.black));
+            style: TextStyle(color: _labelColor, fontSize: fonts.sizeBase));
 
     return Container(
       child: child,
