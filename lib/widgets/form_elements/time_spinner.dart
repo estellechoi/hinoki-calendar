@@ -7,8 +7,12 @@ import 'number_spinner.dart';
 class TimeSpinner extends StatefulWidget {
   final int defaultHour;
   final int defaultMinute;
+  final ValueChanged<List<int>> onChanged;
 
-  TimeSpinner({required this.defaultHour, required this.defaultMinute});
+  TimeSpinner(
+      {required this.defaultHour,
+      required this.defaultMinute,
+      required this.onChanged});
 
   @override
   _TimeSpinnerState createState() => _TimeSpinnerState();
@@ -17,10 +21,8 @@ class TimeSpinner extends StatefulWidget {
 class _TimeSpinnerState extends State<TimeSpinner> {
   int _selectedHour = 0;
   int _selectedMinute = 0;
-
   bool _isScrolling = false;
   Color _borderColor = colors.transparent;
-
   bool _isHourDisabled = false;
   bool _isMinuteDisabled = false;
 
@@ -72,12 +74,16 @@ class _TimeSpinnerState extends State<TimeSpinner> {
     setState(() {
       _selectedHour = value;
     });
+
+    widget.onChanged([_selectedHour, _selectedMinute]);
   }
 
   void _changeMinute(int value) {
     setState(() {
       _selectedMinute = value;
     });
+
+    widget.onChanged([_selectedHour, _selectedMinute]);
   }
 
   @override
@@ -96,7 +102,7 @@ class _TimeSpinnerState extends State<TimeSpinner> {
                         width: 1,
                         style: BorderStyle.solid,
                         color: _borderColor),
-                    borderRadius: borders.radiusBase),
+                    borderRadius: borders.radiusLight),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,

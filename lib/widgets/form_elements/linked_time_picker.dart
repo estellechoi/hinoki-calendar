@@ -1,19 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/widgets/form_elements/hinoki_time_picker.dart';
 import 'linked_block.dart';
-import 'hinoki_switch.dart';
 import './../styles/textstyles.dart' as textstyles;
-import 'hinoki_date_picker.dart';
 
 class LinkedTimePicker extends StatefulWidget {
   final String position;
   final String labelText;
-  final String defaultTime;
+  final int hour;
+  final int minute;
+  final bool isPMSelected;
+  final ValueChanged<List<int>> onTimeSelected;
+  final ValueChanged<bool> onZoneToggle;
 
-  LinkedTimePicker(
-      {required this.position,
-      required this.labelText,
-      required this.defaultTime});
+  LinkedTimePicker({
+    required this.position,
+    required this.labelText,
+    required this.hour,
+    required this.minute,
+    this.isPMSelected = false,
+    required this.onTimeSelected,
+    required this.onZoneToggle,
+  });
 
   @override
   _LinkedTimePickerState createState() => _LinkedTimePickerState();
@@ -32,7 +39,14 @@ class _LinkedTimePickerState extends State<LinkedTimePicker> {
           children: <Widget>[
             Container(
                 child: Text(widget.labelText, style: textstyles.inputText)),
-            Container(child: HinokiTimePicker(defaultTime: widget.defaultTime))
+            Container(
+                child: HinokiTimePicker(
+              defaultHour: widget.hour,
+              defaultMinute: widget.minute,
+              isPMSelected: widget.isPMSelected,
+              onTimeSelected: widget.onTimeSelected,
+              onZoneToggle: widget.onZoneToggle,
+            ))
           ],
         ));
   }

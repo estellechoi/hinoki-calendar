@@ -8,8 +8,9 @@ import './../calendars/date_picker_calendar.dart';
 
 class HinokiDatePicker extends StatefulWidget {
   final String defaultDate;
+  final ValueChanged<String> onDaySelected;
 
-  HinokiDatePicker({required this.defaultDate});
+  HinokiDatePicker({required this.defaultDate, required this.onDaySelected});
 
   @override
   _HinokiDatePickerState createState() => _HinokiDatePickerState();
@@ -18,9 +19,15 @@ class HinokiDatePicker extends StatefulWidget {
 class _HinokiDatePickerState extends State<HinokiDatePicker> {
   String _selectedDate = '';
 
+  @override
+  void initState() {
+    super.initState();
+    _selectedDate = widget.defaultDate;
+  }
+
   Future _openDatePicker(BuildContext context) async {
-    double dialogWidth = MediaQuery.of(context).size.width * (4 / 5);
-    double dialogHeight = dialogWidth * 1.1;
+    final double dialogWidth = MediaQuery.of(context).size.width * (4 / 5);
+    final double dialogHeight = dialogWidth * 1.1;
 
     await mixins.openDialog(
       context: context,
@@ -35,23 +42,19 @@ class _HinokiDatePickerState extends State<HinokiDatePicker> {
                 children: <Widget>[
                   Expanded(
                       child: DatePickerCalendar(
-                    defaultDate: _selectedDate,
+                    defaultDate: widget.defaultDate,
                     onPageChanged: (String date) {},
                     onDaySelected: (String date, int weekday) {
                       setState(() {
                         _selectedDate = date;
                       });
+
+                      widget.onDaySelected(date);
                     },
                   ))
                 ],
               ))),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _selectedDate = widget.defaultDate;
   }
 
   @override

@@ -26,19 +26,19 @@ class _TextLabelButtonState extends State<TextLabelButton> {
         onPressed: widget.disabled ? null : widget.onPressed,
         child: Text(widget.label,
             style: TextStyle(
-                color: colors.black,
+                color: widget.disabled ? colors.disabled : colors.black,
                 fontSize: fonts.sizeBase,
                 fontWeight: fonts.weightBase,
                 fontFamily: fonts.primary,
                 fontFamilyFallback: fonts.primaryFallbacks)),
         style: ElevatedButton.styleFrom(
-          primary: colors.transparent,
+          primary: colors.white,
           onPrimary: colors.white,
-          onSurface: colors.disabled,
+          onSurface: colors.white,
           elevation: 0,
           // minimumSize: Size(_minWidth, 0.0),
           padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20.0),
-          shape: RoundedRectangleBorder(borderRadius: borders.radiusCircle),
+          shape: RoundedRectangleBorder(borderRadius: borders.radiusLight),
           // textStyle: TextStyle(
           //     color: colors.black,
           //     fontSize: fonts.sizeBase,

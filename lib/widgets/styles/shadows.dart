@@ -16,10 +16,10 @@ final input = [
 
 final tool = [
   BoxShadow(
-      color: colors.shadowDark,
+      color: colors.shadow,
       blurRadius: 4,
       spreadRadius: 0,
-      offset: Offset(-2, 0))
+      offset: Offset(0, 2))
 ];
 
 final card = [

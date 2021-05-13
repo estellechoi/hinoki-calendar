@@ -1,66 +1,60 @@
 import 'package:flutter/material.dart';
-import './../styles/colors.dart' as colors;
-import './../styles/borders.dart' as borders;
-import 'number_spinner.dart';
+import 'time_spinner.dart';
+import 'radio_switch.dart';
 
 class TimePicker extends StatefulWidget {
+  final int defaultHour;
+  final int defaultMinute;
+  final bool isPMSelected;
+  final ValueChanged<List<int>> onTimeSelected;
+  final ValueChanged<bool> onZoneToggle;
+
+  TimePicker(
+      {required this.defaultHour,
+      required this.defaultMinute,
+      this.isPMSelected = false,
+      required this.onTimeSelected,
+      required this.onZoneToggle});
+
   @override
   _TimePickerState createState() => _TimePickerState();
 }
 
 class _TimePickerState extends State<TimePicker> {
-  List<int> hours = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-  List<int> mins = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+  bool _isPMSelected = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _isPMSelected = widget.isPMSelected;
+  }
+
+  void _onToggle(bool isPMSelected) {
+    setState(() {
+      _isPMSelected = isPMSelected;
+    });
+
+    widget.onZoneToggle(_isPMSelected);
+  }
 
   @override
   Widget build(BuildContext context) {
-    int _selectedHour = 10;
-    int _selectedMinute = 25;
-
-    return Container(
-        child: Align(
-            alignment: Alignment.center,
-            child: Container(
-                clipBehavior: Clip.hardEdge,
-                width: 110,
-                decoration: BoxDecoration(
-                  color: colors.lightgrey,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    NumberSpinner(
-                      useHaptics: true,
-                      visibleItemCount: 1,
-                      width: 50,
-                      minValue: 1,
-                      maxValue: 12,
-                      value: _selectedHour,
-                      onChanged: (int value) {
-                        setState(() {
-                          _selectedHour = value;
-                        });
-                      },
-                    ),
-                    SizedBox(
-                        width: 10,
-                        child: Align(
-                            alignment: Alignment.center, child: Text(':'))),
-                    NumberSpinner(
-                      useHaptics: true,
-                      visibleItemCount: 1,
-                      width: 50,
-                      minValue: 1,
-                      maxValue: 59,
-                      value: _selectedMinute,
-                      onChanged: (int value) {
-                        setState(() {
-                          _selectedMinute = value;
-                        });
-                      },
-                    )
-                  ],
-                ))));
+    return IntrinsicWidth(
+        child: Row(
+      children: <Widget>[
+        TimeSpinner(
+          defaultHour: widget.defaultHour,
+          defaultMinute: widget.defaultMinute,
+          onChanged: widget.onTimeSelected,
+        ),
+        Container(
+          margin: EdgeInsets.only(left: 10),
+          child: RadioSwitch(
+              labels: ['AM', 'PM'],
+              isRightSelected: _isPMSelected,
+              onToggle: _onToggle),
+        )
+      ],
+    ));
   }
 }

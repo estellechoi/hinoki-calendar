@@ -190,9 +190,8 @@ class _CalendarDailyModalState extends State<CalendarDailyModal> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Container(
-              margin: EdgeInsets.only(bottom: paddings.verticalCard),
-              padding:
-                  EdgeInsets.symmetric(horizontal: paddings.horizontalModal),
+              margin: EdgeInsets.only(top: 10, bottom: paddings.verticalCard),
+              padding: EdgeInsets.only(left: 26),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -206,12 +205,12 @@ class _CalendarDailyModalState extends State<CalendarDailyModal> {
                       onPressed: () {
                         showWriteModal(context);
                       },
-                      icon: Icon(Icons.add)),
+                      iconData: Icons.add),
                 ],
               ),
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height / 2,
+              height: MediaQuery.of(context).size.height / 2.5,
               child: ListView.builder(
                 padding: EdgeInsets.all(0),
                 itemCount: _events.length,
