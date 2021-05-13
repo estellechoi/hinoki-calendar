@@ -11,6 +11,7 @@ class NumberSpinner extends StatefulWidget {
   final int value;
   final ValueChanged<int> onChanged;
 
+  final bool disabled;
   final Color scrollingColor;
   final double width;
   final int visibleItemCount;
@@ -19,20 +20,26 @@ class NumberSpinner extends StatefulWidget {
   final bool isInfinite;
   final bool prefixZero;
 
-  NumberSpinner(
-      {Key? key,
-      required this.minValue,
-      required this.maxValue,
-      required this.value,
-      required this.onChanged,
-      required this.scrollingColor,
-      this.width = 100,
-      this.visibleItemCount = 3,
-      this.step = 1,
-      this.useHaptics = false,
-      this.isInfinite = false,
-      this.prefixZero = false})
-      : assert(minValue <= value),
+  final onScroll;
+  final onScrollEnd;
+
+  NumberSpinner({
+    Key? key,
+    required this.minValue,
+    required this.maxValue,
+    required this.value,
+    required this.onChanged,
+    required this.scrollingColor,
+    this.disabled = false,
+    this.width = 100,
+    this.visibleItemCount = 3,
+    this.step = 1,
+    this.useHaptics = false,
+    this.isInfinite = false,
+    this.prefixZero = false,
+    this.onScroll,
+    this.onScrollEnd,
+  })  : assert(minValue <= value),
         assert(value <= maxValue),
         super(key: key);
 
@@ -41,9 +48,8 @@ class NumberSpinner extends StatefulWidget {
 }
 
 class _NumberSpinnerState extends State<NumberSpinner> {
-  final double itemHeight = 40;
+  final double itemHeight = 34;
   late final ScrollController _scrollController;
-
   Color _labelColor = colors.black;
 
   @override
@@ -76,6 +82,8 @@ class _NumberSpinnerState extends State<NumberSpinner> {
   }
 
   void _handleScroll() {
+    if (widget.disabled) return;
+
     _labelColor = widget.scrollingColor;
 
     var indexOfMiddleElement = (_scrollController.offset / itemHeight).round();
@@ -90,6 +98,7 @@ class _NumberSpinnerState extends State<NumberSpinner> {
         getIntValueFromIndex(indexOfMiddleElement + additionalItemsOnEachSide);
 
     if (widget.value != intValueInTheMiddle) {
+      if (widget.onScroll != null) widget.onScroll();
       widget.onChanged(intValueInTheMiddle);
 
       if (widget.useHaptics) {
@@ -102,6 +111,8 @@ class _NumberSpinnerState extends State<NumberSpinner> {
 
   void _animateScroll() {
     if (_scrollController.hasClients && !isScrolling) {
+      if (widget.onScrollEnd != null) widget.onScrollEnd();
+
       int diff = widget.value - widget.minValue;
       int index = diff ~/ widget.step;
 
@@ -111,15 +122,15 @@ class _NumberSpinnerState extends State<NumberSpinner> {
         index += cycles * itemCount;
       }
 
+      setState(() {
+        _labelColor = colors.black;
+      });
+
       _scrollController.animateTo(
         index * itemHeight,
         duration: Duration(milliseconds: 300),
         curve: Curves.easeOutCubic,
       );
-
-      setState(() {
-        _labelColor = colors.black;
-      });
     }
   }
 
@@ -192,7 +203,9 @@ class _NumberSpinnerState extends State<NumberSpinner> {
     final Widget child = isExtra
         ? SizedBox.shrink()
         : Text(getDisplayedValue(value),
-            style: TextStyle(color: _labelColor, fontSize: fonts.sizeBase));
+            style: TextStyle(
+                color: widget.disabled ? colors.disabled : _labelColor,
+                fontSize: fonts.sizeBase));
 
     return Container(
       child: child,
