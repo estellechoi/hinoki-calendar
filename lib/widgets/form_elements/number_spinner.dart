@@ -41,6 +41,8 @@ class _NumberSpinnerState extends State<NumberSpinner> {
   final double itemHeight = 40;
   late final ScrollController _scrollController;
 
+  Color _labelColor = colors.black;
+
   @override
   void initState() {
     super.initState();
@@ -71,6 +73,8 @@ class _NumberSpinnerState extends State<NumberSpinner> {
   }
 
   void _handleScroll() {
+    _labelColor = colors.active;
+
     var indexOfMiddleElement = (_scrollController.offset / itemHeight).round();
 
     if (widget.isInfinite) {
