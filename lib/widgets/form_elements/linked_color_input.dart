@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'linked_input_frame.dart';
 import 'color_picker.dart';
+import 'package:flutter_app/types/color_palette_option.dart';
 
 class LinkedColorInput extends StatefulWidget {
   final String type; // text, textarea
@@ -10,7 +11,7 @@ class LinkedColorInput extends StatefulWidget {
   final Color color;
 
   final ValueChanged<String> onChanged;
-  final ValueChanged<Color> onColorChanged;
+  final ValueChanged<ColorPaletteOption> onColorChanged;
 
   LinkedColorInput(
       {Key? key,
@@ -37,7 +38,7 @@ class _LinkedColorInputState extends State<LinkedColorInput> {
         onChanged: widget.onChanged,
         child: ColorPicker(
           color: widget.color,
-          onChanged: widget.onColorChanged,
+          onSelected: widget.onColorChanged,
         ));
   }
 }
