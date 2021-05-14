@@ -17,6 +17,7 @@ import './../../widgets/form_elements/linked_color_input.dart';
 import './../../widgets/form_elements/linked_switch.dart';
 import './../../widgets/form_elements/linked_date_picker.dart';
 import './../../widgets/form_elements/linked_time_picker.dart';
+import 'package:flutter_app/types/color_palette_option.dart';
 
 class CalendarWriteModal extends StatefulWidget {
   final int? id;
@@ -146,7 +147,8 @@ class _CalendarWriteModalState extends State<CalendarWriteModal> {
             }));
   }
 
-  Color _color = colors.black;
+  ColorPaletteOption _colorOption =
+      ColorPaletteOption(id: 1, color: colors.black, label: 'Black');
   String _title = '';
   bool _isPeriod = false;
   String _date = '';
@@ -179,9 +181,9 @@ class _CalendarWriteModalState extends State<CalendarWriteModal> {
     });
   }
 
-  void _handleColorChange(Color color) {
+  void _handleColorChange(ColorPaletteOption colorOption) {
     setState(() {
-      _color = color;
+      _colorOption = colorOption;
     });
     // ...
   }
@@ -277,7 +279,7 @@ class _CalendarWriteModalState extends State<CalendarWriteModal> {
                             position: 'single',
                             labelText: 'Title',
                             defaultValue: '',
-                            color: _color,
+                            color: _colorOption.color,
                             onChanged: _handleTitleChange,
                             onColorChanged: _handleColorChange,
                           ),
