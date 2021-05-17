@@ -16,6 +16,7 @@
 		97E5D35D263AC98300205184 /* PushKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97E5D35C263AC98300205184 /* PushKit.framework */; };
 		97E5D35F263AC98F00205184 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97E5D35E263AC98F00205184 /* UserNotifications.framework */; };
 		97E5D361263AC99E00205184 /* UserNotificationsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97E5D360263AC99E00205184 /* UserNotificationsUI.framework */; };
+		97FE0CCB265282D300B02CB9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 97FE0CCA265282D300B02CB9 /* GoogleService-Info.plist */; };
 		FAB03208BD510584A0684987 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08D54C69D5EF903B926A45D3 /* Pods_Runner.framework */; };
 /* End PBXBuildFile section */
 
@@ -53,6 +54,7 @@
 		97E5D35C263AC98300205184 /* PushKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PushKit.framework; path = System/Library/Frameworks/PushKit.framework; sourceTree = SDKROOT; };
 		97E5D35E263AC98F00205184 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		97E5D360263AC99E00205184 /* UserNotificationsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotificationsUI.framework; path = System/Library/Frameworks/UserNotificationsUI.framework; sourceTree = SDKROOT; };
+		97FE0CCA265282D300B02CB9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		AB62FCAC5968A1D88B964EBF /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -125,6 +127,7 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
+				97FE0CCA265282D300B02CB9 /* GoogleService-Info.plist */,
 				97E5D35B263AC88300205184 /* Runner.entitlements */,
 				97C146FA1CF9000F007C117D /* Main.storyboard */,
 				97C146FD1CF9000F007C117D /* Assets.xcassets */,
@@ -203,6 +206,7 @@
 			files = (
 				97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */,
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
+				97FE0CCB265282D300B02CB9 /* GoogleService-Info.plist in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
 			);
