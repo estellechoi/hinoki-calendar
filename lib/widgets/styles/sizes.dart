@@ -5,8 +5,16 @@ final double emojiBox = 48.0;
 final double appBar = 56;
 final double bottomNavigationBar = 82;
 
+double screenHeight(BuildContext context) {
+  return MediaQuery.of(context).size.height;
+}
+
 double getBodyHeight(BuildContext context) {
-  return MediaQuery.of(context).size.height - appBar - bottomNavigationBar;
+  return screenHeight(context) - appBar - bottomNavigationBar;
+}
+
+double getBesideAppBarHeight(BuildContext context) {
+  return screenHeight(context) - appBar;
 }
 
 // Chart

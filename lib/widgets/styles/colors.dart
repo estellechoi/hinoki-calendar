@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 // Brand colors
-const Color primary = Color(0xFF524F);
+const Color primary = Color(0xFFFF5052);
 const Color primaryHigh = Color(0xff00c3fc);
 final Color primaryHighAlpha = const Color(0xff00c3fc).withOpacity(0.1);
 const Color primaryFocused = Color(0xffd7f5fe);

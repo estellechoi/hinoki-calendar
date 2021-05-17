@@ -19,7 +19,7 @@ final Border calendarStrongCell = Border.all(
 // Border Dividers
 final Border dividerTop = Border(
     top: BorderSide(
-        width: 1.0, style: BorderStyle.solid, color: colors.divider));
+        width: 0.5, style: BorderStyle.solid, color: colors.divider));
 
 final Border sectionDividerBottom = Border(
     top: BorderSide.none,

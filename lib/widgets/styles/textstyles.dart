@@ -2,6 +2,41 @@ import 'package:flutter/material.dart';
 import 'colors.dart' as colors;
 import 'fonts.dart' as fonts;
 
+final TextStyle comment = TextStyle(
+    color: colors.black,
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    fontFamily: fonts.primary,
+    fontFamilyFallback: fonts.primaryFallbacks);
+
+final TextStyle fadedComment = TextStyle(
+    color: colors.disabled,
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    fontFamily: fonts.primary,
+    fontFamilyFallback: fonts.primaryFallbacks);
+
+final TextStyle strongComment = TextStyle(
+    color: colors.primary,
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    fontFamily: fonts.primary,
+    fontFamilyFallback: fonts.primaryFallbacks);
+
+final TextStyle helpText = TextStyle(
+    color: colors.black,
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    fontFamily: fonts.primary,
+    fontFamilyFallback: fonts.primaryFallbacks);
+
+final TextStyle strongHelpText = TextStyle(
+    color: colors.primary,
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    fontFamily: fonts.primary,
+    fontFamilyFallback: fonts.primaryFallbacks);
+
 final TextStyle button = TextStyle(
     color: colors.white,
     fontSize: fonts.sizeBase,

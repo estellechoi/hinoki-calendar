@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import '../api/auth.dart' as api;
+
 import '../widgets/buttons/hinoki_button.dart';
-import '../widgets/form_elements/linked_input.dart';
-import '../widgets/buttons/f_button.dart';
-import '../widgets/styles/paddings.dart' as paddings;
 import '../widgets/styles/colors.dart' as colors;
 import '../widgets/styles/fonts.dart' as fonts;
-import '../app_state.dart';
 import '../widgets/layouts/layout.dart';
+import './../mixins/common.dart' as mixins;
+import 'login/signup_modal_view.dart';
 
 class LoginView extends StatefulWidget {
   @override
@@ -15,30 +13,36 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-  Map<String, String> formData = {'id': '', 'password': '', 'type': 'email'};
+  final int modalToggleDuration = 600;
 
-  void login() async {
-    print('login data');
-    print(formData.toString());
-    try {
-      await api.login(formData);
-      await appState.getGuideUnreadCnt();
-      appState.login();
-    } catch (e) {
-      // ...
-    }
+  Future _openSignupDialog(BuildContext context) async {
+    await mixins.openTitledBottomModal(
+        context: context,
+        intrinsicHeight: false,
+        title: 'Create an account',
+        backButtonLabel: 'Cancel',
+        child: SignupModalView(onToggled: () {
+          Future.delayed(Duration(milliseconds: modalToggleDuration),
+              () => _openSigninDialog(context));
+        }),
+        onCanceled: () {},
+        onRightButtonClicked: () {});
   }
 
-  void _changeId(String text) {
-    setState(() {
-      formData['id'] = text;
-    });
-  }
-
-  void _changePassword(String text) {
-    setState(() {
-      formData['password'] = text;
-    });
+  Future _openSigninDialog(BuildContext context) async {
+    await mixins.openTitledBottomModal(
+        context: context,
+        intrinsicHeight: false,
+        title: 'Sign in',
+        backButtonLabel: 'Cancel',
+        child: SignupModalView(
+            isSignin: true,
+            onToggled: () {
+              Future.delayed(Duration(milliseconds: modalToggleDuration),
+                  () => _openSignupDialog(context));
+            }),
+        onCanceled: () {},
+        onRightButtonClicked: () {});
   }
 
   @override
@@ -69,43 +73,46 @@ class _LoginViewState extends State<LoginView> {
                     child: Text('Hinoki',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            color: colors.white,
-                            fontFamily: fonts.primary,
-                            fontFamilyFallback: fonts.primaryFallbacks,
-                            height: 1.3,
-                            fontSize: 30,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 3))),
+                          color: colors.white,
+                          fontFamily: fonts.primary,
+                          fontFamilyFallback: fonts.primaryFallbacks,
+                          height: 1.3,
+                          fontSize: 34,
+                          fontWeight: FontWeight.w700,
+                        ))),
                 Column(
                   children: <Widget>[
-                    LinkedInput(
-                      position: 'top',
-                      labelText: 'ID',
-                      defaultValue: '',
-                      onChanged: _changeId,
-                    ),
-                    LinkedInput(
-                      type: 'password',
-                      position: 'bottom',
-                      labelText: 'Password',
-                      defaultValue: '',
-                      onChanged: _changePassword,
-                    ),
-                    SizedBox(height: 50),
+                    Container(
+                        margin: EdgeInsets.only(bottom: 40),
+                        child: Text(
+                          'Customize everything.\n'
+                          'Discover productivity.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: colors.white,
+                              fontSize: 26,
+                              fontFamily: fonts.primary,
+                              fontFamilyFallback: fonts.primaryFallbacks),
+                        )),
                     Container(
                         child: HinokiButton(
                       // disabled: true,
                       fullWidth: true,
-                      onPressed: login,
+                      onPressed: () {
+                        _openSignupDialog(context);
+                      },
                       label: 'Create an account',
                     )),
                     SizedBox(height: 20),
                     Container(
                         child: HinokiButton(
                       type: 'border',
+                      color: 'white',
                       fullWidth: true,
                       // disabled: true,
-                      onPressed: login,
+                      onPressed: () {
+                        _openSigninDialog(context);
+                      },
                       label: 'I already have an account',
                     ))
                   ],

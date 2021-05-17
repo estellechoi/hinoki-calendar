@@ -23,7 +23,8 @@ enum Pages {
   Menu,
   RecordBody,
   GuideCategoryDetails,
-  GuideArticle
+  GuideArticle,
+  SignupForm
 }
 enum PageState { none, addPage, addAll, addWidget, pop, replace, replaceAll }
 

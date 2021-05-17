@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../styles/colors.dart' as colors;
-import '../styles/textstyles.dart' as textstyles;
+import '../styles/sizes.dart' as sizes;
 
 class AppBarLayout extends StatefulWidget {
   final String title;
@@ -49,14 +49,16 @@ class _AppBarLayoutState extends State<AppBarLayout> {
           key: widget.globalKey,
           resizeToAvoidBottomInset: false,
           extendBodyBehindAppBar: widget.extendBodyBehindAppBar,
-          appBar: AppBar(
-              title: Text(widget.title),
-              backgroundColor: appBarBackgroundColor,
-              iconTheme: IconThemeData(
-                color: iconColor, //change your color here
-              ),
-              elevation: 0,
-              actions: []),
+          appBar: PreferredSize(
+              preferredSize: Size(double.infinity, sizes.appBar),
+              child: AppBar(
+                  title: Text(widget.title),
+                  backgroundColor: appBarBackgroundColor,
+                  iconTheme: IconThemeData(
+                    color: iconColor, //change your color here
+                  ),
+                  elevation: 0,
+                  actions: [])),
           body: SingleChildScrollView(
               child: widget.body, controller: widget.scrollController),
         ));
