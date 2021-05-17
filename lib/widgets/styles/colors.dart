@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 // Brand colors
-const Color primary = Color(0xff44bbff);
+const Color primary = Color(0xFF524F);
 const Color primaryHigh = Color(0xff00c3fc);
 final Color primaryHighAlpha = const Color(0xff00c3fc).withOpacity(0.1);
 const Color primaryFocused = Color(0xffd7f5fe);
 const Color primaryDeco = Color(0xffa1dbfc);
+const Color coral = Color(0xFFFF524F);
+final Color coralFaded = coral..withOpacity(0.9);
 
 const Color disabled = Color(0xffbdc0c3);
 

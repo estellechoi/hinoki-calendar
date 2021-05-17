@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 // Font Family
-final String primary = 'Apple SD Gothic Neo';
+final String primary = 'NunitoSans';
 final primaryFallbacks = <String>['Malgun Gothic', '맑은 고딕', 'sans-serif'];
+
+// Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif
 
 // Base Font Style Set
 final double sizeBase = 16.0;

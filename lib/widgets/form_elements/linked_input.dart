@@ -26,6 +26,7 @@ class _LinkedInputState extends State<LinkedInput> {
   Widget build(BuildContext context) {
     return LinkedInputFrame(
         position: widget.position,
+        type: widget.type,
         labelText: widget.labelText,
         defaultValue: widget.defaultValue,
         onChanged: widget.onChanged,

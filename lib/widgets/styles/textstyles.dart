@@ -5,13 +5,14 @@ import 'fonts.dart' as fonts;
 final TextStyle button = TextStyle(
     color: colors.white,
     fontSize: fonts.sizeBase,
-    fontWeight: fonts.weightBase,
+    fontWeight: FontWeight.w400,
     fontFamily: fonts.primary,
     fontFamilyFallback: fonts.primaryFallbacks);
 
 final TextStyle inputText = TextStyle(
     color: colors.inputText,
     fontSize: fonts.sizeBase,
+    fontWeight: FontWeight.w400,
     height: fonts.lineHeightInput,
     fontFamily: fonts.primary,
     fontFamilyFallback: fonts.primaryFallbacks);
@@ -19,6 +20,7 @@ final TextStyle inputText = TextStyle(
 final TextStyle inputHintText = TextStyle(
     color: colors.blackAlphaDeep,
     fontSize: fonts.sizeBase,
+    fontWeight: FontWeight.w400,
     height: fonts.lineHeightInput,
     fontFamily: fonts.primary,
     fontFamilyFallback: fonts.primaryFallbacks);

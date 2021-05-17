@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import '../api/auth.dart' as api;
-import '../widgets/form_elements/f_input.dart';
+import '../widgets/buttons/hinoki_button.dart';
+import '../widgets/form_elements/linked_input.dart';
 import '../widgets/buttons/f_button.dart';
 import '../widgets/styles/paddings.dart' as paddings;
+import '../widgets/styles/colors.dart' as colors;
+import '../widgets/styles/fonts.dart' as fonts;
 import '../app_state.dart';
 import '../widgets/layouts/layout.dart';
 
@@ -41,40 +44,75 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return Layout(
-        child: Container(
-            padding: EdgeInsets.symmetric(
-                vertical: paddings.verticalBase,
-                horizontal: paddings.horizontalBase),
-            child: Align(
-                alignment: Alignment.center,
-                child: Column(
+        child: Stack(
+      children: <Widget>[
+        Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            decoration: BoxDecoration(color: colors.active),
+            child: Image(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              fit: BoxFit.cover,
+              alignment: Alignment.bottomCenter,
+              image: AssetImage('static/sky.jpeg'),
+            )),
+        Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            padding: EdgeInsets.symmetric(vertical: 100, horizontal: 26),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                    child: Text('Hinoki',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: colors.white,
+                            fontFamily: fonts.primary,
+                            fontFamilyFallback: fonts.primaryFallbacks,
+                            height: 1.3,
+                            fontSize: 30,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 3))),
+                Column(
                   children: <Widget>[
+                    LinkedInput(
+                      position: 'top',
+                      labelText: 'ID',
+                      defaultValue: '',
+                      onChanged: _changeId,
+                    ),
+                    LinkedInput(
+                      type: 'password',
+                      position: 'bottom',
+                      labelText: 'Password',
+                      defaultValue: '',
+                      onChanged: _changePassword,
+                    ),
+                    SizedBox(height: 50),
                     Container(
-                        padding: EdgeInsets.only(bottom: paddings.formField),
-                        child: FInput(
-                          hintText: '아이디',
-                          defaultValue: '',
-                          onChanged: _changeId,
-                        )),
-                    Container(
-                        padding: EdgeInsets.only(
-                          bottom: paddings.formField,
-                        ),
-                        child: FInput(
-                          type: 'password',
-                          hintText: '비밀번호',
-                          defaultValue: '',
-                          onChanged: _changePassword,
-                        )),
-                    Container(
-                        // padding: EdgeInsets.only(bottom: paddings.formField),
-                        child: FButton(
+                        child: HinokiButton(
                       // disabled: true,
                       fullWidth: true,
                       onPressed: login,
-                      text: '로그인',
+                      label: 'Create an account',
+                    )),
+                    SizedBox(height: 20),
+                    Container(
+                        child: HinokiButton(
+                      type: 'border',
+                      fullWidth: true,
+                      // disabled: true,
+                      onPressed: login,
+                      label: 'I already have an account',
                     ))
                   ],
-                ))));
+                )
+              ],
+            ))
+      ],
+    ));
   }
 }
