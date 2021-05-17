@@ -5,6 +5,7 @@ import '../styles/borders.dart' as borders;
 
 class HinokiButton extends StatefulWidget {
   final String type;
+  final String color;
   final VoidCallback onPressed;
   final String label;
   final bool disabled;
@@ -13,6 +14,7 @@ class HinokiButton extends StatefulWidget {
   HinokiButton(
       {Key? key,
       this.type = 'filled',
+      this.color = 'primary',
       required this.onPressed,
       this.label = '',
       this.disabled = false,
@@ -29,26 +31,42 @@ class _HinokiButtonState extends State<HinokiButton> {
     bool isFilled = widget.type == 'filled';
     double minWidth = widget.fullWidth ? double.infinity : 0;
 
+    Color _color = colors.primary;
+
+    switch (widget.color) {
+      case 'primary':
+        _color = colors.primary;
+        break;
+      case 'white':
+        _color = colors.white;
+        break;
+      case 'black':
+        _color = colors.black;
+        break;
+    }
+
     return ElevatedButton(
         onPressed: widget.disabled ? null : widget.onPressed,
         child: Text(widget.label,
             style: TextStyle(
-                color: widget.disabled ? colors.disabled : colors.white,
+                color: widget.disabled
+                    ? colors.disabled
+                    : isFilled
+                        ? colors.white
+                        : _color,
                 fontSize: 18,
                 fontWeight: FontWeight.w400,
                 fontFamily: fonts.primary,
                 fontFamilyFallback: fonts.primaryFallbacks)),
         style: ElevatedButton.styleFrom(
-          primary: isFilled ? colors.coralFaded : colors.transparent,
-          onPrimary: isFilled ? colors.coralFaded : colors.transparent,
-          onSurface: isFilled ? colors.coralFaded : colors.transparent,
+          primary: isFilled ? _color : colors.transparent,
+          onPrimary: isFilled ? _color : colors.transparent,
+          onSurface: isFilled ? _color : colors.transparent,
           elevation: 0,
           minimumSize: Size(minWidth, 0),
           padding: EdgeInsets.symmetric(vertical: 14, horizontal: 20.0),
           shape: RoundedRectangleBorder(
-              side: BorderSide(
-                  width: isFilled ? 0 : 1,
-                  color: isFilled ? colors.coralFaded : colors.white),
+              side: BorderSide(width: isFilled ? 0 : 1, color: _color),
               borderRadius: borders.radiusLight),
         ));
   }
