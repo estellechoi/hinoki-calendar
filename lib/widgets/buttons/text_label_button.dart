@@ -28,7 +28,7 @@ class _TextLabelButtonState extends State<TextLabelButton> {
             style: TextStyle(
                 color: widget.disabled ? colors.disabled : colors.black,
                 fontSize: fonts.sizeBase,
-                fontWeight: fonts.weightBase,
+                fontWeight: FontWeight.w400,
                 fontFamily: fonts.primary,
                 fontFamilyFallback: fonts.primaryFallbacks)),
         style: ElevatedButton.styleFrom(
