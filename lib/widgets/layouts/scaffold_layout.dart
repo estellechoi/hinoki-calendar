@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import '../styles/colors.dart' as colors;
 import '../styles/textstyles.dart' as textstyles;
 import '../styles/sizes.dart' as sizes;
+import './../../app_state.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 
 class ScaffoldLayout extends StatefulWidget {
   final bool hideAppBar;
@@ -33,6 +36,12 @@ class _ScaffoldLayoutState extends State<ScaffoldLayout> {
 
   @override
   Widget build(BuildContext context) {
+    final User? firebaseUser = context.watch<User>();
+
+    if (firebaseUser == null) {
+      appState.redirectLoginPage();
+    }
+
     return GestureDetector(
         onTap: () {
           WidgetsBinding.instance?.focusManager.primaryFocus?.unfocus();

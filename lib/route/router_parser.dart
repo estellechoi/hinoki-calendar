@@ -25,7 +25,7 @@ class AppRouteInformationParser
     final String path = '/${uri.pathSegments[0]}';
 
     // if not logged in, redirect to login page
-    if (appState.loggedIn == false && path != loginPath) {
+    if (!appState.loggedIn && path != loginPath) {
       appState.redirectLoginPage();
     }
 

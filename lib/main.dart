@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/utils/auth_provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 import 'route/router_delegate.dart';
@@ -8,9 +9,16 @@ import 'route/pages.dart';
 import 'app_state.dart';
 import 'widgets/styles/colors.dart' as colors;
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
+
 // main()
-Future main() async {
+Future<void> main() async {
+  // main 메소드에서 서버나 SharedPreferences 등 비동기로 데이터를 다룬 다음 runApp을 실행해야하는 경우
+  WidgetsFlutterBinding.ensureInitialized();
   await DotEnv.load(fileName: '.env');
+  await Firebase.initializeApp();
   initializeDateFormatting().then((_) => runApp(MyApp()));
 }
 
@@ -38,20 +46,30 @@ class _MyAppState extends State<MyApp> {
     // link back displatcher with router delegate
     _backButtonDispatcher = AppBackButtonDispatcher(_routerDelegate);
 
-    if (appState.loggedIn == true) appState.getGuideUnreadCnt();
+    if (appState.loggedIn) appState.getGuideUnreadCnt();
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-        title: 'Hinoki Calendar',
-        theme: ThemeData(
-          primaryColor: colors.white,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-        routerDelegate: _routerDelegate,
-        routeInformationParser: _routeInformationParser,
-        backButtonDispatcher: _backButtonDispatcher);
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider(
+            create: (BuildContext ctx) => AuthProvider(FirebaseAuth.instance),
+          ),
+          StreamProvider(
+              create: (BuildContext ctx) =>
+                  context.read<AuthProvider>().authStateChanges,
+              initialData: null)
+        ],
+        child: MaterialApp.router(
+            title: 'Hinoki Calendar',
+            theme: ThemeData(
+              primaryColor: colors.white,
+              visualDensity: VisualDensity.adaptivePlatformDensity,
+            ),
+            routerDelegate: _routerDelegate,
+            routeInformationParser: _routeInformationParser,
+            backButtonDispatcher: _backButtonDispatcher));
   }
 }
 

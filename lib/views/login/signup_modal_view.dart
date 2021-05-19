@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_app/views/login/signup_form.dart';
 import '../../app_state.dart';
 import '../../route/pages.dart';
 import '../../api/auth.dart' as api;
 import '../../widgets/buttons/hinoki_button.dart';
+import '../../widgets/buttons/sign_in_with_apple_button.dart';
+
 import '../../widgets/form_elements/linked_input.dart';
 import '../../widgets/form_elements/common/shadowed_bundle.dart';
 import '../../widgets/styles/colors.dart' as colors;
@@ -49,13 +52,15 @@ class _SignupModalViewState extends State<SignupModalView> {
                 )),
             Container(
                 margin: EdgeInsets.only(bottom: 20),
-                child: HinokiButton(
-                  fullWidth: true,
-                  type: 'border',
-                  color: 'black',
-                  label: 'Sign $toggledText with Apple',
-                  onPressed: () {},
-                )),
+                child: SignInWithAppleButton(
+                    fullWidth: true,
+                    onSuccess: (User? firebaseUser) {
+                      // ...
+                      print(firebaseUser);
+                    },
+                    onError: (error) {
+                      // ...
+                    })),
             Container(
                 margin: EdgeInsets.only(bottom: 40),
                 child: HinokiButton(
