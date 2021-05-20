@@ -36,11 +36,11 @@ class _ScaffoldLayoutState extends State<ScaffoldLayout> {
 
   @override
   Widget build(BuildContext context) {
-    final User? firebaseUser = context.watch<User>();
+    // final User? firebaseUser = context.watch<User>();
 
-    if (firebaseUser == null) {
-      appState.redirectLoginPage();
-    }
+    // if (firebaseUser == null) {
+    //   appState.redirectLoginPage();
+    // }
 
     return GestureDetector(
         onTap: () {

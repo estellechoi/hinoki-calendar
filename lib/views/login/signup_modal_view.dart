@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -25,6 +27,22 @@ class SignupModalView extends StatefulWidget {
 }
 
 class _SignupModalViewState extends State<SignupModalView> {
+  void handleSuccess(User? firebaseUser) {
+    print('---------------------------------------');
+    print('Firebase login success');
+    print(firebaseUser);
+    print('---------------------------------------');
+
+    appState.login();
+  }
+
+  void handleError(Object error) {
+    print('---------------------------------------');
+    print('Firebase login fail');
+    print(error);
+    print('---------------------------------------');
+  }
+
   @override
   Widget build(BuildContext context) {
     String toggledText = widget.isSignin ? 'in' : 'up';
@@ -50,17 +68,15 @@ class _SignupModalViewState extends State<SignupModalView> {
                   label: 'Sign $toggledText with Google',
                   onPressed: () {},
                 )),
-            Container(
-                margin: EdgeInsets.only(bottom: 20),
-                child: SignInWithAppleButton(
-                    fullWidth: true,
-                    onSuccess: (User? firebaseUser) {
-                      // ...
-                      print(firebaseUser);
-                    },
-                    onError: (error) {
-                      // ...
-                    })),
+            Platform.isIOS
+                ? Container(
+                    margin: EdgeInsets.only(bottom: 20),
+                    child: SignInWithAppleButton(
+                        fullWidth: true,
+                        toggledText: toggledText,
+                        onSuccess: handleSuccess,
+                        onError: handleError))
+                : Container(),
             Container(
                 margin: EdgeInsets.only(bottom: 40),
                 child: HinokiButton(
@@ -70,7 +86,9 @@ class _SignupModalViewState extends State<SignupModalView> {
                   label: 'Sign $toggledText with Email',
                   onPressed: () {
                     Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => SignupForm()),
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              SignupForm(isSignin: widget.isSignin)),
                     );
                   },
                 )),

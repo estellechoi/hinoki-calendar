@@ -46,34 +46,29 @@ class _HinokiButtonState extends State<HinokiButton> {
         break;
     }
 
-    return Stack(
-      children: [
-        ElevatedButton(
-            onPressed: widget.disabled ? null : widget.onPressed,
-            child: Text(widget.label,
-                style: TextStyle(
-                    color: widget.disabled
-                        ? colors.disabled
-                        : isFilled
-                            ? colors.white
-                            : _color,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: fonts.primary,
-                    fontFamilyFallback: fonts.primaryFallbacks)),
-            style: ElevatedButton.styleFrom(
-              primary: isFilled ? _color : colors.transparent,
-              onPrimary: isFilled ? _color : colors.transparent,
-              onSurface: isFilled ? _color : colors.transparent,
-              elevation: 0,
-              minimumSize: Size(minWidth, 0),
-              padding: EdgeInsets.symmetric(vertical: 14, horizontal: 20.0),
-              shape: RoundedRectangleBorder(
-                  side: BorderSide(width: isFilled ? 0 : 1, color: _color),
-                  borderRadius: borders.radiusLight),
-            )),
-        Positioned(left: 14, top: 0, bottom: 0, child: Icon(Icons.book))
-      ],
-    );
+    return ElevatedButton(
+        onPressed: widget.disabled ? null : widget.onPressed,
+        child: Text(widget.label,
+            style: TextStyle(
+                color: widget.disabled
+                    ? colors.disabled
+                    : isFilled
+                        ? colors.white
+                        : _color,
+                fontSize: 18,
+                fontWeight: FontWeight.w400,
+                fontFamily: fonts.primary,
+                fontFamilyFallback: fonts.primaryFallbacks)),
+        style: ElevatedButton.styleFrom(
+          primary: isFilled ? _color : colors.transparent,
+          onPrimary: isFilled ? _color : colors.transparent,
+          onSurface: isFilled ? _color : colors.transparent,
+          elevation: 0,
+          minimumSize: Size(minWidth, 0),
+          padding: EdgeInsets.symmetric(vertical: 14, horizontal: 20.0),
+          shape: RoundedRectangleBorder(
+              side: BorderSide(width: isFilled ? 0 : 1, color: _color),
+              borderRadius: borders.radiusLight),
+        ));
   }
 }

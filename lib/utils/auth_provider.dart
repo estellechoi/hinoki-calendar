@@ -49,7 +49,6 @@ class AuthProvider with ChangeNotifier {
 
       return firebaseUser;
     } catch (e) {
-      print(e);
       onError(e);
     }
   }

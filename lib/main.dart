@@ -58,7 +58,7 @@ class _MyAppState extends State<MyApp> {
           ),
           StreamProvider(
               create: (BuildContext ctx) =>
-                  context.read<AuthProvider>().authStateChanges,
+                  ctx.read<AuthProvider>().authStateChanges,
               initialData: null)
         ],
         child: MaterialApp.router(

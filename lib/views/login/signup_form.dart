@@ -12,6 +12,10 @@ import '../../widgets/styles/fonts.dart' as fonts;
 import '../../widgets/styles/sizes.dart' as sizes;
 
 class SignupForm extends StatefulWidget {
+  final bool isSignin;
+
+  SignupForm({required this.isSignin});
+
   @override
   _SignupFormState createState() => _SignupFormState();
 }
@@ -45,6 +49,8 @@ class _SignupFormState extends State<SignupForm> {
 
   @override
   Widget build(BuildContext context) {
+    String toggleText = widget.isSignin ? 'in' : 'up';
+
     return AppBarLayout(
         extendBodyBehindAppBar: true,
         title: '',
@@ -71,7 +77,7 @@ class _SignupFormState extends State<SignupForm> {
                   children: <Widget>[
                     Container(
                         margin: EdgeInsets.symmetric(vertical: 40),
-                        child: Text('Sign up with email.',
+                        child: Text('Sign $toggleText with email.',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 color: colors.black,
@@ -101,8 +107,9 @@ class _SignupFormState extends State<SignupForm> {
                           fullWidth: true,
                           type: 'filled',
                           color: 'primary',
-                          label: 'Create an account',
-                          onPressed: () {},
+                          label:
+                              widget.isSignin ? 'Sign in' : 'Create an account',
+                          onPressed: login,
                         )),
                   ],
                 )),
