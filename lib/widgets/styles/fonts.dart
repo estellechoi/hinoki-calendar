@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 // Font Family
-final String primary = 'NunitoSans';
+final String primary = 'Overpass';
 final primaryFallbacks = <String>['Malgun Gothic', '맑은 고딕', 'sans-serif'];
 
 // Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif

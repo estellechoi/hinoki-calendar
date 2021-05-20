@@ -79,13 +79,13 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: NunitoSans
+    - family: Overpass
       fonts:
-        - asset: fonts/Nunito_Sans/NunitoSans-Regular.ttf
+        - asset: fonts/Overpass/Overpass-Regular.ttf
           weight: 400
-        - asset: fonts/Nunito_Sans/NunitoSans-Light.ttf
+        - asset: fonts/Overpass/Overpass-Light.ttf
           weight: 300
-        - asset: fonts/Nunito_Sans/NunitoSans-Bold.ttf
+        - asset: fonts/Overpass/Overpass-Bold.ttf
           weight: 700
   #   - family: Trajan Pro
   #     fonts:
