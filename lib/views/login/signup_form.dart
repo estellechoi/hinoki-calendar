@@ -13,8 +13,9 @@ import '../../widgets/styles/sizes.dart' as sizes;
 
 class SignupForm extends StatefulWidget {
   final bool isSignin;
+  final onSuccess;
 
-  SignupForm({required this.isSignin});
+  SignupForm({required this.isSignin, required this.onSuccess});
 
   @override
   _SignupFormState createState() => _SignupFormState();
@@ -23,13 +24,14 @@ class SignupForm extends StatefulWidget {
 class _SignupFormState extends State<SignupForm> {
   Map<String, String> formData = {'id': '', 'password': '', 'type': 'email'};
 
-  void login() async {
+  void login(BuildContext context) async {
     print('login data');
     print(formData.toString());
     try {
       await api.login(formData);
       await appState.getGuideUnreadCnt();
       appState.login();
+      widget.onSuccess();
     } catch (e) {
       // ...
     }
@@ -55,7 +57,7 @@ class _SignupFormState extends State<SignupForm> {
         extendBodyBehindAppBar: true,
         title: '',
         scrollController: ScrollController(),
-        globalKey: GlobalKey(),
+        // globalKey: GlobalKey(),
         body: Container(
             height: sizes.screenHeight(context),
             padding: EdgeInsets.only(
@@ -109,7 +111,9 @@ class _SignupFormState extends State<SignupForm> {
                           color: 'primary',
                           label:
                               widget.isSignin ? 'Sign in' : 'Create an account',
-                          onPressed: login,
+                          onPressed: () {
+                            login(context);
+                          },
                         )),
                   ],
                 )),

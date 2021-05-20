@@ -7,18 +7,18 @@ class AppBarLayout extends StatefulWidget {
   final Widget body;
   final bool extendBodyBehindAppBar;
   final String appBarColor;
-  final GlobalKey globalKey;
+  // final GlobalKey globalKey;
   final ScrollController scrollController;
 
-  AppBarLayout(
-      {Key? key,
-      required this.title,
-      required this.body,
-      this.extendBodyBehindAppBar = false,
-      this.appBarColor = 'white',
-      required this.scrollController,
-      required this.globalKey})
-      : super(key: key);
+  AppBarLayout({
+    Key? key,
+    required this.title,
+    required this.body,
+    this.extendBodyBehindAppBar = false,
+    this.appBarColor = 'white',
+    required this.scrollController,
+    // required this.globalKey
+  }) : super(key: key);
 
   @override
   _AppBarLayoutState createState() => _AppBarLayoutState();
@@ -46,7 +46,7 @@ class _AppBarLayoutState extends State<AppBarLayout> {
           WidgetsBinding.instance?.focusManager.primaryFocus?.unfocus();
         },
         child: Scaffold(
-          key: widget.globalKey,
+          // key: widget.globalKey,
           resizeToAvoidBottomInset: false,
           extendBodyBehindAppBar: widget.extendBodyBehindAppBar,
           appBar: PreferredSize(

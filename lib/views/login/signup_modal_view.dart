@@ -27,7 +27,7 @@ class SignupModalView extends StatefulWidget {
 }
 
 class _SignupModalViewState extends State<SignupModalView> {
-  void handleSuccess(User? firebaseUser) {
+  void handleFirebaseAuthSuccess(User? firebaseUser) {
     print('---------------------------------------');
     print('Firebase login success');
     print(firebaseUser);
@@ -36,11 +36,28 @@ class _SignupModalViewState extends State<SignupModalView> {
     appState.login();
   }
 
-  void handleError(Object error) {
+  void handleFirebaseAuthError(Object error) {
     print('---------------------------------------');
     print('Firebase login fail');
     print(error);
     print('---------------------------------------');
+  }
+
+  void openSignupForm(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+          builder: (context) => SignupForm(
+              isSignin: widget.isSignin,
+              onSuccess: () {
+                Navigator.pop(context);
+                Navigator.pop(context);
+              })),
+    );
+  }
+
+  void toggleMode(BuildContext context) {
+    widget.onToggled();
+    Navigator.pop(context);
   }
 
   @override
@@ -74,8 +91,8 @@ class _SignupModalViewState extends State<SignupModalView> {
                     child: SignInWithAppleButton(
                         fullWidth: true,
                         toggledText: toggledText,
-                        onSuccess: handleSuccess,
-                        onError: handleError))
+                        onSuccess: handleFirebaseAuthSuccess,
+                        onError: handleFirebaseAuthError))
                 : Container(),
             Container(
                 margin: EdgeInsets.only(bottom: 40),
@@ -85,11 +102,7 @@ class _SignupModalViewState extends State<SignupModalView> {
                   color: 'black',
                   label: 'Sign $toggledText with Email',
                   onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              SignupForm(isSignin: widget.isSignin)),
-                    );
+                    openSignupForm(context);
                   },
                 )),
             Container(
@@ -108,8 +121,7 @@ class _SignupModalViewState extends State<SignupModalView> {
                             style: textstyles.strongHelpText,
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                widget.onToggled();
-                                Navigator.pop(context);
+                                toggleMode(context);
                               },
                           )
                         ])))

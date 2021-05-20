@@ -103,6 +103,7 @@ class _LinkedInputFrameState extends State<LinkedInputFrame> {
               autofocus: false,
               focusNode: focusNode,
               controller: controller,
+              cursorColor: colors.black,
               style: textstyles.inputText,
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.all(0),
@@ -111,7 +112,6 @@ class _LinkedInputFrameState extends State<LinkedInputFrame> {
                 hintText: widget.labelText,
                 hintStyle: textstyles.inputHintText,
               ),
-              cursorColor: colors.black,
             )),
             widget.child
           ],

@@ -12,7 +12,7 @@ class GuideArticle extends StatefulWidget {
 }
 
 class _GuideArticleState extends State<GuideArticle> {
-  final GlobalKey _globalKey = GlobalKey();
+  // final GlobalKey _globalKey = GlobalKey();
   final ScrollController _scrollController = ScrollController();
   final String _id = appState.routeParam ?? '1';
 
@@ -81,7 +81,7 @@ class _GuideArticleState extends State<GuideArticle> {
         title: '',
         extendBodyBehindAppBar: true,
         appBarColor: _appBarColor,
-        globalKey: _globalKey,
+        // globalKey: _globalKey,
         scrollController: _scrollController,
         body: Container(
             child: Column(

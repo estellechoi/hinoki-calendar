@@ -112,7 +112,7 @@ class _RecordBodyState extends State<RecordBody> {
   @override
   Widget build(BuildContext context) {
     return AppBarLayout(
-        globalKey: GlobalKey(),
+        // globalKey: GlobalKey(),
         title: '나의 상태',
         scrollController: ScrollController(),
         body: Container(

@@ -60,7 +60,7 @@ class _GuideCategoryDetailsState extends State<GuideCategoryDetails> {
   @override
   Widget build(BuildContext context) {
     return AppBarLayout(
-        globalKey: GlobalKey(),
+        // globalKey: GlobalKey(),
         title: '',
         scrollController: ScrollController(),
         body: Container(

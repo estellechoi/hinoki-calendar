@@ -15,7 +15,7 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   final int modalToggleDuration = 600;
 
-  Future _openSignupDialog(BuildContext context) async {
+  Future openSignupDialog(BuildContext context) async {
     await mixins.openTitledBottomModal(
         context: context,
         intrinsicHeight: false,
@@ -23,13 +23,13 @@ class _LoginViewState extends State<LoginView> {
         backButtonLabel: 'Cancel',
         child: SignupModalView(onToggled: () {
           Future.delayed(Duration(milliseconds: modalToggleDuration),
-              () => _openSigninDialog(context));
+              () => openSigninDialog(context));
         }),
         onCanceled: () {},
         onRightButtonClicked: () {});
   }
 
-  Future _openSigninDialog(BuildContext context) async {
+  Future openSigninDialog(BuildContext context) async {
     await mixins.openTitledBottomModal(
         context: context,
         intrinsicHeight: false,
@@ -39,7 +39,7 @@ class _LoginViewState extends State<LoginView> {
             isSignin: true,
             onToggled: () {
               Future.delayed(Duration(milliseconds: modalToggleDuration),
-                  () => _openSignupDialog(context));
+                  () => openSignupDialog(context));
             }),
         onCanceled: () {},
         onRightButtonClicked: () {});
@@ -85,7 +85,7 @@ class _LoginViewState extends State<LoginView> {
                     Container(
                         margin: EdgeInsets.only(bottom: 40),
                         child: Text(
-                          'Customize everything.\n'
+                          'Simplify your days.\n'
                           'Discover productivity.',
                           textAlign: TextAlign.center,
                           style: TextStyle(
@@ -99,7 +99,7 @@ class _LoginViewState extends State<LoginView> {
                       // disabled: true,
                       fullWidth: true,
                       onPressed: () {
-                        _openSignupDialog(context);
+                        openSignupDialog(context);
                       },
                       label: 'Create an account',
                     )),
@@ -111,7 +111,7 @@ class _LoginViewState extends State<LoginView> {
                       fullWidth: true,
                       // disabled: true,
                       onPressed: () {
-                        _openSigninDialog(context);
+                        openSigninDialog(context);
                       },
                       label: 'I already have an account',
                     ))
