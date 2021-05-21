@@ -6,14 +6,12 @@ import 'package:provider/provider.dart';
 import '../styles/colors.dart' as colors;
 
 class SignInWithAppleButton extends StatefulWidget {
-  final ValueChanged<User?> onSuccess;
-  final onError;
+  final ValueChanged<UserCredential?> onFinished;
   final bool fullWidth;
   final String toggledText;
 
   SignInWithAppleButton(
-      {required this.onSuccess,
-      required this.onError,
+      {required this.onFinished,
       this.fullWidth = false,
       this.toggledText = 'in'});
 
@@ -23,12 +21,10 @@ class SignInWithAppleButton extends StatefulWidget {
 
 class _SignInWithAppleButtonState extends State<SignInWithAppleButton> {
   Future signinWithApple(BuildContext context) async {
-    final User? firebaseUser = await context
-        .read<AuthProvider>()
-        .signinWithApple(onError: widget.onError);
+    final UserCredential? authResult =
+        await context.read<AuthProvider>().signinWithApple();
 
-    if (firebaseUser != null) return widget.onSuccess(firebaseUser);
-    // widget.onError(firebaseUser);
+    widget.onFinished(authResult);
   }
 
   @override

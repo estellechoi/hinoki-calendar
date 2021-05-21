@@ -70,16 +70,54 @@ class _LoginViewState extends State<LoginView> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Container(
-                    child: Text('Hinoki',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: colors.white,
-                          fontFamily: fonts.primary,
-                          fontFamilyFallback: fonts.primaryFallbacks,
-                          height: 1.3,
-                          fontSize: 34,
-                          fontWeight: FontWeight.w700,
-                        ))),
+                    child: Column(
+                  children: <Widget>[
+                    Container(
+                        width: 160,
+                        height: 32,
+                        padding:
+                            EdgeInsets.symmetric(vertical: 0, horizontal: 4),
+                        decoration: BoxDecoration(
+                          color: colors.whiteAlphaLight,
+                          // border: Border.all(
+                          //     width: 3,
+                          //     style: BorderStyle.solid,
+                          //     color: colors.white)
+                        ),
+                        child: Text('Hinoki',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: colors.whiteAlphaDeep,
+                              fontFamily: fonts.primary,
+                              fontFamilyFallback: fonts.primaryFallbacks,
+                              height: 1.3,
+                              fontSize: 46,
+                              fontWeight: FontWeight.w700,
+                            ))),
+                    Container(
+                        width: 160,
+                        height: 46,
+                        padding:
+                            EdgeInsets.symmetric(vertical: 0, horizontal: 4),
+                        decoration: BoxDecoration(
+                          color: colors.whiteAlphaLight,
+                          // border: Border.all(
+                          //     width: 3,
+                          //     style: BorderStyle.solid,
+                          //     color: colors.white)
+                        ),
+                        child: Text('Hinoki',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: colors.whiteAlphaDeep,
+                              fontFamily: fonts.primary,
+                              fontFamilyFallback: fonts.primaryFallbacks,
+                              height: 1.3,
+                              fontSize: 46,
+                              fontWeight: FontWeight.w700,
+                            )))
+                  ],
+                )),
                 Column(
                   children: <Widget>[
                     Container(

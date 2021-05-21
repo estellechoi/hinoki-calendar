@@ -21,6 +21,7 @@ const Color helperLabel = Color(0xff848484);
 // Basic colors
 const Color white = Color(0xffffffff);
 final Color whiteAlphaDeep = white.withOpacity(0.6);
+final Color whiteAlphaLight = white.withOpacity(0.2);
 
 const Color black = Color(0xff000000);
 final Color blackAlpha = black.withOpacity(0.4);

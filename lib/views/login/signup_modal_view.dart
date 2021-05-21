@@ -27,20 +27,18 @@ class SignupModalView extends StatefulWidget {
 }
 
 class _SignupModalViewState extends State<SignupModalView> {
-  void handleFirebaseAuthSuccess(User? firebaseUser) {
+  void handleFirebaseAuthFinish(UserCredential? authResult) {
     print('---------------------------------------');
-    print('Firebase login success');
-    print(firebaseUser);
+    print('Firebase login success : UserCredential');
+    print(authResult);
     print('---------------------------------------');
 
-    appState.login();
-  }
-
-  void handleFirebaseAuthError(Object error) {
-    print('---------------------------------------');
-    print('Firebase login fail');
-    print(error);
-    print('---------------------------------------');
+    if (authResult != null) {
+      appState.login();
+      Navigator.pop(context);
+    } else {
+      // ...
+    }
   }
 
   void openSignupForm(BuildContext context) {
@@ -91,8 +89,7 @@ class _SignupModalViewState extends State<SignupModalView> {
                     child: SignInWithAppleButton(
                         fullWidth: true,
                         toggledText: toggledText,
-                        onSuccess: handleFirebaseAuthSuccess,
-                        onError: handleFirebaseAuthError))
+                        onFinished: handleFirebaseAuthFinish))
                 : Container(),
             Container(
                 margin: EdgeInsets.only(bottom: 40),
