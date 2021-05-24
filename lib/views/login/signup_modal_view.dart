@@ -9,6 +9,7 @@ import '../../route/pages.dart';
 import '../../api/auth.dart' as api;
 import '../../widgets/buttons/hinoki_button.dart';
 import '../../widgets/buttons/sign_in_with_apple_button.dart';
+import '../../widgets/buttons/sign_in_with_google_button.dart';
 
 import '../../widgets/form_elements/linked_input.dart';
 import '../../widgets/form_elements/common/shadowed_bundle.dart';
@@ -29,7 +30,7 @@ class SignupModalView extends StatefulWidget {
 class _SignupModalViewState extends State<SignupModalView> {
   void handleFirebaseAuthFinish(UserCredential? authResult) {
     print('---------------------------------------');
-    print('Firebase login success : UserCredential');
+    print('Firebase login finished : UserCredential');
     print(authResult);
     print('---------------------------------------');
 
@@ -76,13 +77,20 @@ class _SignupModalViewState extends State<SignupModalView> {
                     style: TextStyle(color: colors.black, fontSize: 34))),
             Container(
                 margin: EdgeInsets.only(bottom: 20),
-                child: HinokiButton(
-                  fullWidth: true,
-                  type: 'border',
-                  color: 'black',
-                  label: 'Sign $toggledText with Google',
-                  onPressed: () {},
-                )),
+                child: SignInWithGoogleButton(
+                    fullWidth: true,
+                    toggledText: toggledText,
+                    onFinished: handleFirebaseAuthFinish)
+
+                // HinokiButton(
+                //   fullWidth: true,
+                //   type: 'border',
+                //   color: 'black',
+                //   label: 'Sign $toggledText with Google',
+                //   onPressed: () {},
+                // )
+
+                ),
             Platform.isIOS
                 ? Container(
                     margin: EdgeInsets.only(bottom: 20),

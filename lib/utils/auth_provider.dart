@@ -4,6 +4,7 @@ import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthProvider with ChangeNotifier {
   final FirebaseAuth firebaseAuth;
@@ -44,7 +45,7 @@ class AuthProvider with ChangeNotifier {
           .credential(idToken: credential.identityToken, rawNonce: rawNonce);
 
       // `oauthCredential` 객체를 사용하여 Firebase에 로그인 시키고
-      // 결과 정보를 담은 `authResult` 객체를 가져옵니다.
+      // 결과 정보를 담은 `UserCredential` 객체를 가져옵니다.
       // If the nonce we generated earlier does
       // not match the nonce in `appleCredential.identityToken`, sign in will fail.
       final UserCredential authResult =
@@ -59,6 +60,34 @@ class AuthProvider with ChangeNotifier {
 
       await firebaseUser?.updateProfile(displayName: displayName);
       await firebaseUser?.updateEmail(userEmail);
+
+      return authResult;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  // signin with google
+  Future<UserCredential?> signinWithGoogle() async {
+    try {
+      // Google 로그인 후 반환된 `GoogleSignInAccount` 객체를 가져옵니다.
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      // 인증 상세정보를 담은 `GoogleSignInAuthentication` 객체를 가져옵니다.
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
+
+      if (googleAuth == null) return null;
+
+      // `OAuthCredential` 객체를 생성합니다.
+      final OAuthCredential credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
+
+      // `oauthCredential` 객체를 사용하여 Firebase에 로그인 시키고
+      // 결과 정보를 담은 `UserCredential` 객체를 가져옵니다.
+      final UserCredential authResult =
+          await FirebaseAuth.instance.signInWithCredential(credential);
 
       return authResult;
     } catch (e) {

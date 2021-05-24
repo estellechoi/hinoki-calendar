@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "741892806279",
+    "project_id": "hinoki-1e44f",
+    "storage_bucket": "hinoki-1e44f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:741892806279:android:475d290b217cdbf00b0a22",
+        "android_client_info": {
+          "package_name": "com.hinoki.seoul"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "741892806279-jsna6t93sbq3euepbt9cq7a9gcfi1kms.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hinoki.seoul",
+            "certificate_hash": "df3be5423a4e3243bed7f730ce62bd7a90fbf5f1"
+          }
+        },
+        {
+          "client_id": "741892806279-uhk19beh8up67nu04fbelf6celjv4hv4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBaVe5zY4qwxG3LtMmCZjqjXC5X_VPMp14"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "741892806279-uhk19beh8up67nu04fbelf6celjv4hv4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "741892806279-8slqnje3uiv99pfvk9i04umdkqkcqddt.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.hinoki.seoul"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
