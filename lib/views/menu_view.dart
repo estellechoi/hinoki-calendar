@@ -5,6 +5,8 @@ import 'package:flutter_app/app_state.dart';
 // import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import './../utils/auth_provider.dart';
+import 'package:health/health.dart';
+import './../utils/health_data.dart' as healthData;
 
 class MenuView extends StatefulWidget {
   @override
@@ -17,15 +19,33 @@ class _MenuViewState extends State<MenuView> {
     appState.logout();
   }
 
+  Future<void> getAppleHealthKitData() async {
+    List<HealthDataPoint>? healthDataList =
+        await healthData.fetchAppleHealthKit();
+
+    print('----------------------------- Apple HealthKit Data Fetched');
+    print(healthDataList);
+  }
+
   @override
   Widget build(BuildContext context) {
     return NavBarFrame(
         bodyWidget: Container(
-            child: TextLabelButton(
-      label: 'Sign out',
-      onPressed: () {
-        signoutFirebase(context);
-      },
+            child: Column(
+      children: <Widget>[
+        TextLabelButton(
+          label: 'Sign out',
+          onPressed: () {
+            signoutFirebase(context);
+          },
+        ),
+        TextLabelButton(
+          label: 'Fetch HealthKit Data',
+          onPressed: () {
+            getAppleHealthKitData();
+          },
+        )
+      ],
     )));
   }
 }
