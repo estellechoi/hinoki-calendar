@@ -68,12 +68,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
             ndk {
-                debugSymbolLevel {
-                    SYMBOL_TABLE
-                }
+                debugSymbolLevel 'SYMBOL_TABLE'
             }
         }
     }
+
+    ndkVersion '23.0.7344513'
 }
 
 flutter {
