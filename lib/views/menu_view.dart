@@ -14,6 +14,8 @@ class MenuView extends StatefulWidget {
 }
 
 class _MenuViewState extends State<MenuView> {
+  List<HealthDataPoint> _healthDataList = const [];
+
   Future signoutFirebase(BuildContext context) async {
     await context.read<AuthProvider>().signout();
     appState.logout();
@@ -25,6 +27,10 @@ class _MenuViewState extends State<MenuView> {
 
     print('----------------------------- Apple HealthKit Data Fetched');
     print(healthDataList);
+
+    setState(() {
+      _healthDataList = healthDataList ?? const [];
+    });
   }
 
   @override
@@ -44,8 +50,26 @@ class _MenuViewState extends State<MenuView> {
           onPressed: () {
             getAppleHealthKitData();
           },
-        )
+        ),
+        Container(
+            child: Text('Total : ${_healthDataList.length} data fetched.')),
+        printFetchedData()
       ],
     )));
+  }
+
+  Widget printFetchedData() {
+    return ListView.builder(
+        itemCount: _healthDataList.length,
+        itemBuilder: (_, index) {
+          HealthDataPoint _healthDataPoint = _healthDataList[index];
+
+          return ListTile(
+              title: Text(
+                  '${_healthDataPoint.typeString}: ${_healthDataPoint.value}'),
+              trailing: Text('${_healthDataPoint.unitString}'),
+              subtitle: Text(
+                  '${_healthDataPoint.dateFrom} - ${_healthDataPoint.dateTo}'));
+        });
   }
 }
