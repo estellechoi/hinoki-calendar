@@ -33,12 +33,22 @@ Future<List<HealthDataPoint>?> fetchAppleHealthKit() async {
       // 중복을 제거합니다.
       healthData = HealthFactory.removeDuplicates(healthData);
 
+      print('---------------------------------------------------');
+      print(
+          'healthFactory.getHealthDataFromTypes returned data, which means success !');
+      print('---------------------------------------------------');
       return healthData;
     } catch (e) {
+      print('---------------------------------------------------');
       print(e);
+      print('---------------------------------------------------');
       return null;
     }
   }
 
+  print('---------------------------------------------------');
+  print(
+      'healthFactory.requestAuthorization returned false, which means authentication failed.');
+  print('---------------------------------------------------');
   return null;
 }

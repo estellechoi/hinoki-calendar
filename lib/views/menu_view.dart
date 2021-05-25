@@ -25,7 +25,6 @@ class _MenuViewState extends State<MenuView> {
     List<HealthDataPoint>? healthDataList =
         await healthData.fetchAppleHealthKit();
 
-    print('----------------------------- Apple HealthKit Data Fetched');
     print(healthDataList);
 
     setState(() {
@@ -36,8 +35,9 @@ class _MenuViewState extends State<MenuView> {
   @override
   Widget build(BuildContext context) {
     return NavBarFrame(
-        bodyWidget: Container(
-            child: Column(
+        bodyWidget: SingleChildScrollView(
+            child: Container(
+                child: Column(
       children: <Widget>[
         TextLabelButton(
           label: 'Sign out',
@@ -53,23 +53,24 @@ class _MenuViewState extends State<MenuView> {
         ),
         Container(
             child: Text('Total : ${_healthDataList.length} data fetched.')),
-        printFetchedData()
+        Container(child: printFetchedData())
       ],
-    )));
+    ))));
   }
 
   Widget printFetchedData() {
-    return ListView.builder(
-        itemCount: _healthDataList.length,
-        itemBuilder: (_, index) {
-          HealthDataPoint _healthDataPoint = _healthDataList[index];
-
-          return ListTile(
-              title: Text(
-                  '${_healthDataPoint.typeString}: ${_healthDataPoint.value}'),
-              trailing: Text('${_healthDataPoint.unitString}'),
-              subtitle: Text(
-                  '${_healthDataPoint.dateFrom} - ${_healthDataPoint.dateTo}'));
-        });
+    return Column(
+      children: <Widget>[
+        for (var _healthDataPoint in _healthDataList)
+          Container(
+              child: Column(
+            children: <Widget>[
+              Text('${_healthDataPoint.typeString}: ${_healthDataPoint.value}'),
+              Text('${_healthDataPoint.unitString}'),
+              Text('${_healthDataPoint.dateFrom} - ${_healthDataPoint.dateTo}')
+            ],
+          ))
+      ],
+    );
   }
 }
