@@ -6,12 +6,14 @@ import 'package:provider/provider.dart';
 import '../styles/colors.dart' as colors;
 
 class SignInWithAppleButton extends StatefulWidget {
+  final VoidCallback onPressed;
   final ValueChanged<UserCredential?> onFinished;
   final bool fullWidth;
   final String toggledText;
 
   SignInWithAppleButton(
-      {required this.onFinished,
+      {required this.onPressed,
+      required this.onFinished,
       this.fullWidth = false,
       this.toggledText = 'in'});
 
@@ -37,6 +39,7 @@ class _SignInWithAppleButtonState extends State<SignInWithAppleButton> {
           color: 'black',
           type: 'border',
           onPressed: () {
+            widget.onPressed();
             signinWithApple(context);
           },
         ),

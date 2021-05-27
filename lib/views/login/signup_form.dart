@@ -169,7 +169,7 @@ class _SignupFormState extends State<SignupForm> {
                                 ])))
                   ],
                 ))),
-        _isLoading ? HinokiSpinner(color: colors.primary) : Container()
+        if (_isLoading) HinokiSpinner(color: colors.primary)
       ],
     );
   }

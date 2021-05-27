@@ -85,7 +85,7 @@ class _MenuViewState extends State<MenuView> {
         Container(
             child: Column(
           children: <Widget>[
-            Text(item.toString()),
+            // Text(item.toString()),
             Text('${item.typeString}: ${item.value}'),
             Text('${item.unitString}'),
             Text('${item.dateFrom} - ${item.dateTo}'),

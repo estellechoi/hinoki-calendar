@@ -23,6 +23,7 @@ class _HinokiSpinnerState extends State<HinokiSpinner>
   @override
   void initState() {
     super.initState();
+
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 1000))
           ..repeat();
@@ -36,7 +37,14 @@ class _HinokiSpinnerState extends State<HinokiSpinner>
 
   @override
   void dispose() {
+    Future.delayed(Duration(milliseconds: 50), () {
+      setState(() {
+        _isSpinning = false;
+      });
+    });
+
     _animationController.dispose();
+
     super.dispose();
   }
 

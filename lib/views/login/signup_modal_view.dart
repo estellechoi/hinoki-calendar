@@ -29,7 +29,21 @@ class SignupModalView extends StatefulWidget {
 }
 
 class _SignupModalViewState extends State<SignupModalView> {
-  void handleFirebaseAuthFinish(UserCredential? authResult) {
+  bool _isLoading = false;
+
+  void _toggleLoading(bool val) {
+    setState(() {
+      _isLoading = val;
+    });
+  }
+
+  void _handleFirebaseAuthStart() {
+    _toggleLoading(true);
+  }
+
+  void _handleFirebaseAuthFinish(UserCredential? authResult) {
+    _toggleLoading(false);
+
     print('---------------------------------------');
     print('Firebase login finished : UserCredential');
     print(authResult);
@@ -56,10 +70,10 @@ class _SignupModalViewState extends State<SignupModalView> {
     Navigator.pop(context);
   }
 
+  String get toggledText => widget.isSignin ? 'in' : 'up';
+
   @override
   Widget build(BuildContext context) {
-    String toggledText = widget.isSignin ? 'in' : 'up';
-
     return Stack(
       children: <Widget>[
         Column(
@@ -79,24 +93,16 @@ class _SignupModalViewState extends State<SignupModalView> {
                     child: SignInWithGoogleButton(
                         fullWidth: true,
                         toggledText: toggledText,
-                        onFinished: handleFirebaseAuthFinish)
-
-                    // HinokiButton(
-                    //   fullWidth: true,
-                    //   type: 'border',
-                    //   color: 'black',
-                    //   label: 'Sign $toggledText with Google',
-                    //   onPressed: () {},
-                    // )
-
-                    ),
+                        onPressed: _handleFirebaseAuthStart,
+                        onFinished: _handleFirebaseAuthFinish)),
                 Platform.isIOS
                     ? Container(
                         margin: EdgeInsets.only(bottom: 20),
                         child: SignInWithAppleButton(
                             fullWidth: true,
                             toggledText: toggledText,
-                            onFinished: handleFirebaseAuthFinish))
+                            onPressed: _handleFirebaseAuthStart,
+                            onFinished: _handleFirebaseAuthFinish))
                     : Container(),
                 Container(
                     margin: EdgeInsets.only(bottom: 40),
@@ -168,7 +174,7 @@ class _SignupModalViewState extends State<SignupModalView> {
                             ])))
           ],
         ),
-        appState.isLoading ? HinokiSpinner(color: colors.primary) : Container()
+        if (_isLoading) HinokiSpinner(color: colors.primary)
       ],
     );
   }
