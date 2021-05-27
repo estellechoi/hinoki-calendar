@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/widgets/spinners/hinoki_spinner.dart';
 import '../widgets/layouts/scaffold_layout.dart';
 import '../widgets/styles/icons.dart' as icons;
 import '../widgets/styles/colors.dart' as colors;
@@ -91,39 +92,44 @@ class _NavBarFrameState extends State<NavBarFrame> {
   ) {
     double appBarHeight = widget.hideAppBar ? 0 : sizes.appBar;
 
-    return ScaffoldLayout(
-        // appBar
-        hideAppBar: widget.hideAppBar,
-        title: widget.appBarLabel.length > 0
-            ? widget.appBarLabel
-            : widget.views[appState.currentNavIndex].label,
-        // body
-        body: widget.refreshable
-            ? RefreshIndicator(
-                color: colors.helperLabel,
-                backgroundColor: colors.white,
-                strokeWidth: 1.0,
-                onRefresh: widget.onRefresh,
-                child: SizedBox(
+    return Stack(
+      children: <Widget>[
+        ScaffoldLayout(
+            // appBar
+            hideAppBar: widget.hideAppBar,
+            title: widget.appBarLabel.length > 0
+                ? widget.appBarLabel
+                : widget.views[appState.currentNavIndex].label,
+            // body
+            body: widget.refreshable
+                ? RefreshIndicator(
+                    color: colors.helperLabel,
+                    backgroundColor: colors.white,
+                    strokeWidth: 1.0,
+                    onRefresh: widget.onRefresh,
+                    child: SizedBox(
+                        height: MediaQuery.of(context).size.height -
+                            appBarHeight -
+                            sizes.bottomNavigationBar -
+                            paddings.verticalBase,
+                        child: ListView(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          children: <Widget>[
+                            widget.bodyWidget,
+                          ],
+                        )),
+                  )
+                : SizedBox(
                     height: MediaQuery.of(context).size.height -
                         appBarHeight -
-                        sizes.bottomNavigationBar -
-                        paddings.verticalBase,
-                    child: ListView(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      children: <Widget>[
-                        widget.bodyWidget,
-                      ],
-                    )),
-              )
-            : SizedBox(
-                height: MediaQuery.of(context).size.height -
-                    appBarHeight -
-                    sizes.bottomNavigationBar,
-                child: widget.bodyWidget),
-        // bottomNavigationBar
-        currentNavIndex: appState.currentNavIndex,
-        navItems: widget.views.map((view) => view.navItemWidget).toList(),
-        onNavItemTap: handleNavTap);
+                        sizes.bottomNavigationBar,
+                    child: widget.bodyWidget),
+            // bottomNavigationBar
+            currentNavIndex: appState.currentNavIndex,
+            navItems: widget.views.map((view) => view.navItemWidget).toList(),
+            onNavItemTap: handleNavTap),
+        appState.isLoading ? HinokiSpinner(color: colors.primary) : Container()
+      ],
+    );
   }
 }

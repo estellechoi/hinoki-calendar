@@ -64,7 +64,7 @@ class AuthProvider with ChangeNotifier {
       return authResult;
     } catch (e) {
       print(e);
-      return null;
+      // return null;
     }
   }
 

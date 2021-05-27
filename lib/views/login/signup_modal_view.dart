@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_app/views/login/signup_form.dart';
+import 'package:flutter_app/widgets/spinners/hinoki_spinner.dart';
 import '../../app_state.dart';
 import '../../route/pages.dart';
 import '../../api/auth.dart' as api;
@@ -34,12 +35,8 @@ class _SignupModalViewState extends State<SignupModalView> {
     print(authResult);
     print('---------------------------------------');
 
-    if (authResult != null) {
-      appState.login();
-      Navigator.pop(context);
-    } else {
-      // ...
-    }
+    appState.login();
+    Navigator.pop(context);
   }
 
   void openSignupForm(BuildContext context) {
@@ -63,110 +60,115 @@ class _SignupModalViewState extends State<SignupModalView> {
   Widget build(BuildContext context) {
     String toggledText = widget.isSignin ? 'in' : 'up';
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.center,
+    return Stack(
       children: <Widget>[
-        Container(
-            child: Column(
+        Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Container(
-                margin: EdgeInsets.only(top: 0, bottom: 40),
-                child: Text('...',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: colors.black, fontSize: 34))),
-            Container(
-                margin: EdgeInsets.only(bottom: 20),
-                child: SignInWithGoogleButton(
-                    fullWidth: true,
-                    toggledText: toggledText,
-                    onFinished: handleFirebaseAuthFinish)
-
-                // HinokiButton(
-                //   fullWidth: true,
-                //   type: 'border',
-                //   color: 'black',
-                //   label: 'Sign $toggledText with Google',
-                //   onPressed: () {},
-                // )
-
-                ),
-            Platform.isIOS
-                ? Container(
+                child: Column(
+              children: <Widget>[
+                Container(
+                    margin: EdgeInsets.only(top: 0, bottom: 40),
+                    child: Text('...',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: colors.black, fontSize: 34))),
+                Container(
                     margin: EdgeInsets.only(bottom: 20),
-                    child: SignInWithAppleButton(
+                    child: SignInWithGoogleButton(
                         fullWidth: true,
                         toggledText: toggledText,
-                        onFinished: handleFirebaseAuthFinish))
-                : Container(),
-            Container(
-                margin: EdgeInsets.only(bottom: 40),
-                child: HinokiButton(
-                  fullWidth: true,
-                  type: 'border',
-                  color: 'black',
-                  label: 'Sign $toggledText with Email',
-                  onPressed: () {
-                    openSignupForm(context);
-                  },
-                )),
-            Container(
-                child: RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                        style: TextStyle(color: colors.disabled),
-                        children: <TextSpan>[
-                          TextSpan(
-                              text: widget.isSignin
-                                  ? "Don't have an account? "
-                                  : 'Already have an account? ',
-                              style: textstyles.helpText),
-                          TextSpan(
-                            text: widget.isSignin ? 'Sign up' : 'Sign in',
-                            style: textstyles.strongHelpText,
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                toggleMode(context);
-                              },
-                          )
-                        ])))
+                        onFinished: handleFirebaseAuthFinish)
+
+                    // HinokiButton(
+                    //   fullWidth: true,
+                    //   type: 'border',
+                    //   color: 'black',
+                    //   label: 'Sign $toggledText with Google',
+                    //   onPressed: () {},
+                    // )
+
+                    ),
+                Platform.isIOS
+                    ? Container(
+                        margin: EdgeInsets.only(bottom: 20),
+                        child: SignInWithAppleButton(
+                            fullWidth: true,
+                            toggledText: toggledText,
+                            onFinished: handleFirebaseAuthFinish))
+                    : Container(),
+                Container(
+                    margin: EdgeInsets.only(bottom: 40),
+                    child: HinokiButton(
+                      fullWidth: true,
+                      type: 'border',
+                      color: 'black',
+                      label: 'Sign $toggledText with Email',
+                      onPressed: () {
+                        openSignupForm(context);
+                      },
+                    )),
+                Container(
+                    child: RichText(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(
+                            style: TextStyle(color: colors.disabled),
+                            children: <TextSpan>[
+                              TextSpan(
+                                  text: widget.isSignin
+                                      ? "Don't have an account? "
+                                      : 'Already have an account? ',
+                                  style: textstyles.helpText),
+                              TextSpan(
+                                text: widget.isSignin ? 'Sign up' : 'Sign in',
+                                style: textstyles.strongHelpText,
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    toggleMode(context);
+                                  },
+                              )
+                            ])))
+              ],
+            )),
+            widget.isSignin
+                ? Container()
+                : Container(
+                    margin: EdgeInsets.only(top: 30, bottom: 0),
+                    child: RichText(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(
+                            style: TextStyle(color: colors.disabled),
+                            children: <TextSpan>[
+                              TextSpan(
+                                  text: 'By Signing up, you agree to our ',
+                                  style: textstyles.comment),
+                              TextSpan(
+                                text: 'Terms of Service',
+                                style: textstyles.strongComment,
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    // Open Browser to see ..
+                                  },
+                              ),
+                              TextSpan(
+                                  text: ' and acknowledge that our ',
+                                  style: textstyles.comment),
+                              TextSpan(
+                                text: 'Privacy Policy',
+                                style: textstyles.strongComment,
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    // Open Browser to see ..
+                                  },
+                              ),
+                              TextSpan(
+                                  text: ' applies to you.',
+                                  style: textstyles.comment),
+                            ])))
           ],
-        )),
-        widget.isSignin
-            ? Container()
-            : Container(
-                margin: EdgeInsets.only(top: 30, bottom: 0),
-                child: RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                        style: TextStyle(color: colors.disabled),
-                        children: <TextSpan>[
-                          TextSpan(
-                              text: 'By Signing up, you agree to our ',
-                              style: textstyles.comment),
-                          TextSpan(
-                            text: 'Terms of Service',
-                            style: textstyles.strongComment,
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                // Open Browser to see ..
-                              },
-                          ),
-                          TextSpan(
-                              text: ' and acknowledge that our ',
-                              style: textstyles.comment),
-                          TextSpan(
-                            text: 'Privacy Policy',
-                            style: textstyles.strongComment,
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                // Open Browser to see ..
-                              },
-                          ),
-                          TextSpan(
-                              text: ' applies to you.',
-                              style: textstyles.comment),
-                        ])))
+        ),
+        appState.isLoading ? HinokiSpinner(color: colors.primary) : Container()
       ],
     );
   }

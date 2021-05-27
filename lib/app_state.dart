@@ -40,8 +40,20 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+  set isLoading(bool val) {
+    _isLoading = val;
+    notifyListeners();
+  }
+
   AppState() {
     getLoggedInState();
+  }
+
+  void toggleLoading(bool val) {
+    _isLoading = val;
+    notifyListeners();
   }
 
   void resetCurrentAction() {

@@ -22,9 +22,12 @@ Future<List<HealthDataPoint>?> fetchAppleHealthKit() async {
 
   if (isAccessGranted) {
     try {
-      // 데이터를 가져올 날짜 범위를 지정합니다.
-      final DateTime startDate = DateTime(2020, 11, 07, 0, 0, 0);
-      final DateTime endDate = DateTime(2025, 11, 07, 23, 59, 59);
+      // 데이터를 가져올 날짜 범위를 지정합니다. (어제 하루)
+      final DateTime now = DateTime.now();
+      final DateTime startDate =
+          DateTime(now.year, now.month, now.day - 1, 0, 0, 0);
+      final DateTime endDate =
+          DateTime(now.year, now.month, now.day - 1, 23, 59, 59);
 
       // 위에서 지정한 데이터들을 가져옵니다.
       List<HealthDataPoint> healthData =
