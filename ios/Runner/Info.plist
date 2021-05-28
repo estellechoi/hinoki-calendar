@@ -41,6 +41,11 @@
 	<string>Your workout data will be used to analyze your daily body balance and suggest relavant amout of each meal.</string>
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>Saving your workout data will allow us to track your body performance and suggest advanced diet plans.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
