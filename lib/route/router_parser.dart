@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'pages.dart';
-import '../app_state.dart';
+import '../store/app_state.dart';
 
 // AppRouteInformationParser
 class AppRouteInformationParser
     extends RouteInformationParser<PageConfiguration> {
+  final AppState appState;
+
+  AppRouteInformationParser(this.appState);
   // RouteInformationParser
   // parses the route information into a user-defined data type (PageConfiguration)
   @override
@@ -26,7 +29,8 @@ class AppRouteInformationParser
 
     // if not logged in, redirect to login page
     if (!appState.loggedIn && path != loginPath) {
-      appState.redirectLoginPage();
+      return loginPageConfig;
+      // appState.goLoginView();
     }
 
     // path with param

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'dart:collection';
 import '../widgets/calendars/f_table_calendar.dart';
 import '../widgets/charts/f_line_chart.dart';
@@ -10,9 +11,10 @@ import '../api/record.dart' as api;
 import '../types/calendar_record.dart';
 import '../types/calendar_menstrual_data.dart';
 import '../utils/format.dart' as format;
-import '../app_state.dart';
+import '../store/route_state.dart';
 import '../route/pages.dart';
-import 'index.dart';
+import '../widgets/layouts/scaffold_layout.dart';
+import '../store/app_state.dart';
 
 class RecordView extends StatefulWidget {
   @override
@@ -28,6 +30,8 @@ class _RecordViewState extends State<RecordView> {
   LinkedHashMap<String, String> _pmsData = LinkedHashMap<String, String>();
   LinkedHashMap<String, String> _goldenData = LinkedHashMap<String, String>();
   String _currentYYYYMM01 = format.stringifyDateTime01(DateTime.now());
+
+  AppState get appState => Provider.of<AppState>(context, listen: false);
 
   Future getMyCalendarData() async {
     try {
@@ -199,10 +203,11 @@ class _RecordViewState extends State<RecordView> {
 
   @override
   Widget build(BuildContext context) {
-    return NavBarFrame(
+    return ScaffoldLayout(
+        title: 'Record',
         refreshable: true,
         onRefresh: getData,
-        bodyWidget: Container(
+        body: Container(
             padding: EdgeInsets.symmetric(
                 vertical: paddings.verticalBase,
                 horizontal: paddings.horizontalBase),

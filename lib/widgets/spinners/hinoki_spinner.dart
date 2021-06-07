@@ -37,11 +37,12 @@ class _HinokiSpinnerState extends State<HinokiSpinner>
 
   @override
   void dispose() {
-    Future.delayed(Duration(milliseconds: 50), () {
-      setState(() {
-        _isSpinning = false;
-      });
+    setState(() {
+      _isSpinning = false;
     });
+
+    // Future.delayed(Duration(milliseconds: 50), () {
+    // });
 
     _animationController.dispose();
 

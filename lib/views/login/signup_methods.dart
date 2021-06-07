@@ -2,10 +2,13 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'package:provider/provider.dart';
+import '../../store/app_state.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_app/views/login/signup_form.dart';
 import 'package:flutter_app/widgets/spinners/hinoki_spinner.dart';
-import '../../app_state.dart';
+import '../../store/route_state.dart';
 import '../../route/pages.dart';
 import '../../api/auth.dart' as api;
 import '../../widgets/buttons/hinoki_button.dart';
@@ -18,17 +21,17 @@ import '../../widgets/styles/colors.dart' as colors;
 import '../../widgets/styles/textstyles.dart' as textstyles;
 import '../../widgets/styles/borders.dart' as borders;
 
-class SignupModalView extends StatefulWidget {
+class SignupMethods extends StatefulWidget {
   final VoidCallback onToggled;
   final bool isSignin;
 
-  SignupModalView({required this.onToggled, this.isSignin = false});
+  SignupMethods({required this.onToggled, this.isSignin = false});
 
   @override
-  _SignupModalViewState createState() => _SignupModalViewState();
+  _SignupMethodsState createState() => _SignupMethodsState();
 }
 
-class _SignupModalViewState extends State<SignupModalView> {
+class _SignupMethodsState extends State<SignupMethods> {
   bool _isLoading = false;
 
   void _toggleLoading(bool val) {
@@ -52,6 +55,8 @@ class _SignupModalViewState extends State<SignupModalView> {
     appState.login();
     Navigator.pop(context);
   }
+
+  AppState get appState => Provider.of<AppState>(context, listen: false);
 
   void openSignupForm(BuildContext context) {
     Navigator.of(context).push(

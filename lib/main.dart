@@ -1,14 +1,15 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/utils/auth_provider.dart';
+import 'package:flutter_app/store/auth_provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 import 'route/router_delegate.dart';
 import 'route/router_parser.dart';
 import 'route/back_dispatcher.dart';
 import 'route/pages.dart';
-import 'app_state.dart';
+import 'store/route_state.dart';
+import 'store/app_state.dart';
 import 'widgets/styles/colors.dart' as colors;
 
 import 'package:firebase_core/firebase_core.dart';
@@ -41,33 +42,25 @@ class MyApp extends StatefulWidget {
 
 // Root App State
 class _MyAppState extends State<MyApp> {
-  final AppRouteInformationParser _routeInformationParser =
-      AppRouteInformationParser();
+  final RouteState _routeState = RouteState();
+  late final AppState _appState;
+  late final AppRouteInformationParser _routeInformationParser;
   late final AppBackButtonDispatcher _backButtonDispatcher;
   late final AppRouterDelegate _routerDelegate;
-
   final FirebaseMessaging _fcm = FirebaseMessaging.instance;
   late final FCMController _fcmController;
 
   @override
   void initState() {
     super.initState();
-
-    // create delegate with appState field
-    _routerDelegate = AppRouterDelegate(appState);
-    // set up initial route of this app
+    _appState = AppState(_routeState);
+    _routerDelegate = AppRouterDelegate(_appState);
     _routerDelegate.setNewRoutePath(homePageConfig);
-    // link back displatcher with router delegate
+    _routeInformationParser = AppRouteInformationParser(_appState);
     _backButtonDispatcher = AppBackButtonDispatcher(_routerDelegate);
 
-    if (appState.loggedIn) appState.getGuideUnreadCnt();
-
     _fcmController = FCMController(_fcm);
-
-    if (Platform.isIOS) {
-      _fcmController.requestPermission();
-    }
-
+    if (Platform.isIOS) _fcmController.requestPermission();
     _fcmController.getMessage();
 
     // Also handle any interaction when the app is in the background via a
@@ -78,11 +71,20 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  // AppRouterDelegate getRouterDelegate(BuildContext context) {
+  //   return AppRouterDelegate(getAppState(context));
+  // }
+
+  // AppState getAppState(BuildContext context) {
+  //   return context.read<AppState>();
+  // }
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
-          ChangeNotifierProvider(
+          ChangeNotifierProvider(create: (BuildContext ctx) => _appState),
+          Provider(
             create: (BuildContext ctx) => AuthProvider(FirebaseAuth.instance),
           ),
           StreamProvider(

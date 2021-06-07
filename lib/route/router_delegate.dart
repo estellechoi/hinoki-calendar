@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'pages.dart';
-import '../app_state.dart';
+import '../store/app_state.dart';
 import '../views/unknown_view.dart';
 import '../views/login_view.dart';
 import '../views/home_view.dart';
@@ -14,13 +14,12 @@ import '../views/guides/guide_category.dart';
 import '../views/guides/guide_article.dart';
 
 // Configutaion for each route
+// * PopNavigatorRouterDelegateMixin : lets remove pages, requires navigator key
 class AppRouterDelegate extends RouterDelegate<PageConfiguration>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<PageConfiguration> {
-  // * ChangeNotifier : lets notify whenever notifyListeners method is invoked.
-  // * PopNavigatorRouterDelegateMixin : lets remove pages, requires navigator key
-
   @override
   final GlobalKey<NavigatorState> navigatorKey;
+
   // private, so it can't be modified directly
   // will be handled outside of here later
   final List<Page> _pages = [];
@@ -29,7 +28,7 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
   // takes in the appState, and creates a global navigator key
   AppRouterDelegate(this.appState) : navigatorKey = GlobalKey() {
     appState.addListener(() {
-      print('appState changed listened!');
+      print('appState Listened Change!');
       notifyListeners();
     });
   }
@@ -56,11 +55,6 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
   }
 
   bool pop(dynamic result) {
-    print('-------------------------');
-    print('pop() called !');
-    print(result);
-    print('-------------------------');
-
     if (canPop()) {
       _removePage(pages.last);
       return true;
@@ -101,7 +95,7 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
 
     if (shouldAddPage) {
       // if has some param
-      appState.routeParam = pageConfig.param;
+      appState.setRouteParam(pageConfig.param);
 
       switch (pageConfig.page) {
         case Pages.Login:
@@ -205,38 +199,39 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
   }
 
   List<Page> buildPages() {
-    switch (appState.currentAction.state) {
+    switch (appState.routeState.currentAction.state) {
       case PageState.none:
         break;
       case PageState.addPage:
-        _setPageAction(appState.currentAction);
-        addPage(appState.currentAction.page);
+        _setPageAction(appState.routeState.currentAction);
+        addPage(appState.routeState.currentAction.page);
         break;
       case PageState.pop:
-        pop(appState.currentAction.result);
+        pop(appState.routeState.currentAction.result);
         break;
       case PageState.replace:
         // 6
-        _setPageAction(appState.currentAction);
-        replace(appState.currentAction.page);
+        _setPageAction(appState.routeState.currentAction);
+        replace(appState.routeState.currentAction.page);
         break;
       case PageState.replaceAll:
         // 7
-        _setPageAction(appState.currentAction);
-        replaceAll(appState.currentAction.page);
+        _setPageAction(appState.routeState.currentAction);
+        replaceAll(appState.routeState.currentAction.page);
         break;
       case PageState.addWidget:
         // 8
-        _setPageAction(appState.currentAction);
-        pushWidget(appState.currentAction.widget, appState.currentAction.page);
+        _setPageAction(appState.routeState.currentAction);
+        pushWidget(appState.routeState.currentAction.widget,
+            appState.routeState.currentAction.page);
         break;
       case PageState.addAll:
         // 9
-        addAll(appState.currentAction.pages);
+        addAll(appState.routeState.currentAction.pages);
         break;
     }
 
-    // appState.resetCurrentAction();
+    // appState.resetrouteState.currentAction();
     // _pages should be List<MaterialPage> with key and child
     return List.of(_pages);
   }
@@ -251,7 +246,7 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
   // handles the routing when user enters URL in the browser
   @override
   Future<void> setNewRoutePath(PageConfiguration pageConfig) {
-    print('setNewRoutePath was called');
+    print('New route path is to be set');
 
     final shouldAddPage = _pages.isEmpty ||
         (_pages.last.arguments as PageConfiguration).page != pageConfig.page;

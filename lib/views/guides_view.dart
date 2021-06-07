@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter_app/types/guide_category.dart';
-import 'index.dart';
-import '../app_state.dart';
+import '../widgets/layouts/scaffold_layout.dart';
+import '../store/route_state.dart';
+import '../store/app_state.dart';
 import '../route/pages.dart';
 import '../widgets/sliders/scroll_slider.dart';
 import '../widgets/texts/section_label.dart';
 import '../widgets/styles/paddings.dart' as paddings;
 import '../api/guides.dart' as api;
 import '../types/guides_tree_data.dart';
-import '../app_state.dart';
+import '../store/route_state.dart';
 import '../types/guide_content.dart';
 import 'mixins/guides.dart' as mixins;
 
@@ -21,7 +23,9 @@ class _GuidesViewState extends State<GuidesView> {
   List<dynamic> _categorySet1 = [];
   List<dynamic> _categorySet2 = [];
 
-  Future getGuideCategories() async {
+  AppState get appState => Provider.of<AppState>(context, listen: false);
+
+  Future<void> getGuideCategories() async {
     try {
       final data = await api.getGuideCategories();
       GuidesTreeData record = GuidesTreeData.fromJson(data);
@@ -70,10 +74,11 @@ class _GuidesViewState extends State<GuidesView> {
 
   @override
   Widget build(BuildContext context) {
-    return NavBarFrame(
+    return ScaffoldLayout(
+        title: 'Guides',
         refreshable: true,
         onRefresh: getGuideCategories,
-        bodyWidget: Container(
+        body: Container(
             padding: EdgeInsets.symmetric(
               vertical: paddings.verticalBase,
               // horizontal: paddings.horizontalBase

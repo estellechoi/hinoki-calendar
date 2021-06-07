@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../widgets/layouts/appbar_layout.dart';
 import '../../widgets/styles/borders.dart' as borders;
 import '../../widgets/styles/colors.dart' as colors;
@@ -6,9 +7,10 @@ import '../../widgets/styles/fonts.dart' as fonts;
 import '../../widgets/styles/shadows.dart' as shadows;
 import '../../api/guides.dart' as api;
 import '../../types/guide_category.dart';
-import '../../app_state.dart';
+import '../../store/route_state.dart';
 import '../../route/pages.dart';
 import '../../utils/format.dart' as format;
+import '../../store/app_state.dart';
 
 class GuideCategoryDetails extends StatefulWidget {
   @override
@@ -18,7 +20,7 @@ class GuideCategoryDetails extends StatefulWidget {
 // getGuideCategoryDetailsById
 
 class _GuideCategoryDetailsState extends State<GuideCategoryDetails> {
-  final String _id = appState.routeParam ?? '1';
+  late final String _id;
 
   // States
   String _title = '';
@@ -27,6 +29,15 @@ class _GuideCategoryDetailsState extends State<GuideCategoryDetails> {
   String _purpose = '';
   String _imagePath = 'https://picsum.photos/250?image=9';
   List<dynamic> _contents = [];
+
+  AppState get appState => Provider.of<AppState>(context, listen: false);
+
+  @override
+  void initState() {
+    super.initState();
+    _id = appState.routeState.routeParam ?? '1';
+    getGuideCategoryById();
+  }
 
   Future getGuideCategoryById() async {
     try {
@@ -49,12 +60,6 @@ class _GuideCategoryDetailsState extends State<GuideCategoryDetails> {
 
   void goArticle(String id) {
     appState.pushNavigation(fetchGuideArticlePageConfig(id));
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getGuideCategoryById();
   }
 
   @override

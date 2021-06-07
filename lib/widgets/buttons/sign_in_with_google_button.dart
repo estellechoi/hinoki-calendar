@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../utils/auth_provider.dart';
+import '../../store/auth_provider.dart';
 import './../buttons/hinoki_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';

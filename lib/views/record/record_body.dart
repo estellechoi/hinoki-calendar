@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../widgets/form_elements/f_input.dart';
 import '../../widgets/texts/input_label.dart';
 import '../../widgets/form_elements/f_switch_advanced.dart';
@@ -7,10 +8,11 @@ import '../../widgets/buttons/f_button.dart';
 import '../../widgets/texts/helper_label.dart';
 import '../../widgets/styles/paddings.dart' as paddings;
 import '../../widgets/layouts/appbar_layout.dart';
-import '../../app_state.dart';
+import '../../store/route_state.dart';
 import '../../api/record.dart' as api;
 import '../../types/daily_body_record.dart';
 import '../../utils/format.dart' as date;
+import '../../store/app_state.dart';
 
 // EXAMPLE WIDGET
 class RecordBody extends StatefulWidget {
@@ -21,8 +23,7 @@ class RecordBody extends StatefulWidget {
 }
 
 class _RecordBodyState extends State<RecordBody> {
-  final String _selectedDate =
-      appState.routeParam ?? date.stringifyDateTime(DateTime.now());
+  late final String _selectedDate;
   late Future<dynamic> _getData;
 
   // fetched/posting states
@@ -37,6 +38,16 @@ class _RecordBodyState extends State<RecordBody> {
   double _weight = 0;
   // sub states
   bool _isEditMode = false;
+
+  AppState get appState => Provider.of<AppState>(context, listen: false);
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedDate = appState.routeState.routeParam ??
+        date.stringifyDateTime(DateTime.now());
+    _getData = getDailyBodyRecord();
+  }
 
   Future<dynamic> keepData() async {
     return DailyBodyRecord(
@@ -101,12 +112,6 @@ class _RecordBodyState extends State<RecordBody> {
       _appetite = value;
       refreshData();
     });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _getData = getDailyBodyRecord();
   }
 
   @override
@@ -235,7 +240,7 @@ class _RecordBodyState extends State<RecordBody> {
                         ]);
                   } else {
                     // go back ...
-                    // appState.goBack(null);
+                    // routeState.goBack(null);
                     return Container();
                   }
                 })));

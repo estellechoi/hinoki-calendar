@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../widgets/layouts/appbar_layout.dart';
 import '../../widgets/styles/colors.dart' as colors;
 import '../../widgets/styles/borders.dart' as borders;
 import '../../api/guides.dart' as api;
-import '../../app_state.dart';
+import '../../store/route_state.dart';
+import '../../store/app_state.dart';
 import '../../types/guide_article_data.dart';
 
 class GuideArticle extends StatefulWidget {
@@ -14,7 +16,7 @@ class GuideArticle extends StatefulWidget {
 class _GuideArticleState extends State<GuideArticle> {
   // final GlobalKey _globalKey = GlobalKey();
   final ScrollController _scrollController = ScrollController();
-  final String _id = appState.routeParam ?? '1';
+  late final String _id;
 
   String _appBarColor = 'transparent';
 
@@ -22,6 +24,16 @@ class _GuideArticleState extends State<GuideArticle> {
   String _description = '';
   bool _isReadPosted = false;
   double _imageScale = 1;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(handleScroll);
+    _id = appState.routeState.routeParam ?? '1';
+    getGuideContentById();
+  }
+
+  AppState get appState => Provider.of<AppState>(context, listen: false);
 
   Future getGuideContentById() async {
     try {
@@ -46,7 +58,7 @@ class _GuideArticleState extends State<GuideArticle> {
     }
   }
 
-  void hadleScroll() {
+  void handleScroll() {
     double offset = _scrollController.offset;
 
     // Scale image
@@ -66,13 +78,6 @@ class _GuideArticleState extends State<GuideArticle> {
       _isReadPosted = true;
       postGuideContentRead();
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(hadleScroll);
-    getGuideContentById();
   }
 
   @override

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'index.dart';
+import '../widgets/layouts/scaffold_layout.dart';
 
 class FeedView extends StatefulWidget {
   @override
@@ -9,6 +9,7 @@ class FeedView extends StatefulWidget {
 class _FeedViewState extends State<FeedView> {
   @override
   Widget build(BuildContext context) {
-    return NavBarFrame(bodyWidget: Container());
+    return ScaffoldLayout(
+        title: 'Review', refreshable: false, body: Container());
   }
 }

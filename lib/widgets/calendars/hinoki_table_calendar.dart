@@ -185,12 +185,13 @@ class _HinokiTableCalendarState extends State<HinokiTableCalendar> {
                         borderRadius: borders.radiusCircle),
                     child: Text(date.day.toString(),
                         style: TextStyle(
-                          color: isToday || isSelected
-                              ? colors.white
-                              : colors.black,
-                          fontSize: fonts.sizeBase,
-                          height: fonts.lineHeightBase,
-                        ))),
+                            color: isToday || isSelected
+                                ? colors.white
+                                : colors.black,
+                            fontSize: fonts.sizeBase,
+                            height: fonts.lineHeightBase,
+                            fontFamily: fonts.primary,
+                            fontFamilyFallback: fonts.primaryFallbacks))),
                 SizedBox(
                   height: 4,
                 ),

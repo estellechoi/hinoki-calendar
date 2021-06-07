@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import '../../widgets/modals/guide_notify.dart';
-import '../../app_state.dart';
+import 'package:provider/provider.dart';
+import '../../store/route_state.dart';
+import '../../store/app_state.dart';
 import '../../route/pages.dart';
 import '../../types/guide_content.dart';
 import '../../types/guide_category.dart';
@@ -16,7 +18,7 @@ void goGuideContent(BuildContext context, GuideContent content,
 
   // 꿀팁 X
   if (category.id != GUIDE_CATE_HONEYTIP) {
-    if (content.isLock == false) goArticle(content.id);
+    if (content.isLock == false) goArticle(content.id, context);
     return;
   }
 
@@ -56,7 +58,7 @@ void goGuideContent(BuildContext context, GuideContent content,
     return;
   }
 
-  goArticle(content.id);
+  goArticle(content.id, context);
 }
 
 void showBottomModal(
@@ -88,6 +90,8 @@ void showBottomModal(
       });
 }
 
-void goArticle(int id) {
-  appState.pushNavigation(fetchGuideArticlePageConfig(id.toString()));
+void goArticle(int id, BuildContext context) {
+  context
+      .read<AppState>()
+      .pushNavigation(fetchGuideArticlePageConfig(id.toString()));
 }

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-
 import '../widgets/buttons/hinoki_button.dart';
 import '../widgets/styles/colors.dart' as colors;
 import '../widgets/styles/fonts.dart' as fonts;
 import '../widgets/layouts/layout.dart';
 import './../mixins/common.dart' as mixins;
-import 'login/signup_modal_view.dart';
+import 'login/signup_methods.dart';
 
 class LoginView extends StatefulWidget {
   @override
@@ -21,7 +20,7 @@ class _LoginViewState extends State<LoginView> {
         intrinsicHeight: false,
         title: 'Create an account',
         backButtonLabel: 'Cancel',
-        child: SignupModalView(onToggled: () {
+        child: SignupMethods(onToggled: () {
           Future.delayed(Duration(milliseconds: modalToggleDuration),
               () => openSigninDialog(context));
         }),
@@ -35,7 +34,7 @@ class _LoginViewState extends State<LoginView> {
         intrinsicHeight: false,
         title: 'Sign in',
         backButtonLabel: 'Cancel',
-        child: SignupModalView(
+        child: SignupMethods(
             isSignin: true,
             onToggled: () {
               Future.delayed(Duration(milliseconds: modalToggleDuration),
