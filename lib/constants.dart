@@ -67,7 +67,7 @@ final List<CalendarEvent> dummyEvents = [
       title: '🏋🏽‍♀️ pt',
       startAt: 'Wed, 17 Mar 2021 10:59:44 GMT',
       date: '2021-05-17',
-      color: colors.active,
+      color: colors.primary,
     ),
     CalendarEventItem(
       id: 3,
@@ -95,7 +95,7 @@ final List<CalendarEvent> dummyEvents = [
       title: 'flight to LAX',
       startAt: 'Wed, 17 Mar 2021 10:59:44 GMT',
       date: '2021-05-17',
-      color: colors.active,
+      color: colors.primary,
     ),
     CalendarEventItem(
       id: 3,
@@ -123,7 +123,7 @@ final List<CalendarEvent> dummyEvents = [
       title: 'portfolio',
       startAt: 'Wed, 17 Mar 2021 10:59:44 GMT',
       date: '2021-05-17',
-      color: colors.active,
+      color: colors.primary,
     ),
     CalendarEventItem(
       id: 3,

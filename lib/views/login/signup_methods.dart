@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:provider/provider.dart';
 import '../../store/app_state.dart';
-
+import '../../types/app_user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_app/views/login/signup_form.dart';
 import 'package:flutter_app/widgets/spinners/hinoki_spinner.dart';
@@ -51,8 +51,14 @@ class _SignupMethodsState extends State<SignupMethods> {
     print('Firebase login finished : UserCredential');
     print(authResult);
     print('---------------------------------------');
-
-    appState.login();
+    AppUser appUser = AppUser(
+        id: 1,
+        accessToken: '',
+        name: 'Test User',
+        birthday: '',
+        gender: 0,
+        phoneNum: '01000000000');
+    appState.login(appUser);
     Navigator.pop(context);
   }
 

@@ -14,7 +14,10 @@ import '../../constants.dart' as constants;
 import '../../store/app_state.dart';
 
 class ScaffoldLayout extends StatefulWidget {
+  final PreferredSizeWidget? appBar;
   final bool hideAppBar;
+  final bool hideBottomNavBar;
+  final bool extendBodyBehindAppBar;
   final String title;
   final Widget body;
   final bool refreshable;
@@ -26,8 +29,11 @@ class ScaffoldLayout extends StatefulWidget {
 
   ScaffoldLayout({
     Key? key,
+    this.appBar,
     this.hideAppBar = false,
-    required this.title,
+    this.hideBottomNavBar = false,
+    this.extendBodyBehindAppBar = false,
+    this.title = '',
     required this.body,
     this.refreshable = false,
     this.onRefresh,
@@ -78,60 +84,63 @@ class _ScaffoldLayoutState extends State<ScaffoldLayout> {
         child: Consumer<AppState>(
             builder: (context, appState, child) => Scaffold(
                 resizeToAvoidBottomInset: false,
-                extendBodyBehindAppBar: widget.hideAppBar,
-                appBar: PreferredSize(
-                  preferredSize: Size(double.infinity, sizes.appBar),
-                  child: AppBar(
-                      elevation: 0,
-                      backgroundColor:
-                          widget.hideAppBar ? colors.transparent : colors.white,
-                      toolbarOpacity: widget.hideAppBar ? 0 : 1,
-                      title: Text(appBarLabel(appState.currentNavIndex)),
-                      actions: [
-                        // IconButton(icon: Icon(Icons.list), onPressed: widget.onMenuPressed)
-                      ]),
-                ),
-                body: SingleChildScrollView(
-                  child: widget.refreshable
-                      ? RefreshIndicator(
-                          color: colors.helperLabel,
-                          backgroundColor: colors.white,
-                          strokeWidth: 1.0,
-                          onRefresh: widget.onRefresh ?? _handleRefresh,
-                          child: SizedBox(
-                              height: MediaQuery.of(context).size.height -
-                                  appBarHeight -
-                                  sizes.bottomNavigationBar -
-                                  paddings.verticalBase,
-                              child: ListView(
-                                physics: const AlwaysScrollableScrollPhysics(),
-                                children: <Widget>[
-                                  widget.body,
-                                ],
-                              )),
-                        )
-                      : SizedBox(
-                          height: MediaQuery.of(context).size.height -
-                              appBarHeight -
-                              sizes.bottomNavigationBar,
-                          child: widget.body),
-                ),
-                bottomNavigationBar: SizedBox(
-                  height: sizes.bottomNavigationBar,
-                  child: BottomNavigationBar(
-                      type: BottomNavigationBarType.fixed,
-                      backgroundColor: colors.white,
-                      unselectedItemColor: colors.inactive,
-                      selectedItemColor: colors.primary,
-                      selectedLabelStyle: textstyles.navItem,
-                      unselectedLabelStyle: textstyles.navItem,
-                      showUnselectedLabels: true,
-                      currentIndex: widget.currentNavIndex,
-                      onTap: (int index) {
-                        _handleNavTap(appState, index);
-                      },
-                      items: views.map((view) => view.navItemWidget).toList()),
-                ))));
+                extendBodyBehindAppBar: widget.extendBodyBehindAppBar,
+                appBar: widget.hideAppBar
+                    ? null
+                    : widget.appBar != null
+                        ? widget.appBar
+                        : PreferredSize(
+                            preferredSize: Size(double.infinity, sizes.appBar),
+                            child: AppBar(
+                                elevation: 0,
+                                backgroundColor: colors.white,
+                                // toolbarOpacity: widget.hideAppBar ? 0 : 1,
+                                title:
+                                    Text(appBarLabel(appState.currentNavIndex)),
+                                actions: [
+                                  // IconButton(icon: Icon(Icons.list), onPressed: widget.onMenuPressed)
+                                ]),
+                          ),
+                body: widget.refreshable
+                    ? SingleChildScrollView(
+                        child: RefreshIndicator(
+                        color: colors.helperLabel,
+                        backgroundColor: colors.white,
+                        strokeWidth: 1.0,
+                        onRefresh: widget.onRefresh ?? _handleRefresh,
+                        child: SizedBox(
+                            height: MediaQuery.of(context).size.height -
+                                appBarHeight -
+                                sizes.bottomNavigationBar -
+                                paddings.verticalBase,
+                            child: ListView(
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              children: <Widget>[
+                                widget.body,
+                              ],
+                            )),
+                      ))
+                    : widget.body,
+                bottomNavigationBar: widget.hideBottomNavBar
+                    ? null
+                    : SizedBox(
+                        height: sizes.bottomNavigationBar,
+                        child: BottomNavigationBar(
+                            type: BottomNavigationBarType.fixed,
+                            backgroundColor: colors.white,
+                            unselectedItemColor: colors.inactive,
+                            selectedItemColor: colors.primary,
+                            selectedLabelStyle: textstyles.navItem,
+                            unselectedLabelStyle: textstyles.navItem,
+                            showUnselectedLabels: true,
+                            currentIndex: widget.currentNavIndex,
+                            onTap: (int index) {
+                              _handleNavTap(appState, index);
+                            },
+                            items: views
+                                .map((view) => view.navItemWidget)
+                                .toList()),
+                      ))));
   }
 
   String appBarLabel(int index) {

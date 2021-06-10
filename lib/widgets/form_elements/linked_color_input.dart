@@ -7,7 +7,8 @@ class LinkedColorInput extends StatefulWidget {
   final String type; // text, textarea
   final String position;
   final String labelText;
-  final String defaultValue;
+  final String defaultText;
+  final String text;
   final Color color;
 
   final ValueChanged<String> onChanged;
@@ -18,7 +19,8 @@ class LinkedColorInput extends StatefulWidget {
       this.type = 'text',
       required this.position,
       this.labelText = '',
-      required this.defaultValue,
+      required this.defaultText,
+      this.text = '',
       required this.color,
       required this.onChanged,
       required this.onColorChanged})
@@ -34,7 +36,7 @@ class _LinkedColorInputState extends State<LinkedColorInput> {
     return LinkedInputFrame(
         position: widget.position,
         labelText: widget.labelText,
-        defaultValue: widget.defaultValue,
+        defaultText: widget.defaultText,
         onChanged: widget.onChanged,
         child: ColorPicker(
           color: widget.color,

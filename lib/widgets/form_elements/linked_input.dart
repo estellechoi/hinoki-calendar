@@ -5,17 +5,23 @@ class LinkedInput extends StatefulWidget {
   final String type; // text, textarea
   final String position;
   final String labelText;
-  final String defaultValue;
+  final String defaultText;
+  final String? text;
+  final bool focused;
   final onChanged;
+  final void Function(bool)? onFocused;
 
-  LinkedInput({
-    Key? key,
-    this.type = 'text',
-    required this.position,
-    this.labelText = '',
-    required this.defaultValue,
-    required this.onChanged,
-  }) : super(key: key);
+  LinkedInput(
+      {Key? key,
+      this.type = 'text',
+      required this.position,
+      this.labelText = '',
+      required this.defaultText,
+      this.text,
+      this.focused = false,
+      required this.onChanged,
+      this.onFocused})
+      : super(key: key);
 
   @override
   _LinkedInputState createState() => _LinkedInputState();
@@ -28,8 +34,11 @@ class _LinkedInputState extends State<LinkedInput> {
         position: widget.position,
         type: widget.type,
         labelText: widget.labelText,
-        defaultValue: widget.defaultValue,
+        defaultText: widget.defaultText,
+        text: widget.text,
+        focused: widget.focused,
         onChanged: widget.onChanged,
+        onFocused: widget.onFocused,
         child: Container());
   }
 }

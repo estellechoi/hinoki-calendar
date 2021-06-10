@@ -3,7 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:provider/provider.dart';
 import '../../store/route_state.dart';
 import '../../store/app_state.dart';
-
+import '../../types/app_user.dart';
 import '../../api/auth.dart' as api;
 import '../../widgets/layouts/appbar_layout.dart';
 import '../../widgets/buttons/hinoki_button.dart';
@@ -32,7 +32,7 @@ class _SignupFormState extends State<SignupForm> {
     'type': 'email'
   };
 
-  AppState get appState => Provider.of<AppState>(context, listen: false);
+  // AppState get appState => Provider.of<AppState>(context, listen: false);
 
   Future<void> _login(BuildContext context) async {
     final AppState appState = context.read<AppState>();
@@ -40,9 +40,11 @@ class _SignupFormState extends State<SignupForm> {
 
     try {
       print(formData);
-      await api.login(formData);
+      final data = await api.login(formData);
+      AppUser appUser = AppUser.fromJson(data);
+
       appState.endLoading();
-      appState.login();
+      appState.login(appUser);
       widget.onSuccess();
     } catch (e) {
       appState.endLoading();
@@ -108,14 +110,14 @@ class _SignupFormState extends State<SignupForm> {
                                     LinkedInput(
                                       position: 'top',
                                       labelText: 'Email',
-                                      defaultValue: '',
+                                      defaultText: '',
                                       onChanged: _changeId,
                                     ),
                                     LinkedInput(
                                       type: 'password',
                                       position: 'bottom',
                                       labelText: 'Password',
-                                      defaultValue: '',
+                                      defaultText: '',
                                       onChanged: _changePassword,
                                     ),
                                   ],

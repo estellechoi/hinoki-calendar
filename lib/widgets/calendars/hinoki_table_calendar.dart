@@ -45,6 +45,10 @@ class _HinokiTableCalendarState extends State<HinokiTableCalendar> {
     _thisMonthYYYYMM01 = _currentYYYYMM01;
   }
 
+  String _buildHeaderTitle(DateTime dateTime, dynamic value) {
+    return '';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -67,7 +71,8 @@ class _HinokiTableCalendarState extends State<HinokiTableCalendar> {
                 headerPadding: EdgeInsets.all(0),
                 titleCentered: true,
                 formatButtonVisible: false,
-                decoration: BoxDecoration(color: colors.white)),
+                decoration: BoxDecoration(color: colors.white),
+                titleTextFormatter: _buildHeaderTitle),
             calendarBuilders: getCalendarBuilder(),
             selectedDayPredicate: (day) {
               // Use `selectedDayPredicate` to determine which day is currently selected.

@@ -12,8 +12,11 @@ class LinkedInputFrame extends StatefulWidget {
   final String type; // text, textarea
   final String position;
   final String labelText;
-  final String defaultValue;
+  final String? text;
+  final String defaultText;
+  final bool focused;
   final onChanged;
+  final void Function(bool)? onFocused;
   final Widget child;
 
   LinkedInputFrame(
@@ -21,8 +24,11 @@ class LinkedInputFrame extends StatefulWidget {
       this.type = 'text',
       required this.position,
       this.labelText = '',
-      required this.defaultValue,
+      required this.defaultText,
+      this.text,
+      this.focused = false,
       required this.onChanged,
+      this.onFocused,
       required this.child})
       : super(key: key);
 
@@ -40,26 +46,16 @@ class _LinkedInputFrameState extends State<LinkedInputFrame> {
   late final int? _maxLines;
 
   // States
-  bool _isFocused = false;
-
-  handleFocus() {
-    debugPrint('Focus : ${focusNode.hasFocus.toString()}');
-    setState(() {
-      _isFocused = focusNode.hasFocus;
-    });
-  }
-
-  handleChange() {
-    widget.onChanged(controller.text);
-  }
+  bool _focused = false;
 
   // Widget Life Cycle Related From Here ...
   @override
   void initState() {
     super.initState();
-    focusNode.addListener(handleFocus);
-    controller.addListener(handleChange);
-    controller.text = widget.defaultValue;
+    focusNode.addListener(_handleFocus);
+    controller.addListener(_handleChange);
+    controller.text = widget.defaultText;
+    _focused = widget.focused;
 
     switch (widget.type) {
       case 'text':
@@ -82,9 +78,36 @@ class _LinkedInputFrameState extends State<LinkedInputFrame> {
   }
 
   @override
+  void didUpdateWidget(covariant LinkedInputFrame oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.text != widget.text &&
+        widget.text != null &&
+        widget.text!.isEmpty) {
+      controller.text = widget.text!;
+    }
+
+    if (oldWidget.focused != widget.focused) {
+      setState(() {
+        _focused = widget.focused;
+        if (!_focused) focusNode.unfocus(disposition: UnfocusDisposition.scope);
+      });
+    }
+  }
+
+  @override
   void dispose() {
+    focusNode.dispose();
     controller.dispose();
     super.dispose();
+  }
+
+  _handleFocus() {
+    widget.onFocused!(focusNode.hasFocus);
+  }
+
+  _handleChange() {
+    widget.onChanged(controller.text);
   }
 
   @override

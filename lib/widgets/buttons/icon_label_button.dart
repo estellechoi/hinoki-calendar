@@ -6,6 +6,7 @@ import '../styles/borders.dart' as borders;
 class IconLabelButton extends StatefulWidget {
   final VoidCallback onPressed;
   final IconData iconData;
+  final Color color;
   final String label;
   final bool disabled;
 
@@ -13,6 +14,7 @@ class IconLabelButton extends StatefulWidget {
     Key? key,
     required this.onPressed,
     required this.iconData,
+    this.color = colors.black,
     this.label = '',
     this.disabled = false,
   }) : super(key: key);
@@ -28,7 +30,7 @@ class _IconLabelButtonState extends State<IconLabelButton> {
         onPressed: widget.disabled ? null : widget.onPressed,
         child: Icon(
           widget.iconData,
-          color: widget.disabled ? colors.disabled : colors.black,
+          color: widget.disabled ? colors.disabled : widget.color,
         ),
         style: ElevatedButton.styleFrom(
             primary: colors.white,

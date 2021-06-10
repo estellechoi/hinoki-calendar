@@ -6,6 +6,7 @@ import '../route/pages.dart';
 import '../api/guides.dart' as api;
 import '../types/guide_unread_cnt.dart';
 import '../api/config.dart' as config;
+import '../types/app_user.dart';
 
 class AppState extends ChangeNotifier {
   final RouteState _routeState;
@@ -39,7 +40,7 @@ class AppState extends ChangeNotifier {
 
   // constructor
   AppState(this._routeState) {
-    getLoggedInState();
+    getLogInState();
   }
 
   // nav bar index
@@ -64,16 +65,16 @@ class AppState extends ChangeNotifier {
   }
 
   // auth
-  void login() {
+  void login(AppUser appUser) {
     _loggedIn = true;
-    saveLoginState(loggedIn);
+    saveLoginState(appUser);
     goHomeView();
     notifyListeners();
   }
 
   void logout() {
     _loggedIn = false;
-    saveLoginState(loggedIn);
+    clearLoginState();
 
     // api config update
     config.headers['Authorization'] = '';
@@ -81,13 +82,23 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> saveLoginState(bool loggedIn) async {
-    await storage.write(key: 'loggedIn', value: 'true');
+  Future<void> saveLoginState(AppUser appUser) async {
+    await storage.write(key: 'accessToken', value: appUser.accessToken);
   }
 
-  Future<void> getLoggedInState() async {
-    String? loggedIn = await storage.read(key: 'loggedIn');
-    _loggedIn = loggedIn == 'true';
+  Future<void> clearLoginState() async {
+    await storage.delete(key: 'accessToken');
+  }
+
+  Future<void> getLogInState() async {
+    String? accessToken = await storage.read(key: 'accessToken');
+
+    if (accessToken != null) {
+      config.headers['Authorization'] = 'Bearer $accessToken';
+    }
+
+    _loggedIn = accessToken != null;
+
     notifyListeners();
   }
 

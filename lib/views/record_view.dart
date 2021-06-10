@@ -190,7 +190,7 @@ class _RecordViewState extends State<RecordView> {
     // how to get return data when the pushed nav popped ?
   }
 
-  Future getData() async {
+  Future _getData() async {
     await getMyCalendarData();
     await getMyCalendarMenstrualData();
   }
@@ -198,7 +198,7 @@ class _RecordViewState extends State<RecordView> {
   @override
   void initState() {
     super.initState();
-    getData();
+    _getData();
   }
 
   @override
@@ -206,7 +206,7 @@ class _RecordViewState extends State<RecordView> {
     return ScaffoldLayout(
         title: 'Record',
         refreshable: true,
-        onRefresh: getData,
+        onRefresh: _getData,
         body: Container(
             padding: EdgeInsets.symmetric(
                 vertical: paddings.verticalBase,

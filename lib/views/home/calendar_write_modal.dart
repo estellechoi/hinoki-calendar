@@ -278,7 +278,7 @@ class _CalendarWriteModalState extends State<CalendarWriteModal> {
                           child: LinkedColorInput(
                             position: 'single',
                             labelText: 'Title',
-                            defaultValue: '',
+                            defaultText: '',
                             color: _colorOption.color,
                             onChanged: _handleTitleChange,
                             onColorChanged: _handleColorChange,
@@ -322,13 +322,13 @@ class _CalendarWriteModalState extends State<CalendarWriteModal> {
                                 LinkedInput(
                                     position: 'top',
                                     labelText: 'URL',
-                                    defaultValue: '',
+                                    defaultText: '',
                                     onChanged: _handleUrlChange),
                                 LinkedInput(
                                     position: 'bottom',
                                     type: 'textarea',
                                     labelText: 'Notes',
-                                    defaultValue: '',
+                                    defaultText: '',
                                     onChanged: _handleNotesChange)
                               ],
                             ))
