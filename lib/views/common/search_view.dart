@@ -84,9 +84,9 @@ class _SearchViewState extends State<SearchView> {
                 labelText: widget.labelText,
                 defaultText: widget.defaultText,
                 text: _text,
-                focused: _focused,
+                // focused: _focused,
                 onFocused: _handleFocus,
-                onChanged: _handleSourceStream),
+                onChanged: _mutateSourceStream),
           ),
           actions: [
             if (_showCancelButton)
@@ -142,19 +142,11 @@ class _SearchViewState extends State<SearchView> {
   }
 
   OverlayEntry _createOverlay() {
-    // final renderBox = context.findRenderObject() as RenderBox;
-    // final size = renderBox.size;
-    // final offset = renderBox.localToGlobal(Offset.zero);
-
     return OverlayEntry(
         builder: (context) => StreamBuilder<List<String>?>(
             stream: _sourceStream.stream,
             builder:
                 (BuildContext context, AsyncSnapshot<List<String>?> snapshot) {
-              // final int count = snapshot.data != null
-              //     ? snapshot.data!.length
-              //     : widget.maxSuggestions;
-
               return CompositedTransformFollower(
                   // offset: _getYOffset(offset, count),
                   link: _layerLink,
@@ -168,43 +160,35 @@ class _SearchViewState extends State<SearchView> {
     setState(() {
       _focused = hasFocus;
     });
-
-    // if (_focused) {
-    //   _overlayEntry = _createOverlay();
-    //   Overlay.of(context)!.insert(_overlayEntry);
-    // } else {
-    //   _overlayEntry.remove();
-    // }
   }
 
   void _handleCancelButtonPress() {
+    FocusScope.of(context).unfocus(disposition: UnfocusDisposition.scope);
     _handleFocus(false);
-    _handleSourceStream('');
-
-    setState(() {
-      _text = '';
-    });
+    _mutateSourceStream('');
   }
 
-  void _handleSourceStream(String value) {
+  void _mutateSourceStream(String value) {
     if (_disposed) return;
 
-    final matchingList = <String>[];
-
     if (value.isEmpty) {
-      // _sourceStream.sink.add(widget.suggestions);
-      _toggleShowCancelButton(false);
       if (_triggered) {
         _triggered = false;
         _overlayEntry.remove();
+        _text = value;
       }
+
+      _toggleShowCancelButton(false);
       return;
     }
+
+    final matchingList = <String>[];
 
     if (value.length == 1 && !_triggered) {
       _triggered = true;
       _overlayEntry = _createOverlay();
       Overlay.of(context)!.insert(_overlayEntry);
+      _text = value;
     }
 
     for (final suggestion in widget.suggestions) {
@@ -214,7 +198,6 @@ class _SearchViewState extends State<SearchView> {
     }
 
     _sourceStream.sink.add(matchingList);
-    _text = value;
     _toggleShowCancelButton(true);
   }
 

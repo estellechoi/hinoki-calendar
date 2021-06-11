@@ -276,9 +276,10 @@ class _CalendarDailyModalState extends State<CalendarDailyModal> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      Text('삭제했습니다', style: TextStyle(color: colors.white)),
+                      Text('Deleting in 5 sec !',
+                          style: TextStyle(color: colors.white)),
                       GestureDetector(
-                          child: Text('실행취소',
+                          child: Text('Undo',
                               style: TextStyle(color: colors.white)),
                           onTap: _cancelEventDismiss)
                     ],

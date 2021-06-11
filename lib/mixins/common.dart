@@ -1,9 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/widgets/buttons/text_label_button.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import './../widgets/styles/borders.dart' as borders;
 import './../widgets/styles/colors.dart' as colors;
 import './../widgets/styles/fonts.dart' as fonts;
+
+void toast(String msg) {
+  Fluttertoast.showToast(
+      msg: msg,
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: colors.primary,
+      textColor: colors.white,
+      fontSize: fonts.sizeBase);
+}
+
+void clearToasts() {
+  Fluttertoast.cancel();
+}
 
 Future openDialog(
     {required BuildContext context, required Widget child}) async {

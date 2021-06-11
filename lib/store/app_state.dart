@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -9,10 +10,16 @@ import '../api/config.dart' as config;
 import '../types/app_user.dart';
 
 class AppState extends ChangeNotifier {
+  static const String ACCESS_TOKEN = 'accessToken';
+  static const String APP_USER = 'appUser';
+
   final RouteState _routeState;
   RouteState get routeState => _routeState;
 
   final FlutterSecureStorage storage = new FlutterSecureStorage();
+
+  AppUser? _appUser;
+  AppUser? get appUser => _appUser;
 
   bool _loggedIn = false;
   bool get loggedIn => _loggedIn;
@@ -26,10 +33,10 @@ class AppState extends ChangeNotifier {
 
   int _currentNavIndex = 0;
   int get currentNavIndex => _currentNavIndex;
-  set currentNavIndex(int index) {
-    _currentNavIndex = index;
-    notifyListeners();
-  }
+  // set currentNavIndex(int index) {
+  //   _currentNavIndex = index;
+  //   notifyListeners();
+  // }
 
   int _unreadCnt = 0;
   int get unreadCnt => _unreadCnt;
@@ -66,39 +73,50 @@ class AppState extends ChangeNotifier {
 
   // auth
   void login(AppUser appUser) {
-    _loggedIn = true;
     saveLoginState(appUser);
     goHomeView();
-    notifyListeners();
   }
 
   void logout() {
-    _loggedIn = false;
     clearLoginState();
-
-    // api config update
-    config.headers['Authorization'] = '';
-
-    notifyListeners();
   }
 
   Future<void> saveLoginState(AppUser appUser) async {
-    await storage.write(key: 'accessToken', value: appUser.accessToken);
-  }
-
-  Future<void> clearLoginState() async {
-    await storage.delete(key: 'accessToken');
+    String json = jsonEncode(appUser);
+    await storage.write(key: APP_USER, value: json);
+    await storage.write(key: ACCESS_TOKEN, value: appUser.accessToken);
+    config.headers['Authorization'] = 'Bearer ${appUser.accessToken}';
+    _appUser = appUser;
+    _loggedIn = true;
+    notifyListeners();
   }
 
   Future<void> getLogInState() async {
-    String? accessToken = await storage.read(key: 'accessToken');
+    String? accessToken = await storage.read(key: ACCESS_TOKEN);
+    String? appUserData = await storage.read(key: APP_USER);
 
-    if (accessToken != null) {
+    if (accessToken != null && appUserData != null) {
+      // should validate token !
+
+      Map<String, dynamic> appUserMap = jsonDecode(appUserData);
       config.headers['Authorization'] = 'Bearer $accessToken';
+      _appUser = AppUser.fromJson(appUserMap);
+      _loggedIn = true;
+      notifyListeners();
+    } else {
+      clearLoginState();
     }
+  }
 
-    _loggedIn = accessToken != null;
+  Future<void> clearLoginState() async {
+    // await storage.deleteAll();
+    await storage.delete(key: ACCESS_TOKEN);
+    await storage.delete(key: APP_USER);
 
+    // api config update
+    config.headers['Authorization'] = '';
+    _appUser = null;
+    _loggedIn = false;
     notifyListeners();
   }
 

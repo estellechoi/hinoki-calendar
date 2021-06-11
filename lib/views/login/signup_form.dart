@@ -14,6 +14,7 @@ import '../../widgets/styles/textstyles.dart' as textstyles;
 import '../../widgets/styles/fonts.dart' as fonts;
 import '../../widgets/styles/sizes.dart' as sizes;
 import '../../widgets/spinners/hinoki_spinner.dart';
+import '../../mixins/common.dart' as mixins;
 
 class SignupForm extends StatefulWidget {
   final bool isSignin;
@@ -45,9 +46,12 @@ class _SignupFormState extends State<SignupForm> {
 
       appState.endLoading();
       appState.login(appUser);
-      widget.onSuccess();
+
+      mixins.toast('Signed ${widget.isSignin ? 'in' : 'up'}!');
+      Future.delayed(Duration(milliseconds: 1100), () => widget.onSuccess());
     } catch (e) {
       appState.endLoading();
+      mixins.toast('Failed to sign ${widget.isSignin ? 'in' : 'up'}.');
       print(e);
     }
   }
@@ -132,6 +136,9 @@ class _SignupFormState extends State<SignupForm> {
                                           ? 'Sign in'
                                           : 'Create an account',
                                       onPressed: () {
+                                        FocusScope.of(context).unfocus(
+                                            disposition:
+                                                UnfocusDisposition.scope);
                                         _login(context);
                                       },
                                     )),

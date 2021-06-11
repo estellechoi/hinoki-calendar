@@ -25,7 +25,7 @@ class ScaffoldLayout extends StatefulWidget {
 
   // final onMenuPressed;
 
-  final int currentNavIndex;
+  // final int currentNavIndex;
 
   ScaffoldLayout({
     Key? key,
@@ -37,7 +37,7 @@ class ScaffoldLayout extends StatefulWidget {
     required this.body,
     this.refreshable = false,
     this.onRefresh,
-    this.currentNavIndex = 0,
+    // this.currentNavIndex = 0,
   }) : super(key: key);
 
   @override
@@ -48,10 +48,6 @@ class _ScaffoldLayoutState extends State<ScaffoldLayout> {
   final List<NavigationView> views = constants.views;
 
   void _handleNavTap(AppState appState, int val) {
-    print('Nav Bar Item Tap Detected');
-    print(val);
-    print(appState.currentNavIndex);
-
     if (appState.currentNavIndex != val) {
       appState.changeNavPage(val);
     }
@@ -133,7 +129,7 @@ class _ScaffoldLayoutState extends State<ScaffoldLayout> {
                             selectedLabelStyle: textstyles.navItem,
                             unselectedLabelStyle: textstyles.navItem,
                             showUnselectedLabels: true,
-                            currentIndex: widget.currentNavIndex,
+                            currentIndex: appState.currentNavIndex,
                             onTap: (int index) {
                               _handleNavTap(appState, index);
                             },

@@ -87,12 +87,12 @@ class _LinkedInputFrameState extends State<LinkedInputFrame> {
       controller.text = widget.text!;
     }
 
-    if (oldWidget.focused != widget.focused) {
-      setState(() {
-        _focused = widget.focused;
-        if (!_focused) focusNode.unfocus(disposition: UnfocusDisposition.scope);
-      });
-    }
+    // if (oldWidget.focused != widget.focused) {
+    //   setState(() {
+    //     _focused = widget.focused;
+    //     if (!_focused) focusNode.unfocus(disposition: UnfocusDisposition.scope);
+    //   });
+    // }
   }
 
   @override
@@ -103,7 +103,7 @@ class _LinkedInputFrameState extends State<LinkedInputFrame> {
   }
 
   _handleFocus() {
-    widget.onFocused!(focusNode.hasFocus);
+    if (widget.onFocused != null) widget.onFocused!(focusNode.hasFocus);
   }
 
   _handleChange() {

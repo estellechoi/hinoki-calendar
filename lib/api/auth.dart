@@ -16,7 +16,7 @@ Future<dynamic> login(Map<String, String> param) async {
     final data = response.data;
     print(data);
 
-    config.headers['Authorization'] = 'Bearer ${data['access_token']}';
+    // config.headers['Authorization'] = 'Bearer ${data['access_token']}';
 
     return data;
   } catch (e) {
