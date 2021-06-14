@@ -30,3 +30,9 @@ Runner/GeneratedPluginRegistrant.*
 !default.mode2v3
 !default.pbxuser
 !default.perspectivev3
+
+# fastlane outputs
+AppStore_com.*
+*.cer
+Runner.app.*.zip
+Runner.ipa

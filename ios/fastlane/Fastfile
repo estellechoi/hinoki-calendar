@@ -1,0 +1,42 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+platform :ios do
+  desc "Push a new beta build to TestFlight"
+  lane :beta do
+    get_certificates
+    get_provisioning_profile
+    cocoapods(use_bundle_exec: false)
+    increment_build_number(xcodeproj: "Runner.xcodeproj")
+    build_app(workspace: "Runner.xcworkspace", scheme: "Runner")
+    upload_to_testflight
+    version = get_version_number
+    send_slack({ "version": version })
+  end
+
+  lane :send_slack do |options|
+    slack(
+      message: "iOS 앱이 TestFlight에 성공적으로 업로드 되었습니다.",
+      channel: "#deploy",
+      slack_url: ENV["SLACK_WEBHOOK_URL"],
+      payload: {
+        "Version": options[:version],
+        "Build Date" => Time.new.to_s
+      }
+    )
+  end
+end

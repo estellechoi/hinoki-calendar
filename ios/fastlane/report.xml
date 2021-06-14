@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="fastlane.lanes">
+    
+    
+    
+      
+      <testcase classname="fastlane.lanes" name="0: default_platform" time="0.00034">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="1: get_certificates" time="2.541684">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="2: get_provisioning_profile" time="2.282941">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="3: cocoapods" time="23.271918">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="4: increment_build_number" time="1.232415">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="5: build_app" time="152.2334">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="6: upload_to_testflight" time="1272.000971">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="7: get_version_number" time="0.087021">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="8: Switch to ios send_slack lane" time="0.000381">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="9: slack" time="1.684397">
+        
+      </testcase>
+    
+  </testsuite>
+</testsuites>
