@@ -1,0 +1,83 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:android)
+
+platform :android do
+  desc "Runs all the tests"
+  lane :test do
+    gradle(task: "test")
+  end
+
+  desc "Submit a new Beta Build to Crashlytics Beta"
+  lane :beta do
+    gradle(task: "clean bundleRelease")
+    crashlytics
+  
+    # sh "your_script.sh"
+    # You can also use other beta testing services here
+  end
+
+  desc "Deploy a new version to the Google Play"
+  lane :deploy do
+    increment_version_code
+    # gradle(task: "clean bundleRelease")
+    sh "flutter build appbundle"
+    track = "internal"
+    upload({ "track": track })
+    new_release_name = google_play_track_release_names(track: track)[0]
+    new_version_code = google_play_track_version_codes(track: track)[0]
+    new_version = "#{new_release_name} (#{new_version_code})"
+    send_slack({ "version": new_version_code })
+  end
+
+  desc "Increment version code and overwrite pubspec"
+  lane :increment_version_code do
+    yaml_file_path = "./../../pubspec.yaml"
+    data = YAML.load_file(yaml_file_path)
+    version = data["version"]
+    version_name = version.split("+")[0]
+    version_code = version.split("+")[1].to_i
+    new_version_code = version_code + 1
+    new_version = "#{version_name}+#{new_version_code}"
+    data["version"] = new_version
+    File.open(yaml_file_path, "w") { |f| YAML.dump(data, f) }
+  end
+
+  desc "Upload app bundle to the Google Play"
+  lane :upload do |options|
+    track = options[:track]
+    release_status = track == "internal" ? "draft" : "completed"
+    upload_to_play_store(
+      track: track,
+      release_status: release_status,
+      aab: "./../build/app/outputs/bundle/release/app-release.aab",
+      skip_upload_apk: true,
+    )
+  end
+
+  desc "Send deploy notification to Slack"
+  lane :send_slack do |options|
+    slack(
+      message: "Android 앱이 Google Play에 성공적으로 업로드 되었습니다.",
+      channel: "#deploy",
+      slack_url: ENV["SLACK_WEBHOOK_URL"],
+      payload: {
+        "Version": options[:version],
+        "Build Date" => Time.new.to_s
+      }
+    )
+  end
+end
