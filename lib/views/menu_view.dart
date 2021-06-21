@@ -12,6 +12,7 @@ import './../utils/health_data.dart' as healthData;
 import '../store/route_state.dart';
 import '../store/app_state.dart';
 import '../widgets/styles/colors.dart' as colors;
+import '../mixins/common.dart' as mixins;
 
 class MenuView extends StatefulWidget {
   @override
@@ -19,18 +20,34 @@ class MenuView extends StatefulWidget {
 }
 
 class _MenuViewState extends State<MenuView> {
-  bool _isLoading = false;
   List<HealthDataPoint> _healthDataList = const [];
 
   AppState get appState => Provider.of<AppState>(context, listen: false);
 
-  Future signoutFirebase(BuildContext context) async {
-    await context.read<AuthProvider>().signout();
-    appState.goLoginView();
+  Future<void> signout(BuildContext context) async {
+    appState.startLoading();
+
+    try {
+      await context.read<AuthProvider>().signout();
+      await appState.logout();
+
+      appState.endLoading();
+      mixins.toast('Signed out!');
+      Future.delayed(
+          Duration(milliseconds: 1100), () => appState.goLoginView());
+    } catch (e) {
+      appState.endLoading();
+      mixins.toast('Failed to sign out.');
+
+      print('*********************************************');
+      print(e);
+      print('*********************************************');
+      print('');
+    }
   }
 
   Future<void> getAppleHealthKitData() async {
-    toggleLoading(true);
+    appState.startLoading();
 
     List<HealthDataPoint>? healthDataList =
         await healthData.fetchAppleHealthKit();
@@ -38,7 +55,7 @@ class _MenuViewState extends State<MenuView> {
     print(healthDataList);
 
     Future.delayed(Duration(milliseconds: 3000), () {
-      toggleLoading(false);
+      appState.endLoading();
 
       setState(() {
         _healthDataList = healthDataList ?? const [];
@@ -46,44 +63,39 @@ class _MenuViewState extends State<MenuView> {
     });
   }
 
-  void toggleLoading(bool val) {
-    setState(() {
-      _isLoading = val;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        ScaffoldLayout(
-            title: 'Profile',
-            refreshable: true,
-            body: SingleChildScrollView(
-                child: Container(
-                    child: Column(
+    return Consumer<AppState>(
+        builder: (context, appState, child) => Stack(
               children: <Widget>[
-                TextLabelButton(
-                  label: 'Sign out',
-                  onPressed: () {
-                    signoutFirebase(context);
-                  },
-                ),
-                TextLabelButton(
-                  label: 'Fetch HealthKit Data',
-                  onPressed: () {
-                    getAppleHealthKitData();
-                  },
-                ),
-                Container(
-                    child: Text(
-                        'Total : ${_healthDataList.length} data fetched.')),
-                Column(children: printFetchedData(_healthDataList))
+                ScaffoldLayout(
+                    title: 'Profile',
+                    refreshable: true,
+                    body: SingleChildScrollView(
+                        child: Container(
+                            child: Column(
+                      children: <Widget>[
+                        TextLabelButton(
+                          label: 'Sign out',
+                          onPressed: () {
+                            signout(context);
+                          },
+                        ),
+                        TextLabelButton(
+                          label: 'Fetch HealthKit Data',
+                          onPressed: () {
+                            getAppleHealthKitData();
+                          },
+                        ),
+                        Container(
+                            child: Text(
+                                'Total : ${_healthDataList.length} data fetched.')),
+                        Column(children: printFetchedData(_healthDataList))
+                      ],
+                    )))),
+                if (appState.isLoading) HinokiSpinner(color: colors.primary)
               ],
-            )))),
-        if (_isLoading) HinokiSpinner(color: colors.primary)
-      ],
-    );
+            ));
   }
 
   List<Widget> printFetchedData(data) {

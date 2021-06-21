@@ -45,11 +45,18 @@ class ScaffoldLayout extends StatefulWidget {
 }
 
 class _ScaffoldLayoutState extends State<ScaffoldLayout> {
-  final List<NavigationView> views = constants.views;
+  final _bucket = PageStorageBucket();
+  final List<NavigationView> _views = constants.views;
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   void _handleNavTap(AppState appState, int val) {
     if (appState.currentNavIndex != val) {
-      appState.changeNavPage(val);
+      appState.goView(val);
     }
 
     // url update handling should be here...
@@ -57,6 +64,10 @@ class _ScaffoldLayoutState extends State<ScaffoldLayout> {
 
   Future<void> _handleRefresh() async {
     // ..
+  }
+
+  String appBarLabel(int index) {
+    return widget.title.length > 0 ? widget.title : _views[index].label;
   }
 
   @override
@@ -97,26 +108,32 @@ class _ScaffoldLayoutState extends State<ScaffoldLayout> {
                                   // IconButton(icon: Icon(Icons.list), onPressed: widget.onMenuPressed)
                                 ]),
                           ),
-                body: widget.refreshable
-                    ? SingleChildScrollView(
-                        child: RefreshIndicator(
-                        color: colors.helperLabel,
-                        backgroundColor: colors.white,
-                        strokeWidth: 1.0,
-                        onRefresh: widget.onRefresh ?? _handleRefresh,
-                        child: SizedBox(
-                            height: MediaQuery.of(context).size.height -
-                                appBarHeight -
-                                sizes.bottomNavigationBar -
-                                paddings.verticalBase,
-                            child: ListView(
-                              physics: const AlwaysScrollableScrollPhysics(),
-                              children: <Widget>[
-                                widget.body,
-                              ],
-                            )),
-                      ))
-                    : widget.body,
+                body: PageStorage(
+                    bucket: _bucket,
+                    child: widget.refreshable
+                        ? SingleChildScrollView(
+                            key: PageStorageKey(
+                                appState.currentNavIndex.toString()),
+                            controller: _scrollController,
+                            child: RefreshIndicator(
+                              color: colors.helperLabel,
+                              backgroundColor: colors.white,
+                              strokeWidth: 1.0,
+                              onRefresh: widget.onRefresh ?? _handleRefresh,
+                              child: SizedBox(
+                                  height: MediaQuery.of(context).size.height -
+                                      appBarHeight -
+                                      sizes.bottomNavigationBar -
+                                      paddings.verticalBase,
+                                  child: ListView(
+                                    physics:
+                                        const AlwaysScrollableScrollPhysics(),
+                                    children: <Widget>[
+                                      widget.body,
+                                    ],
+                                  )),
+                            ))
+                        : widget.body),
                 bottomNavigationBar: widget.hideBottomNavBar
                     ? null
                     : SizedBox(
@@ -133,13 +150,9 @@ class _ScaffoldLayoutState extends State<ScaffoldLayout> {
                             onTap: (int index) {
                               _handleNavTap(appState, index);
                             },
-                            items: views
+                            items: _views
                                 .map((view) => view.navItemWidget)
                                 .toList()),
                       ))));
-  }
-
-  String appBarLabel(int index) {
-    return widget.title.length > 0 ? widget.title : views[index].label;
   }
 }

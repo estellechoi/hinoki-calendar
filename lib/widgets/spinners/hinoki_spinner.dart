@@ -16,7 +16,7 @@ class HinokiSpinner extends StatefulWidget {
 }
 
 class _HinokiSpinnerState extends State<HinokiSpinner>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   late final AnimationController _animationController;
   bool _isSpinning = false;
 
@@ -26,7 +26,8 @@ class _HinokiSpinnerState extends State<HinokiSpinner>
 
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 1000))
-          ..repeat();
+          ..repeat()
+          ..forward();
 
     Future.delayed(Duration(milliseconds: 50), () {
       setState(() {
@@ -37,20 +38,25 @@ class _HinokiSpinnerState extends State<HinokiSpinner>
 
   @override
   void dispose() {
-    setState(() {
-      _isSpinning = false;
-    });
-
-    // Future.delayed(Duration(milliseconds: 50), () {
+    // setState(() {
+    //   _isSpinning = false;
     // });
 
     _animationController.dispose();
+
+    // Future.delayed(Duration(milliseconds: 50), () {
+    // });
 
     super.dispose();
   }
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return AnimatedOpacity(
         opacity: _isSpinning ? 1 : 0,
         duration: Duration(milliseconds: 1000),

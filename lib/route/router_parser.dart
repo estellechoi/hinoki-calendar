@@ -7,35 +7,45 @@ class AppRouteInformationParser
     extends RouteInformationParser<PageConfiguration> {
   final AppState appState;
 
-  AppRouteInformationParser(this.appState);
+  AppRouteInformationParser(this.appState) {
+    print('=============================================');
+    print('[CONSTRUCTOR] AppRouteInformationParser');
+    print('=============================================');
+    print('');
+  }
+
   // RouteInformationParser
   // parses the route information into a user-defined data type (PageConfiguration)
   @override
   Future<PageConfiguration> parseRouteInformation(
       RouteInformation routeInformation) async {
-    final uri = Uri.parse(routeInformation.location ?? '');
+    print('=============================================');
+    print('[FUNC CALL] AppRouteInformationParser.parseRouteInformation');
+    print('=============================================');
+    print('');
 
-    print('---------------------------- URI');
-    print(uri);
-    print('---------------------------- IS LOGGEDIN ?');
-    print(appState.loggedIn);
+    final uri = Uri.parse(routeInformation.location ?? '');
+    print('=============================================');
+    print('* URI : $uri');
+    print('* appState.loggedIn : ${appState.loggedIn}');
+    print('=============================================');
+    print('');
+
+    // if not logged in
+    if (!appState.loggedIn) {
+      return loginPageConfig;
+    }
 
     // handle '/'
     if (uri.pathSegments.isEmpty) {
-      return appState.loggedIn ? homePageConfig : loginPageConfig;
+      return homePageConfig;
     }
 
     final String path = '/${uri.pathSegments[0]}';
 
-    // if not logged in, redirect to login page
-    if (!appState.loggedIn && path != loginPath) {
-      return loginPageConfig;
-      // appState.goLoginView();
-    }
-
-    // path with param
+    // handle path param
     if (uri.pathSegments.length >= 2) {
-      var param = uri.pathSegments[1];
+      final param = uri.pathSegments[1];
 
       switch (path) {
         case recordPath:
@@ -68,6 +78,11 @@ class AppRouteInformationParser
   // store the browsing history in the browser
   @override
   RouteInformation restoreRouteInformation(PageConfiguration pageConfig) {
+    print('=============================================');
+    print('[FUNC CALL] AppRouteInformationParser.restoreRouteInformation');
+    print('=============================================');
+    print('');
+
     switch (pageConfig.page) {
       case Pages.Login:
         return const RouteInformation(location: loginPath);

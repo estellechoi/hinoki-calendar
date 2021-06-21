@@ -45,16 +45,21 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  // constructor
-  AppState(this._routeState) {
-    getLogInState();
-  }
+  // private constructor
+  AppState._create(this._routeState);
 
-  // nav bar index
-  void changeNavPage(index) {
-    _currentNavIndex = index;
-    goView(index);
-    notifyListeners();
+  // public factory
+  static Future<AppState> create(RouteState routeState) async {
+    print('=============================================');
+    print('[CONSTRUCTOR] AppState.create');
+    print('=============================================');
+    print('');
+
+    // Call the private constructor
+    final AppState appState = AppState._create(routeState);
+    await appState.getLogInState();
+
+    return appState;
   }
 
   // loading
@@ -77,38 +82,83 @@ class AppState extends ChangeNotifier {
     goHomeView();
   }
 
-  void logout() {
-    clearLoginState();
+  Future<void> logout() async {
+    await clearLoginState();
   }
 
   Future<void> saveLoginState(AppUser appUser) async {
+    print('=============================================');
+    print('[FUNC CALL] AppState.saveLoginState');
+    print('=============================================');
+    print('');
+
     String json = jsonEncode(appUser);
     await storage.write(key: APP_USER, value: json);
     await storage.write(key: ACCESS_TOKEN, value: appUser.accessToken);
     config.headers['Authorization'] = 'Bearer ${appUser.accessToken}';
     _appUser = appUser;
     _loggedIn = true;
+
+    print('=============================================');
+    print('notifyListeners');
+    print('=============================================');
+    print('');
+
     notifyListeners();
   }
 
   Future<void> getLogInState() async {
+    print('=============================================');
+    print('[FUNC CALL] AppState.getLogInState');
+    print('=============================================');
+    print('');
+
     String? accessToken = await storage.read(key: ACCESS_TOKEN);
     String? appUserData = await storage.read(key: APP_USER);
 
+    print('=============================================');
+    print('1) appUserData :');
+    print(appUserData.toString());
+    print('=============================================');
+    print('2) accessToken :');
+    print(accessToken.toString());
+    print('=============================================');
+    print('');
+
     if (accessToken != null && appUserData != null) {
       // should validate token !
+      print('=============================================');
+      print('[WARN] Token Validation is missing !');
+      print('=============================================');
+      print('');
 
       Map<String, dynamic> appUserMap = jsonDecode(appUserData);
       config.headers['Authorization'] = 'Bearer $accessToken';
       _appUser = AppUser.fromJson(appUserMap);
       _loggedIn = true;
+
+      print('=============================================');
+      print('_loggedIn : $_loggedIn');
+      print('=============================================');
+      print('');
+
+      print('=============================================');
+      print('notifyListeners');
+      print('=============================================');
+      print('');
+
       notifyListeners();
     } else {
-      clearLoginState();
+      await clearLoginState();
     }
   }
 
   Future<void> clearLoginState() async {
+    print('=============================================');
+    print('[FUNC CALL] AppState.clearLoginState');
+    print('=============================================');
+    print('');
+
     // await storage.deleteAll();
     await storage.delete(key: ACCESS_TOKEN);
     await storage.delete(key: APP_USER);
@@ -117,6 +167,12 @@ class AppState extends ChangeNotifier {
     config.headers['Authorization'] = '';
     _appUser = null;
     _loggedIn = false;
+
+    print('=============================================');
+    print('notifyListeners');
+    print('=============================================');
+    print('');
+
     notifyListeners();
   }
 
@@ -131,24 +187,64 @@ class AppState extends ChangeNotifier {
   }
 
   // routeState mutating
-  void setRouteParam(String? param) {
-    routeState.routeParam = param;
-    notifyListeners();
-  }
+  // void setRouteParam(String? param) {
+  //   routeState.routeParam = param;
+
+  //   print('=============================================');
+  //   print('[FUNC CALL] AppState.setRouteParam');
+  //   print('=============================================');
+  //   print('');
+
+  //   print('=============================================');
+  //   print('notifyListeners');
+  //   print('=============================================');
+  //   print('');
+
+  //   notifyListeners();
+  // }
 
   void goHomeView() {
     routeState.currentAction =
         PageAction(state: PageState.replaceAll, page: homePageConfig);
+
+    print('=============================================');
+    print('[FUNC CALL] AppState.goHomeView');
+    print('=============================================');
+    print('');
+
+    print('=============================================');
+    print('notifyListeners');
+    print('=============================================');
+    print('');
+
     notifyListeners();
   }
 
   void goLoginView() {
     routeState.currentAction =
         PageAction(state: PageState.replaceAll, page: loginPageConfig);
+
+    print('=============================================');
+    print('[FUNC CALL] AppState.goLoginView');
+    print('=============================================');
+    print('');
+
+    print('=============================================');
+    print('notifyListeners');
+    print('=============================================');
+    print('');
+
     notifyListeners();
   }
 
   void goView(int index) {
+    print('=============================================');
+    print('[FUNC CALL] AppState.goView');
+    print('=============================================');
+    print('');
+
+    _currentNavIndex = index;
+
     switch (index) {
       case 0:
         routeState.currentAction =
@@ -171,6 +267,12 @@ class AppState extends ChangeNotifier {
             PageAction(state: PageState.replaceAll, page: menuPageConfig);
         break;
     }
+
+    print('=============================================');
+    print('notifyListeners');
+    print('=============================================');
+    print('');
+
     notifyListeners();
   }
 
@@ -179,12 +281,34 @@ class AppState extends ChangeNotifier {
         state: PageState.pop,
         page: routeState.currentAction.page,
         result: result);
+
+    print('=============================================');
+    print('[FUNC CALL] AppState.goBack');
+    print('=============================================');
+    print('');
+
+    print('=============================================');
+    print('notifyListeners');
+    print('=============================================');
+    print('');
+
     notifyListeners();
   }
 
   void pushNavigation(PageConfiguration pageConfig) {
     routeState.currentAction =
         PageAction(state: PageState.addPage, page: pageConfig);
+
+    print('=============================================');
+    print('[FUNC CALL] AppState.pushNavigation');
+    print('=============================================');
+    print('');
+
+    print('=============================================');
+    print('notifyListeners');
+    print('=============================================');
+    print('');
+
     notifyListeners();
   }
 }

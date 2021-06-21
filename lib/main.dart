@@ -17,6 +17,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'utils/fcm_controller.dart';
+import 'views/loading_view.dart';
 
 Future<void> _handleFirebaseMessage(RemoteMessage message) async {
   print("A background message: ${message.messageId}");
@@ -50,18 +51,27 @@ class _MyAppState extends State<MyApp> {
   final FirebaseMessaging _fcm = FirebaseMessaging.instance;
   late final FCMController _fcmController;
 
-  @override
-  void initState() {
-    super.initState();
-    _appState = AppState(_routeState);
+  Future<_MyAppState> initApp() async {
+    // AppState
+    _appState = await AppState.create(_routeState);
+    print('=============================================');
+    print('AppState Instance Returned');
+    print('=============================================');
+    print('');
+
+    // AppRouteDelegate
     _routerDelegate = AppRouterDelegate(_appState);
     _routerDelegate.setNewRoutePath(homePageConfig);
+
+    // AppRouteInformationParser
     _routeInformationParser = AppRouteInformationParser(_appState);
+
+    // AppBackButtonDispatcher
     _backButtonDispatcher = AppBackButtonDispatcher(_routerDelegate);
 
     _fcmController = FCMController(_fcm);
-    if (Platform.isIOS) _fcmController.requestPermission();
-    _fcmController.getMessage();
+    if (Platform.isIOS) await _fcmController.requestPermission();
+    await _fcmController.getMessage();
 
     // Also handle any interaction when the app is in the background via a
     // Stream listener
@@ -69,57 +79,91 @@ class _MyAppState extends State<MyApp> {
       print('FirebaseMessaging.onMessageOpenedApp listened !');
       print(message.data);
     });
+
+    return this;
   }
 
-  // AppRouterDelegate getRouterDelegate(BuildContext context) {
-  //   return AppRouterDelegate(getAppState(context));
-  // }
+  @override
+  void initState() {
+    print('=============================================');
+    print('main.dart / initState()');
+    print('=============================================');
+    print('');
 
-  // AppState getAppState(BuildContext context) {
-  //   return context.read<AppState>();
-  // }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (BuildContext ctx) => _appState),
-          Provider(
-            create: (BuildContext ctx) => AuthProvider(FirebaseAuth.instance),
-          ),
-          StreamProvider(
-              create: (BuildContext ctx) =>
-                  ctx.read<AuthProvider>().authStateChanges,
-              initialData: null)
-        ],
-        child: MaterialApp.router(
-            title: 'Hinoki Calendar',
-            theme: ThemeData(
-              primaryColor: colors.white,
-              visualDensity: VisualDensity.adaptivePlatformDensity,
-            ),
-            routerDelegate: _routerDelegate,
-            routeInformationParser: _routeInformationParser,
-            backButtonDispatcher: _backButtonDispatcher));
+    print('=============================================');
+    print('main.dart / build()');
+    print('=============================================');
+    print('');
+
+    return FutureBuilder(
+        future: initApp(),
+        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          print('=============================================');
+          print('[BUILD] main.dart / build() / FutureBuilder');
+          print('=============================================');
+          print('hasError : ${snapshot.hasError}');
+          print('hasData : ${snapshot.hasData}');
+          print('data : ${snapshot.data}');
+          print('=============================================');
+          print('');
+
+          if (snapshot.hasData) {
+            return MultiProvider(
+                providers: [
+                  ChangeNotifierProvider(
+                      create: (BuildContext ctx) => _appState),
+                  ChangeNotifierProvider(
+                    create: (BuildContext ctx) =>
+                        AuthProvider(FirebaseAuth.instance),
+                  ),
+                  StreamProvider(
+                      create: (BuildContext ctx) =>
+                          ctx.read<AuthProvider>().authStateChanges,
+                      initialData: null)
+                ],
+                child: MaterialApp.router(
+                    title: 'Hinoki Calendar',
+                    theme: ThemeData(
+                      primaryColor: colors.white,
+                      visualDensity: VisualDensity.adaptivePlatformDensity,
+                    ),
+                    routerDelegate: _routerDelegate,
+                    routeInformationParser: _routeInformationParser,
+                    backButtonDispatcher: _backButtonDispatcher));
+          }
+
+          // Error Page
+          if (snapshot.hasError) {
+            return MaterialApp(home: LoadingView());
+          }
+
+          // Loading Page
+          return MaterialApp(home: LoadingView());
+        });
   }
 }
 
 // Route Page - Animation
-class AnimationPage extends Page {
-  final child;
-  final title;
+// class AnimationPage extends Page {
+//   final child;
+//   final title;
 
-  AnimationPage({required this.child, required this.title})
-      : super(key: ValueKey(title));
+//   AnimationPage({required this.child, required this.title})
+//       : super(key: ValueKey(title));
 
-  Route createRoute(BuildContext context) {
-    return PageRouteBuilder(
-        settings: this,
-        pageBuilder: (context, animation, animation2) {
-          final tween = Tween(begin: Offset(0.0, 1.0), end: Offset.zero);
-          final curveTween = CurveTween(curve: Curves.easeInOut);
-          return SlideTransition(
-              position: animation.drive(curveTween).drive(tween), child: child);
-        });
-  }
-}
+//   Route createRoute(BuildContext context) {
+//     return PageRouteBuilder(
+//         settings: this,
+//         pageBuilder: (context, animation, animation2) {
+//           final tween = Tween(begin: Offset(0.0, 1.0), end: Offset.zero);
+//           final curveTween = CurveTween(curve: Curves.easeInOut);
+//           return SlideTransition(
+//               position: animation.drive(curveTween).drive(tween), child: child);
+//         });
+//   }
+// }

@@ -97,7 +97,8 @@ class AuthProvider with ChangeNotifier {
   }
 
   // Signout
-  Future signout() async {
-    await firebaseAuth.signOut();
+  Future<void> signout() async {
+    final User? user = firebaseAuth.currentUser;
+    if (user != null) await firebaseAuth.signOut();
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import './../widgets/layouts/layout.dart';
 
 class UnknownView extends StatefulWidget {
   @override
@@ -8,6 +9,8 @@ class UnknownView extends StatefulWidget {
 class _UnknownViewState extends State<UnknownView> {
   @override
   Widget build(BuildContext context) {
-    return Container(child: Text('Unknown !'));
+    return Layout(
+        child:
+            Container(alignment: Alignment.center, child: Text('Unknown !')));
   }
 }

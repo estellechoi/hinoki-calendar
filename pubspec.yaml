@@ -2,7 +2,7 @@
 name: flutter_app
 description: A new Flutter application.
 publish_to: none
-version: 1.0.0+20
+version: 1.0.0+22
 environment:
   sdk: ">=2.12.0 <3.0.0"
 dependencies:

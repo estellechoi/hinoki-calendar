@@ -27,8 +27,22 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
 
   // takes in the appState, and creates a global navigator key
   AppRouterDelegate(this.appState) : navigatorKey = GlobalKey() {
+    print('=============================================');
+    print('[CONSTRUCTOR] AppRouterDelegate');
+    print('=============================================');
+    print('');
+
     appState.addListener(() {
-      print('appState Listened Change!');
+      print('=============================================');
+      print('[NOTIFY LISTENER] AppState Notify Listened !');
+      print('=============================================');
+      print('');
+
+      print('=============================================');
+      print('notifyListeners');
+      print('=============================================');
+      print('');
+
       notifyListeners();
     });
   }
@@ -86,17 +100,30 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
   }
 
   void _addPageData(Widget child, PageConfiguration pageConfig) {
+    print('=============================================');
+    print('[FUNC CALL] AppRouterDelegate._addPageData');
+    print('=============================================');
+    print('');
+
     _pages.add(_createPage(child, pageConfig));
+
+    // if has some param
+    // appState.setRouteParam(pageConfig.param);
   }
 
   void addPage(PageConfiguration pageConfig) {
+    print('=============================================');
+    print('[FUNC CALL] AppRouterDelegate.addPage');
+    print('=============================================');
+    print('pageConfig.name : ${pageConfig.name}');
+    print('pageConfig.param : ${pageConfig.param}');
+    print('=============================================');
+    print('');
+
     final shouldAddPage = _pages.isEmpty ||
         (_pages.last.arguments as PageConfiguration).page != pageConfig.page;
 
     if (shouldAddPage) {
-      // if has some param
-      appState.setRouteParam(pageConfig.param);
-
       switch (pageConfig.page) {
         case Pages.Login:
           _addPageData(LoginView(), loginPageConfig);
@@ -134,6 +161,11 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
 
   // modifying pages
   void replaceAll(PageConfiguration pageConfig) {
+    print('=============================================');
+    print('[FUNC CALL] AppRouterDelegate.replaceAll');
+    print('=============================================');
+    print('');
+
     setNewRoutePath(pageConfig);
   }
 
@@ -199,6 +231,11 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
   }
 
   List<Page> buildPages() {
+    print('=============================================');
+    print('[FUNC CALL] AppRouterDelegate.buildPages');
+    print('=============================================');
+    print('');
+
     switch (appState.routeState.currentAction.state) {
       case PageState.none:
         break;
@@ -239,6 +276,11 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
   // returns the Navigator
   @override
   Widget build(BuildContext context) {
+    print('=============================================');
+    print('[FUNC CALL] AppRouterDelegate.build');
+    print('=============================================');
+    print('');
+
     return Navigator(
         key: navigatorKey, onPopPage: _onPopPage, pages: buildPages());
   }
@@ -246,7 +288,12 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
   // handles the routing when user enters URL in the browser
   @override
   Future<void> setNewRoutePath(PageConfiguration pageConfig) {
-    print('New route path is to be set');
+    print('=============================================');
+    print('[FUNC CALL] AppRouterDelegate.setNewRoutePath');
+    print('=============================================');
+    print('pageConfig.name : ${pageConfig.name}');
+    print('=============================================');
+    print('');
 
     final shouldAddPage = _pages.isEmpty ||
         (_pages.last.arguments as PageConfiguration).page != pageConfig.page;

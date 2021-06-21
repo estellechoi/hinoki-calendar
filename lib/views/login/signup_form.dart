@@ -52,7 +52,11 @@ class _SignupFormState extends State<SignupForm> {
     } catch (e) {
       appState.endLoading();
       mixins.toast('Failed to sign ${widget.isSignin ? 'in' : 'up'}.');
+
+      print('*********************************************');
       print(e);
+      print('*********************************************');
+      print('');
     }
   }
 
