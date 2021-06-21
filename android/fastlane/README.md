@@ -35,17 +35,17 @@ Deploy a new version to the Google Play
 ```
 fastlane android increment_version_code
 ```
-Increment Version Code for Android App
+Increment version code and overwrite pubspec
 ### android upload
 ```
 fastlane android upload
 ```
-Upload to Play Store
+Upload app bundle to the Google Play
 ### android send_slack
 ```
 fastlane android send_slack
 ```
-Send Deploy Notification to Slack
+Send deploy notification to Slack
 
 ----
 
