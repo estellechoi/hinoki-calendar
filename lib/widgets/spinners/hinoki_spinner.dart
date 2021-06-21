@@ -26,8 +26,8 @@ class _HinokiSpinnerState extends State<HinokiSpinner>
 
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 1000))
-          ..repeat()
-          ..forward();
+          ..repeat();
+    // ..forward();
 
     Future.delayed(Duration(milliseconds: 50), () {
       setState(() {

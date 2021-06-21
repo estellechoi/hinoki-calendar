@@ -95,7 +95,10 @@ class AppState extends ChangeNotifier {
     String json = jsonEncode(appUser);
     await storage.write(key: APP_USER, value: json);
     await storage.write(key: ACCESS_TOKEN, value: appUser.accessToken);
+
     config.headers['Authorization'] = 'Bearer ${appUser.accessToken}';
+    config.http.options.headers = config.headers;
+
     _appUser = appUser;
     _loggedIn = true;
 
@@ -134,6 +137,8 @@ class AppState extends ChangeNotifier {
 
       Map<String, dynamic> appUserMap = jsonDecode(appUserData);
       config.headers['Authorization'] = 'Bearer $accessToken';
+      config.http.options.headers = config.headers;
+
       _appUser = AppUser.fromJson(appUserMap);
       _loggedIn = true;
 
@@ -165,6 +170,8 @@ class AppState extends ChangeNotifier {
 
     // api config update
     config.headers['Authorization'] = '';
+    config.http.options.headers = config.headers;
+
     _appUser = null;
     _loggedIn = false;
 

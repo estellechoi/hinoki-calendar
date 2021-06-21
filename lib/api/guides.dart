@@ -4,8 +4,8 @@ import 'config.dart' as config;
 Future<dynamic> getGuideUnreadCnt() async {
   try {
     final String url = '/api/content/unread';
-    final Response response =
-        await config.dio.get(url, options: Options(headers: config.headers));
+    final Response response = await config.http.get(url);
+    // , options: Options(headers: config.headers)
 
     print('getGuideUnreadCnt - Success');
     print(response);
@@ -23,8 +23,8 @@ Future<dynamic> getGuideUnreadCnt() async {
 Future<dynamic> getGuideCategories() async {
   try {
     final String url = '/api/content/category';
-    final Response response =
-        await config.dio.get(url, options: Options(headers: config.headers));
+    final Response response = await config.http.get(url);
+    // , options: Options(headers: config.headers)
 
     print('getGuideCategories - Success');
     print(response);
@@ -42,8 +42,8 @@ Future<dynamic> getGuideCategories() async {
 Future<dynamic> getGuideCategoryById(String id) async {
   try {
     final String url = '/api/content/category/$id';
-    final Response response =
-        await config.dio.get(url, options: Options(headers: config.headers));
+    final Response response = await config.http.get(url);
+    // , options: Options(headers: config.headers)
 
     print('getGuideCategoryById - Success');
     print(response);
@@ -61,8 +61,8 @@ Future<dynamic> getGuideCategoryById(String id) async {
 Future<dynamic> getGuideContentById(String id) async {
   try {
     final String url = '/api/contents/$id';
-    final Response response =
-        await config.dio.get(url, options: Options(headers: config.headers));
+    final Response response = await config.http.get(url);
+    // , options: Options(headers: config.headers)
 
     print('getGuideContentById - Success');
     print(response);
@@ -80,8 +80,8 @@ Future<dynamic> getGuideContentById(String id) async {
 Future<dynamic> postGuideContentRead(String id) async {
   try {
     final String url = '/api/contents/$id';
-    final Response response =
-        await config.dio.post(url, options: Options(headers: config.headers));
+    final Response response = await config.http.post(url);
+    // , options: Options(headers: config.headers)
 
     print('postGuideContentRead - Success');
     print(response);

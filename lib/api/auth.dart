@@ -3,10 +3,10 @@ import 'config.dart' as config;
 
 Future<dynamic> login(Map<String, String> param) async {
   try {
-    print(config.dio.options.baseUrl);
+    print(config.http.options.baseUrl);
 
     final String url = '/cafe24/user/login';
-    final Response response = await config.dio.post(url,
+    final Response response = await config.http.post(url,
         data: FormData.fromMap(param),
         options: Options(headers: {'Content-Type': 'multipart/form-data'}));
 

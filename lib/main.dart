@@ -18,6 +18,7 @@ import 'package:provider/provider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'utils/fcm_controller.dart';
 import 'views/loading_view.dart';
+import 'views/unknown_view.dart';
 
 Future<void> _handleFirebaseMessage(RemoteMessage message) async {
   print("A background message: ${message.messageId}");
@@ -139,7 +140,7 @@ class _MyAppState extends State<MyApp> {
 
           // Error Page
           if (snapshot.hasError) {
-            return MaterialApp(home: LoadingView());
+            return MaterialApp(home: UnknownView());
           }
 
           // Loading Page

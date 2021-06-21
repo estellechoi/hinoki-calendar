@@ -4,8 +4,8 @@ import 'config.dart' as config;
 Future<dynamic> getMyCalendarData(Map<String, String> param) async {
   try {
     final String url = '/cafe24/user/body_weight/month';
-    final Response response = await config.dio.get(url,
-        queryParameters: param, options: Options(headers: config.headers));
+    final Response response =
+        await config.http.get(url, queryParameters: param);
 
     print('getMyCalendarData - Success');
     print(response);
@@ -23,8 +23,8 @@ Future<dynamic> getMyCalendarData(Map<String, String> param) async {
 Future<dynamic> getMyCalendarMenstrualData(Map<String, String> param) async {
   try {
     final String url = '/cafe24/user/menstrual/day';
-    final Response response = await config.dio.get(url,
-        queryParameters: param, options: Options(headers: config.headers));
+    final Response response =
+        await config.http.get(url, queryParameters: param);
 
     print('getMyCalendarMenstrualData - Success');
     print(response);
@@ -41,8 +41,8 @@ Future<dynamic> getMyCalendarMenstrualData(Map<String, String> param) async {
 Future<dynamic> getDailyBodyRecord(Map<String, String> param) async {
   try {
     final String url = '/cafe24/user/body_weight/day';
-    final Response response = await config.dio.get(url,
-        queryParameters: param, options: Options(headers: config.headers));
+    final Response response =
+        await config.http.get(url, queryParameters: param);
 
     print('getDailyBodyInfoData - Success');
     print(response);
@@ -59,8 +59,8 @@ Future<dynamic> getDailyBodyRecord(Map<String, String> param) async {
 Future<dynamic> deleteDailyBodyRecord(Map<String, String> param) async {
   try {
     final String url = '/cafe24/user/body_weight/day';
-    final Response response = await config.dio.delete(url,
-        queryParameters: param, options: Options(headers: config.headers));
+    final Response response =
+        await config.http.delete(url, queryParameters: param);
 
     print('deleteDailyBodyRecord - Success');
     print(response);
