@@ -29,9 +29,17 @@ class AuthProvider with ChangeNotifier {
 
   // Signin with Apple
   Future<UserCredential?> signinWithApple() async {
+    print('=============================================');
+    print('[FUNC CALL] AuthProvider.signinWithApple');
+    print('=============================================');
+    print('');
+
     try {
       final String rawNonce = generateNonce();
       final String nonce = sha256ofString(rawNonce);
+
+      print('1) [Firebase] nonce Created for Apple Signin');
+      print('');
 
       // Apple 로그인 후 반환된 `credential` 객체를 가져옵니다
       final AuthorizationCredentialAppleID credential =
@@ -40,65 +48,152 @@ class AuthProvider with ChangeNotifier {
         AppleIDAuthorizationScopes.fullName,
       ], nonce: nonce);
 
+      print('2) [Firebase] Apple Signin Processed by User and idToken Fetched');
+      print('* Email : ${AppleIDAuthorizationScopes.email}');
+      print('* Full Name : ${AppleIDAuthorizationScopes.fullName}');
+      print('* AuthorizationCredentialAppleID : $credential');
+      print('');
+
       // 위에서 가져온 `credential` 객체를 사용하여 `oauthCredential` 객체를 생성합니다.
       final OAuthCredential oauthCredential = OAuthProvider('apple.com')
           .credential(idToken: credential.identityToken, rawNonce: rawNonce);
+
+      print(
+          '3) [Firebase] Apple OAuth Credential Fetched Using idToken and rawNonce');
+      print('* OAuthCredential : $oauthCredential');
+      print('');
 
       // `oauthCredential` 객체를 사용하여 Firebase에 로그인 시키고
       // 결과 정보를 담은 `UserCredential` 객체를 가져옵니다.
       // If the nonce we generated earlier does
       // not match the nonce in `appleCredential.identityToken`, sign in will fail.
-      final UserCredential authResult =
+      final UserCredential userCredential =
           await firebaseAuth.signInWithCredential(oauthCredential);
 
-      final String displayName =
-          '${credential.givenName} ${credential.familyName}';
-      final String userEmail = '${credential.email}';
+      print('4) [Firebase] Firebase Sigin Processed Using Apple Credential');
+      print('* UserCredential : $userCredential');
+      print('');
 
-      // `authResult` 객체에서 사용자 정보를 가져옵니다.
-      final User? firebaseUser = authResult.user;
+      final String displayName =
+          '${credential.familyName}${credential.givenName}';
+      final String? userEmail = credential.email ?? userCredential.user?.email;
+
+      print('5) [Firebase] User Name and Email Extracted from UserCredential');
+      print('* Display Name : $displayName');
+      print('* User Email : $userEmail');
+      print('');
+
+      // `userCredential` 객체에서 사용자 정보를 가져옵니다.
+      final User? firebaseUser = userCredential.user;
+
+      print('6) [Firebase] Firebase User Object Extracted from UserCredential');
+      print('* User : $firebaseUser');
+      print('');
 
       await firebaseUser?.updateProfile(displayName: displayName);
-      await firebaseUser?.updateEmail(userEmail);
 
-      return authResult;
+      print('7) [Firebase] Firebase User Profile Updated with Display Name');
+      print('* Display Name : $displayName');
+
+      if (userEmail != null) {
+        await firebaseUser?.updateEmail(userEmail);
+
+        print('');
+        print('8) [Firebase] Firebase User Email Updated');
+        print('* User Email : $userEmail');
+      }
+
+      print('=============================================');
+      print('');
+
+      return userCredential;
     } catch (e) {
+      print('=============================================');
+      print('');
+      print('*********************************************');
       print(e);
-      // return null;
+      print('*********************************************');
+      print('');
+
+      return null;
     }
   }
 
-  // signin with google
+  // Signin with Apple
   Future<UserCredential?> signinWithGoogle() async {
+    print('=============================================');
+    print('[FUNC CALL] AuthProvider.signinWithGoogle');
+    print('=============================================');
+    print('');
+
     try {
+      print('=============================================');
+
       // Google 로그인 후 반환된 `GoogleSignInAccount` 객체를 가져옵니다.
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      print('1) [Firebase] Google Signin Processed by User');
+      print('* GoogleSignInAccount: $googleUser');
+      print('');
 
       // 인증 상세정보를 담은 `GoogleSignInAuthentication` 객체를 가져옵니다.
       final GoogleSignInAuthentication? googleAuth =
           await googleUser?.authentication;
 
-      if (googleAuth == null) return null;
+      print('2) [Firebase] Google accessToken & idToken Fetched');
+      print('* GoogleSignInAuthentication: $googleAuth');
+      print('');
+
+      if (googleAuth == null) {
+        print('=============================================');
+        return null;
+      }
 
       // `OAuthCredential` 객체를 생성합니다.
       final OAuthCredential credential = GoogleAuthProvider.credential(
           accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
 
+      print('3) [Firebase] Google OAuth Credential Fetched Using Tokens');
+      print('* OAuthCredential: $credential');
+      print('');
+
       // `oauthCredential` 객체를 사용하여 Firebase에 로그인 시키고
       // 결과 정보를 담은 `UserCredential` 객체를 가져옵니다.
-      final UserCredential authResult =
+      final UserCredential userCredential =
           await FirebaseAuth.instance.signInWithCredential(credential);
 
-      return authResult;
+      print('4) [Firebase] Firebase Sigin Processed Using Google Credential');
+      print('* UserCredential: $userCredential');
+      print('=============================================');
+      print('');
+
+      return userCredential;
     } catch (e) {
+      print('=============================================');
+      print('');
+      print('*********************************************');
       print(e);
+      print('*********************************************');
+      print('');
+
       return null;
     }
   }
 
   // Signout
   Future<void> signout() async {
+    print('=============================================');
+    print('[FUNC CALL] AuthProvider.signout');
+    print('=============================================');
+    print('');
+
     final User? user = firebaseAuth.currentUser;
+
+    print('=============================================');
+    print('* Current User: $user');
+    print('=============================================');
+    print('');
+
     if (user != null) await firebaseAuth.signOut();
   }
 }

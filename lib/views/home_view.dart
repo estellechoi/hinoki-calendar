@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import './../store/app_state.dart';
 import 'package:flutter_app/widgets/form_elements/common/shadowed_bundle.dart';
 import 'dart:collection';
 import '../widgets/layouts/scaffold_layout.dart';
@@ -90,22 +92,24 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    return ScaffoldLayout(
-        appBar: _buildAppBar(),
-        refreshable: false,
-        // onRefresh: _getEvents,
-        body: Container(
-            child: Column(
-          children: <Widget>[
-            Expanded(
-              child: HinokiTableCalendar(
-                  events: _events,
-                  onPageChanged: _getEventsForNewMonth,
-                  onDaySelected: (String date, int weekday) {
-                    _showDailyModal(context, date, weekday);
-                  }),
-            )
-          ],
-        )));
+    return Consumer<AppState>(
+        builder: (context, appState, child) => ScaffoldLayout(
+            appBar: _buildAppBar(),
+            refreshable: false,
+            // onRefresh: _getEvents,
+            body: Container(
+                child: Column(
+              children: <Widget>[
+                Container(child: Text(appState.currentNavIndex.toString())),
+                Expanded(
+                  child: HinokiTableCalendar(
+                      events: _events,
+                      onPageChanged: _getEventsForNewMonth,
+                      onDaySelected: (String date, int weekday) {
+                        _showDailyModal(context, date, weekday);
+                      }),
+                )
+              ],
+            ))));
   }
 }

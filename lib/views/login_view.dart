@@ -52,7 +52,7 @@ class _LoginViewState extends State<LoginView> {
         Container(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
-            decoration: BoxDecoration(color: colors.active),
+            decoration: BoxDecoration(color: colors.white),
             child: Image(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,

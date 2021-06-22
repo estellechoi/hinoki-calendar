@@ -59,7 +59,7 @@ class _GuideCategoryDetailsState extends State<GuideCategoryDetails> {
   }
 
   void goArticle(String id) {
-    appState.pushNavigation(fetchGuideArticlePageConfig(id));
+    // appState.pushNavigation(fetchGuideArticlePageConfig(id));
   }
 
   @override

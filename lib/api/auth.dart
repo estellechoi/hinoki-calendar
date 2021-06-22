@@ -15,13 +15,18 @@ Future<dynamic> login(Map<String, String> param) async {
 
     final data = response.data;
     print(data);
+    print('');
 
     // config.headers['Authorization'] = 'Bearer ${data['access_token']}';
 
     return data;
   } catch (e) {
+    print('*********************************************');
     print('login - Fail');
     print(e);
+    print('*********************************************');
+    print('');
+
     throw Error();
   }
 }

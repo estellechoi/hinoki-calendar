@@ -22,42 +22,47 @@ class SignInWithAppleButton extends StatefulWidget {
 }
 
 class _SignInWithAppleButtonState extends State<SignInWithAppleButton> {
-  Future signinWithApple(BuildContext context) async {
-    final UserCredential? authResult =
-        await context.read<AuthProvider>().signinWithApple();
+  Future signinWithApple(AuthProvider authProvider) async {
+    final UserCredential? authResult = await authProvider.signinWithApple();
+
+    print('=============================================');
+    print('[ASYNC DONE] AuthProvider.signinWithApple');
+    print('=============================================');
+    print('');
 
     widget.onFinished(authResult);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        HinokiButton(
-          label: 'Sign ${widget.toggledText} with Apple',
-          fullWidth: widget.fullWidth,
-          color: 'black',
-          type: 'border',
-          onPressed: () {
-            widget.onPressed();
-            signinWithApple(context);
-          },
-        ),
-        Positioned(
-            left: 14,
-            top: 0,
-            bottom: 0,
-            child: Container(
-                width: 20,
-                height: 20,
-                child: Image(
-                  width: double.infinity,
-                  height: double.infinity,
-                  fit: BoxFit.contain,
-                  alignment: Alignment.center,
-                  image: AssetImage('static/apple_icon.png'),
-                )))
-      ],
-    );
+    return Consumer<AuthProvider>(
+        builder: (context, authProvider, child) => Stack(
+              children: <Widget>[
+                HinokiButton(
+                  label: 'Sign ${widget.toggledText} with Apple',
+                  fullWidth: widget.fullWidth,
+                  color: 'black',
+                  type: 'border',
+                  onPressed: () {
+                    widget.onPressed();
+                    signinWithApple(authProvider);
+                  },
+                ),
+                Positioned(
+                    left: 14,
+                    top: 0,
+                    bottom: 0,
+                    child: Container(
+                        width: 20,
+                        height: 20,
+                        child: Image(
+                          width: double.infinity,
+                          height: double.infinity,
+                          fit: BoxFit.contain,
+                          alignment: Alignment.center,
+                          image: AssetImage('static/apple_icon.png'),
+                        )))
+              ],
+            ));
   }
 }

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:provider/provider.dart';
-import '../../store/route_state.dart';
 import '../../store/app_state.dart';
 import '../../types/app_user.dart';
 import '../../api/auth.dart' as api;
-import '../../widgets/layouts/appbar_layout.dart';
+import '../../widgets/layouts/layout.dart';
 import '../../widgets/buttons/hinoki_button.dart';
 import '../../widgets/form_elements/linked_input.dart';
 import '../../widgets/form_elements/common/shadowed_bundle.dart';
@@ -15,10 +14,11 @@ import '../../widgets/styles/fonts.dart' as fonts;
 import '../../widgets/styles/sizes.dart' as sizes;
 import '../../widgets/spinners/hinoki_spinner.dart';
 import '../../mixins/common.dart' as mixins;
+import '../../constants.dart' as constants;
 
 class SignupForm extends StatefulWidget {
   final bool isSignin;
-  final onSuccess;
+  final VoidCallback onSuccess;
 
   SignupForm({required this.isSignin, required this.onSuccess});
 
@@ -35,28 +35,42 @@ class _SignupFormState extends State<SignupForm> {
 
   // AppState get appState => Provider.of<AppState>(context, listen: false);
 
-  Future<void> _login(BuildContext context) async {
-    final AppState appState = context.read<AppState>();
+  Future<void> _login(AppState appState) async {
     appState.startLoading();
 
+    print('=============================================');
+    print('[FUNC CALL] SignupForm._login');
+    print('=============================================');
+    print('');
+
     try {
-      print(formData);
+      print('=============================================');
+      print('* ID : ${formData["id"]}');
+      print('* PW : ${formData["password"]}');
+      print('=============================================');
+      print('');
+
       final data = await api.login(formData);
       AppUser appUser = AppUser.fromJson(data);
 
-      appState.endLoading();
-      appState.login(appUser);
+      await appState.login(appUser);
 
-      mixins.toast('Signed ${widget.isSignin ? 'in' : 'up'}!');
-      Future.delayed(Duration(milliseconds: 1100), () => widget.onSuccess());
+      mixins.toast('Signed ${widget.isSignin ? 'in' : 'up'}');
+
+      Future.delayed(constants.loadingDelayDuration, () {
+        appState.endLoading();
+        widget.onSuccess();
+      });
     } catch (e) {
-      appState.endLoading();
-      mixins.toast('Failed to sign ${widget.isSignin ? 'in' : 'up'}.');
-
       print('*********************************************');
       print(e);
       print('*********************************************');
       print('');
+
+      mixins.toast('Failed to sign ${widget.isSignin ? 'in' : 'up'}');
+
+      Future.delayed(
+          constants.loadingDelayDuration, () => appState.endLoading());
     }
   }
 
@@ -79,12 +93,8 @@ class _SignupFormState extends State<SignupForm> {
     return Consumer<AppState>(
         builder: (context, appState, child) => Stack(
               children: <Widget>[
-                AppBarLayout(
-                    extendBodyBehindAppBar: true,
-                    title: '',
-                    scrollController: ScrollController(),
-                    // globalKey: GlobalKey(),
-                    body: Container(
+                Layout(
+                    child: Container(
                         height: sizes.screenHeight(context),
                         padding: EdgeInsets.only(
                           top: sizes.appBar * 2,
@@ -143,7 +153,7 @@ class _SignupFormState extends State<SignupForm> {
                                         FocusScope.of(context).unfocus(
                                             disposition:
                                                 UnfocusDisposition.scope);
-                                        _login(context);
+                                        _login(appState);
                                       },
                                     )),
                               ],

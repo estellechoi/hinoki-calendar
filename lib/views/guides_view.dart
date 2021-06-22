@@ -58,8 +58,8 @@ class _GuidesViewState extends State<GuidesView> {
   void goCategoryDetails(GuideCategory category) {
     print('goCategoryDetails');
     print(category.id);
-    appState
-        .pushNavigation(fetchGuideCategoryPageConfig(category.id.toString()));
+    // appState
+    //     .pushNavigation(fetchGuideCategoryPageConfig(category.id.toString()));
   }
 
   void _goGuideContent(GuideContent content, GuideCategory category) {

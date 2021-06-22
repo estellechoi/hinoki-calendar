@@ -55,6 +55,11 @@ class _ScaffoldLayoutState extends State<ScaffoldLayout> {
   }
 
   void _handleNavTap(AppState appState, int val) {
+    print('=============================================');
+    print('[FUNC CALL] ScaffoldLayout._handleNavTap');
+    print('=============================================');
+    print('');
+
     if (appState.currentNavIndex != val) {
       appState.goView(val);
     }

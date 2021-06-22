@@ -12,11 +12,10 @@ import '../types/app_user.dart';
 class AppState extends ChangeNotifier {
   static const String ACCESS_TOKEN = 'accessToken';
   static const String APP_USER = 'appUser';
+  final FlutterSecureStorage storage = new FlutterSecureStorage();
 
   final RouteState _routeState;
   RouteState get routeState => _routeState;
-
-  final FlutterSecureStorage storage = new FlutterSecureStorage();
 
   AppUser? _appUser;
   AppUser? get appUser => _appUser;
@@ -77,9 +76,8 @@ class AppState extends ChangeNotifier {
   }
 
   // auth
-  void login(AppUser appUser) {
-    saveLoginState(appUser);
-    goHomeView();
+  Future<void> login(AppUser appUser) async {
+    await saveLoginState(appUser);
   }
 
   Future<void> logout() async {
@@ -211,13 +209,13 @@ class AppState extends ChangeNotifier {
   // }
 
   void goHomeView() {
-    routeState.currentAction =
-        PageAction(state: PageState.replaceAll, page: homePageConfig);
-
     print('=============================================');
     print('[FUNC CALL] AppState.goHomeView');
     print('=============================================');
     print('');
+
+    routeState.currentPageAction =
+        PageAction(state: PageState.replaceAll, page: homePageConfig);
 
     print('=============================================');
     print('notifyListeners');
@@ -228,7 +226,7 @@ class AppState extends ChangeNotifier {
   }
 
   void goLoginView() {
-    routeState.currentAction =
+    routeState.currentPageAction =
         PageAction(state: PageState.replaceAll, page: loginPageConfig);
 
     print('=============================================');
@@ -247,6 +245,7 @@ class AppState extends ChangeNotifier {
   void goView(int index) {
     print('=============================================');
     print('[FUNC CALL] AppState.goView');
+    print('* index : $index');
     print('=============================================');
     print('');
 
@@ -254,23 +253,23 @@ class AppState extends ChangeNotifier {
 
     switch (index) {
       case 0:
-        routeState.currentAction =
+        routeState.currentPageAction =
             PageAction(state: PageState.replaceAll, page: homePageConfig);
         break;
       case 1:
-        routeState.currentAction =
+        routeState.currentPageAction =
             PageAction(state: PageState.replaceAll, page: feedPageConfig);
         break;
       case 2:
-        routeState.currentAction =
+        routeState.currentPageAction =
             PageAction(state: PageState.replaceAll, page: recordPageConfig);
         break;
       case 3:
-        routeState.currentAction =
+        routeState.currentPageAction =
             PageAction(state: PageState.replaceAll, page: guidesPageConfig);
         break;
       case 4:
-        routeState.currentAction =
+        routeState.currentPageAction =
             PageAction(state: PageState.replaceAll, page: menuPageConfig);
         break;
     }
@@ -284,9 +283,9 @@ class AppState extends ChangeNotifier {
   }
 
   void goBack(dynamic result) {
-    routeState.currentAction = PageAction(
+    routeState.currentPageAction = PageAction(
         state: PageState.pop,
-        page: routeState.currentAction.page,
+        page: routeState.currentPageAction.page,
         result: result);
 
     print('=============================================');
@@ -303,7 +302,7 @@ class AppState extends ChangeNotifier {
   }
 
   void pushNavigation(PageConfiguration pageConfig) {
-    routeState.currentAction =
+    routeState.currentPageAction =
         PageAction(state: PageState.addPage, page: pageConfig);
 
     print('=============================================');

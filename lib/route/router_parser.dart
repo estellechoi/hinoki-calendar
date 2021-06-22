@@ -45,12 +45,12 @@ class AppRouteInformationParser
 
     // handle path param
     if (uri.pathSegments.length >= 2) {
-      final param = uri.pathSegments[1];
+      // tmp
+      // final param = uri.pathSegments[1];
 
       switch (path) {
         case recordPath:
-          return PageConfiguration.param(
-              'RecordBody', recordBodyPath, Pages.RecordBody, param, null);
+          return homePageConfig;
       }
     }
 

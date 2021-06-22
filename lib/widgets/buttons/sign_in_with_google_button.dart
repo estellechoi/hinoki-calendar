@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../store/auth_provider.dart';
 import './../buttons/hinoki_button.dart';
@@ -5,9 +6,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import '../styles/colors.dart' as colors;
 
+// typedef FutureCallback = Future<void> Function(dynamic arg);
+
 class SignInWithGoogleButton extends StatefulWidget {
   final VoidCallback onPressed;
   final ValueChanged<UserCredential?> onFinished;
+  // final FutureCallback onFinished;
   final bool fullWidth;
   final String toggledText;
 
@@ -22,42 +26,48 @@ class SignInWithGoogleButton extends StatefulWidget {
 }
 
 class _SignInWithGoogleButtonState extends State<SignInWithGoogleButton> {
-  Future signinWithGoogle(BuildContext context) async {
-    final UserCredential? authResult =
-        await context.read<AuthProvider>().signinWithGoogle();
+  Future<void> signinWithGoogle(AuthProvider authProvider) async {
+    final UserCredential? userCredential =
+        await authProvider.signinWithGoogle();
 
-    widget.onFinished(authResult);
+    print('=============================================');
+    print('[ASYNC DONE] AuthProvider.signinWithGoogle');
+    print('=============================================');
+    print('');
+
+    widget.onFinished(userCredential);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        HinokiButton(
-          label: 'Sign ${widget.toggledText} with Google',
-          fullWidth: widget.fullWidth,
-          color: 'black',
-          type: 'border',
-          onPressed: () {
-            widget.onPressed();
-            signinWithGoogle(context);
-          },
-        ),
-        Positioned(
-            left: 14,
-            top: 0,
-            bottom: 0,
-            child: Container(
-                width: 20,
-                height: 20,
-                child: Image(
-                  width: double.infinity,
-                  height: double.infinity,
-                  fit: BoxFit.contain,
-                  alignment: Alignment.center,
-                  image: AssetImage('static/google_icon.png'),
-                )))
-      ],
-    );
+    return Consumer<AuthProvider>(
+        builder: (context, authProvider, child) => Stack(
+              children: <Widget>[
+                HinokiButton(
+                  label: 'Sign ${widget.toggledText} with Google',
+                  fullWidth: widget.fullWidth,
+                  color: 'black',
+                  type: 'border',
+                  onPressed: () {
+                    widget.onPressed();
+                    signinWithGoogle(authProvider);
+                  },
+                ),
+                Positioned(
+                    left: 14,
+                    top: 0,
+                    bottom: 0,
+                    child: Container(
+                        width: 20,
+                        height: 20,
+                        child: Image(
+                          width: double.infinity,
+                          height: double.infinity,
+                          fit: BoxFit.contain,
+                          alignment: Alignment.center,
+                          image: AssetImage('static/google_icon.png'),
+                        )))
+              ],
+            ));
   }
 }

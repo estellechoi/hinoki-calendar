@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_app/widgets/spinners/hinoki_spinner.dart';
@@ -8,11 +9,12 @@ import 'package:flutter_app/store/route_state.dart';
 import 'package:provider/provider.dart';
 import '../store/auth_provider.dart';
 import 'package:health/health.dart';
-import './../utils/health_data.dart' as healthData;
+import '../utils/health_data_controller.dart';
 import '../store/route_state.dart';
 import '../store/app_state.dart';
 import '../widgets/styles/colors.dart' as colors;
 import '../mixins/common.dart' as mixins;
+import '../constants.dart' as constants;
 
 class MenuView extends StatefulWidget {
   @override
@@ -22,51 +24,56 @@ class MenuView extends StatefulWidget {
 class _MenuViewState extends State<MenuView> {
   List<HealthDataPoint> _healthDataList = const [];
 
-  AppState get appState => Provider.of<AppState>(context, listen: false);
-
-  Future<void> signout(BuildContext context) async {
+  Future<void> signout(AppState appState, AuthProvider authProvider) async {
     appState.startLoading();
 
     try {
-      await context.read<AuthProvider>().signout();
+      await authProvider.signout();
       await appState.logout();
 
-      appState.endLoading();
-      mixins.toast('Signed out!');
-      Future.delayed(
-          Duration(milliseconds: 1100), () => appState.goLoginView());
-    } catch (e) {
-      appState.endLoading();
-      mixins.toast('Failed to sign out.');
+      mixins.toast('Signed out');
 
+      Future.delayed(constants.loadingDelayDuration, () {
+        appState.endLoading();
+        appState.goLoginView();
+      });
+    } catch (e) {
       print('*********************************************');
       print(e);
       print('*********************************************');
       print('');
+
+      mixins.toast('Failed to sign out.');
+
+      Future.delayed(
+          constants.loadingDelayDuration, () => appState.endLoading());
     }
   }
 
-  Future<void> getAppleHealthKitData() async {
+  Future<void> getAppleHealthKitData(AppState appState) async {
     appState.startLoading();
 
+    HealthDataController _healthDataController =
+        HealthDataController(HealthFactory());
+
     List<HealthDataPoint>? healthDataList =
-        await healthData.fetchAppleHealthKit();
+        await _healthDataController.fetchHealthData();
 
-    print(healthDataList);
+    print('=============================================');
+    print('[ASYNC DONE] HealthDataController.fetchHealthData');
+    print('=============================================');
+    print('');
 
-    Future.delayed(Duration(milliseconds: 3000), () {
+    setState(() {
+      _healthDataList = healthDataList ?? const [];
       appState.endLoading();
-
-      setState(() {
-        _healthDataList = healthDataList ?? const [];
-      });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AppState>(
-        builder: (context, appState, child) => Stack(
+    return Consumer2<AppState, AuthProvider>(
+        builder: (context, appState, authProvider, child) => Stack(
               children: <Widget>[
                 ScaffoldLayout(
                     title: 'Profile',
@@ -78,13 +85,13 @@ class _MenuViewState extends State<MenuView> {
                         TextLabelButton(
                           label: 'Sign out',
                           onPressed: () {
-                            signout(context);
+                            signout(appState, authProvider);
                           },
                         ),
                         TextLabelButton(
                           label: 'Fetch HealthKit Data',
                           onPressed: () {
-                            getAppleHealthKitData();
+                            getAppleHealthKitData(appState);
                           },
                         ),
                         Container(

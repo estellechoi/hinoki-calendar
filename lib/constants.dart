@@ -7,46 +7,50 @@ import './widgets/styles/icons.dart' as icons;
 import './widgets/layouts/navigation_icon.dart';
 
 // Bottom Nav Items
-final String home = 'Home';
-final String feed = 'Review';
-final String record = 'Record';
-final String guides = 'Guide';
-final String menu = 'Profile';
+const String LABEL_HOME = 'Home';
+const String LABEL_REVIEW = 'Review';
+const String LABEL_RECORD = 'Record';
+const String LABEL_GUIDE = 'Guide';
+const String LABEL_PROFILE = 'Profile';
+
+const int loadingDelayMs = 2000;
+const Duration loadingDelayDuration = Duration(milliseconds: loadingDelayMs);
 
 final List<NavigationView> views = <NavigationView>[
   NavigationView(
       icon: icons.home,
-      label: home,
+      label: LABEL_HOME,
       // page: Pages.Home,
       navItemWidget: BottomNavigationBarItem(
           icon: NavigationIcon(
             icon: icons.home,
           ),
-          label: home)),
+          label: LABEL_HOME)),
   NavigationView(
       icon: icons.feed,
-      label: feed,
+      label: LABEL_REVIEW,
       // page: Pages.Feed,
       navItemWidget: BottomNavigationBarItem(
-          icon: NavigationIcon(icon: icons.feed), label: feed)),
+          icon: NavigationIcon(icon: icons.feed), label: LABEL_REVIEW)),
   NavigationView(
       icon: icons.record,
-      label: record,
+      label: LABEL_RECORD,
       // page: Pages.Record,
       navItemWidget: BottomNavigationBarItem(
-          icon: NavigationIcon(icon: icons.record), label: record)),
+          icon: NavigationIcon(icon: icons.record), label: LABEL_RECORD)),
   NavigationView(
       icon: icons.guides,
-      label: guides,
+      label: LABEL_GUIDE,
       // page: Pages.Guides,
       navItemWidget: BottomNavigationBarItem(
-          icon: NavigationIcon(icon: icons.guides, count: 0), label: guides)),
+          icon: NavigationIcon(icon: icons.guides, count: 0),
+          label: LABEL_GUIDE)),
   NavigationView(
       icon: icons.menu,
-      label: menu,
+      label: LABEL_PROFILE,
       // page: Pages.Menu,
       navItemWidget: BottomNavigationBarItem(
-          icon: NavigationIcon(icon: icons.menu), label: menu)),
+          icon: NavigationIcon(icon: icons.menu), label: LABEL_PROFILE)),
 ];
 
 final List<CalendarEvent> dummyEvents = [

@@ -4,10 +4,10 @@ import '../route/pages.dart';
 import '../api/config.dart' as config;
 
 class RouteState {
-  PageAction _currentAction = PageAction(page: homePageConfig);
-  PageAction get currentAction => _currentAction;
-  set currentAction(PageAction action) {
-    _currentAction = action;
+  PageAction _currentPageAction = PageAction(page: homePageConfig);
+  PageAction get currentPageAction => _currentPageAction;
+  set currentPageAction(PageAction action) {
+    _currentPageAction = action;
   }
 
   String? _routeParam;

@@ -20,6 +20,8 @@ import '../../widgets/form_elements/common/shadowed_bundle.dart';
 import '../../widgets/styles/colors.dart' as colors;
 import '../../widgets/styles/textstyles.dart' as textstyles;
 import '../../widgets/styles/borders.dart' as borders;
+import '../../mixins/common.dart' as mixins;
+import '../../constants.dart' as constants;
 
 class SignupMethods extends StatefulWidget {
   final VoidCallback onToggled;
@@ -32,36 +34,114 @@ class SignupMethods extends StatefulWidget {
 }
 
 class _SignupMethodsState extends State<SignupMethods> {
-  void _handleFirebaseAuthStart(BuildContext context) {
-    final AppState appState = context.read<AppState>();
+  void _handleFirebaseAuthStart(AppState appState) {
+    // final AppState appState = context.read<AppState>();
     appState.startLoading();
+
+    print('=============================================');
+    print('[FUNC CALL] SignupMethods._handleFirebaseAuthStart');
+    print('=============================================');
+    print('');
   }
 
-  void _handleFirebaseAuthFinish(UserCredential? authResult) {
-    // need context parameter ?
-    final AppState appState = context.read<AppState>();
-    appState.endLoading();
+  Future<void> _handleFirebaseAuthFinish(
+      AppState appState, UserCredential? userCredential) async {
+    print('=============================================');
+    print('[FUNC CALL] SignupMethods._handleFirebaseAuthFinish');
+    print('=============================================');
+    print('');
 
-    print('---------------------------------------');
-    print('Firebase login finished : UserCredential');
-    print(authResult);
-    print('---------------------------------------');
+    if (userCredential == null) {
+      mixins.toast('Sign ${widget.isSignin ? 'in' : 'up'} Process Terminated');
 
-    AppUser appUser = AppUser(
-        id: 1,
-        accessToken: '',
-        name: 'Test User',
-        birthday: '',
-        gender: 0,
-        phoneNum: '01000000000');
-    appState.login(appUser);
+      Future.delayed(
+          constants.loadingDelayDuration, () => appState.endLoading());
 
-    Navigator.pop(context);
+      return;
+    }
+
+    final AdditionalUserInfo? additionalUserInfo =
+        userCredential.additionalUserInfo;
+    final User? user = userCredential.user;
+    final AuthCredential? authCredential = userCredential.credential;
+
+    if (authCredential != null) {
+      print('=============================================');
+      print('* Provider Id : ${authCredential.providerId}');
+      print('=============================================');
+      print('');
+    }
+
+    if (additionalUserInfo != null) {
+      print('=============================================');
+      print('* is New User : ${additionalUserInfo.isNewUser}');
+      print('* Profile Picture : ${additionalUserInfo.profile?['picture']}');
+      print('* Family Name : ${additionalUserInfo.profile?['family_name']}');
+      print('* Given Name : ${additionalUserInfo.profile?['given_name']}');
+      print('* Email : ${additionalUserInfo.profile?['email']}');
+      print(
+          '* Email Verified : ${additionalUserInfo.profile?['email_verified']}');
+      print('=============================================');
+      print('');
+    }
+
+    if (user != null) {
+      print('=============================================');
+      print('* Display Name : ${user.displayName}');
+      print('* is Anonymous : ${user.isAnonymous}');
+      print('* Email Verified : ${user.emailVerified}');
+      print('* Creation Time : ${user.metadata.creationTime}');
+      print('* Last Sign In Time : ${user.metadata.lastSignInTime}');
+      print('=============================================');
+      print('');
+    }
+
+    try {
+      final bool isNewUser = additionalUserInfo?.isNewUser ?? true;
+
+      if (isNewUser) {
+        // 자동 회원가입 API Call ...
+
+      } else {
+        // id, pw 없이 자동 로그인 API Call ...
+      }
+
+      AppUser appUser = AppUser(
+          id: 1,
+          accessToken: '',
+          name: 'Test User',
+          birthday: '',
+          gender: 0,
+          phoneNum: '01000000000');
+
+      await appState.login(appUser);
+
+      if (widget.isSignin && isNewUser)
+        mixins.toast('Auto-signed up as could not find your account');
+      else if (!widget.isSignin && !isNewUser)
+        mixins.toast('Already signed up !');
+      else
+        mixins.toast('Signed ${widget.isSignin ? 'in' : 'up'}');
+
+      Future.delayed(constants.loadingDelayDuration, () {
+        appState.endLoading();
+        Navigator.pop(context);
+        appState.goHomeView();
+      });
+    } catch (e) {
+      print('*********************************************');
+      print(e);
+      print('*********************************************');
+      print('');
+
+      mixins.toast('Failed to sign ${widget.isSignin ? 'in' : 'up'} .');
+
+      Future.delayed(
+          constants.loadingDelayDuration, () => appState.endLoading());
+    }
   }
 
-  AppState get appState => Provider.of<AppState>(context, listen: false);
-
-  void openSignupForm(BuildContext context) {
+  void openSignupForm(AppState appState) {
     Navigator.of(context).push(
       MaterialPageRoute(
           builder: (context) => SignupForm(
@@ -69,6 +149,7 @@ class _SignupMethodsState extends State<SignupMethods> {
               onSuccess: () {
                 Navigator.pop(context);
                 Navigator.pop(context);
+                appState.goHomeView();
               })),
     );
   }
@@ -104,9 +185,12 @@ class _SignupMethodsState extends State<SignupMethods> {
                                 fullWidth: true,
                                 toggledText: toggledText,
                                 onPressed: () {
-                                  _handleFirebaseAuthStart(context);
+                                  _handleFirebaseAuthStart(appState);
                                 },
-                                onFinished: _handleFirebaseAuthFinish)),
+                                onFinished: (userCredential) {
+                                  _handleFirebaseAuthFinish(
+                                      appState, userCredential);
+                                })),
                         Platform.isIOS
                             ? Container(
                                 margin: EdgeInsets.only(bottom: 20),
@@ -114,9 +198,12 @@ class _SignupMethodsState extends State<SignupMethods> {
                                     fullWidth: true,
                                     toggledText: toggledText,
                                     onPressed: () {
-                                      _handleFirebaseAuthStart(context);
+                                      _handleFirebaseAuthStart(appState);
                                     },
-                                    onFinished: _handleFirebaseAuthFinish))
+                                    onFinished: (userCredential) {
+                                      _handleFirebaseAuthFinish(
+                                          appState, userCredential);
+                                    }))
                             : Container(),
                         Container(
                             margin: EdgeInsets.only(bottom: 40),
@@ -126,7 +213,7 @@ class _SignupMethodsState extends State<SignupMethods> {
                               color: 'black',
                               label: 'Sign $toggledText with Email',
                               onPressed: () {
-                                openSignupForm(context);
+                                openSignupForm(appState);
                               },
                             )),
                         Container(

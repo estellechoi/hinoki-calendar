@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../widgets/styles/colors.dart' as colors;
 import '../../animations/delay_tween.dart';
@@ -18,6 +19,7 @@ class HinokiSpinner extends StatefulWidget {
 class _HinokiSpinnerState extends State<HinokiSpinner>
     with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   late final AnimationController _animationController;
+  late final Timer _timer;
   bool _isSpinning = false;
 
   @override
@@ -29,7 +31,7 @@ class _HinokiSpinnerState extends State<HinokiSpinner>
           ..repeat();
     // ..forward();
 
-    Future.delayed(Duration(milliseconds: 50), () {
+    _timer = Timer(Duration(milliseconds: 50), () {
       setState(() {
         _isSpinning = true;
       });
@@ -38,15 +40,8 @@ class _HinokiSpinnerState extends State<HinokiSpinner>
 
   @override
   void dispose() {
-    // setState(() {
-    //   _isSpinning = false;
-    // });
-
+    _timer.cancel();
     _animationController.dispose();
-
-    // Future.delayed(Duration(milliseconds: 50), () {
-    // });
-
     super.dispose();
   }
 

@@ -91,7 +91,7 @@ void showBottomModal(
 }
 
 void goArticle(int id, BuildContext context) {
-  context
-      .read<AppState>()
-      .pushNavigation(fetchGuideArticlePageConfig(id.toString()));
+  // context
+  //     .read<AppState>()
+  //     .pushNavigation(fetchGuideArticlePageConfig(id.toString()));
 }

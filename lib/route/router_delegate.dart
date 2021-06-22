@@ -233,42 +233,43 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
   List<Page> buildPages() {
     print('=============================================');
     print('[FUNC CALL] AppRouterDelegate.buildPages');
+    print('* Current Action : ${appState.routeState.currentPageAction.state}');
     print('=============================================');
     print('');
 
-    switch (appState.routeState.currentAction.state) {
+    switch (appState.routeState.currentPageAction.state) {
       case PageState.none:
         break;
       case PageState.addPage:
-        _setPageAction(appState.routeState.currentAction);
-        addPage(appState.routeState.currentAction.page);
+        _setPageAction(appState.routeState.currentPageAction);
+        addPage(appState.routeState.currentPageAction.page);
         break;
       case PageState.pop:
-        pop(appState.routeState.currentAction.result);
+        pop(appState.routeState.currentPageAction.result);
         break;
       case PageState.replace:
         // 6
-        _setPageAction(appState.routeState.currentAction);
-        replace(appState.routeState.currentAction.page);
+        _setPageAction(appState.routeState.currentPageAction);
+        replace(appState.routeState.currentPageAction.page);
         break;
       case PageState.replaceAll:
         // 7
-        _setPageAction(appState.routeState.currentAction);
-        replaceAll(appState.routeState.currentAction.page);
+        _setPageAction(appState.routeState.currentPageAction);
+        replaceAll(appState.routeState.currentPageAction.page);
         break;
       case PageState.addWidget:
         // 8
-        _setPageAction(appState.routeState.currentAction);
-        pushWidget(appState.routeState.currentAction.widget,
-            appState.routeState.currentAction.page);
+        _setPageAction(appState.routeState.currentPageAction);
+        pushWidget(appState.routeState.currentPageAction.widget,
+            appState.routeState.currentPageAction.page);
         break;
       case PageState.addAll:
         // 9
-        addAll(appState.routeState.currentAction.pages);
+        addAll(appState.routeState.currentPageAction.pages);
         break;
     }
 
-    // appState.resetrouteState.currentAction();
+    // appState.resetrouteState.currentPageAction();
     // _pages should be List<MaterialPage> with key and child
     return List.of(_pages);
   }

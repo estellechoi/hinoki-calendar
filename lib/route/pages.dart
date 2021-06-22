@@ -107,17 +107,17 @@ final PageConfiguration recordBodyPageConfig = PageConfiguration(
     page: Pages.RecordBody,
     currentPageAction: null);
 
-PageConfiguration fetchRecordBodyPageConfig(String param) {
-  return PageConfiguration.param(
-      'RecordBody', recordBodyPath, Pages.RecordBody, param, null);
-}
+// PageConfiguration fetchRecordBodyPageConfig(String param) {
+//   return PageConfiguration.param(
+//       'RecordBody', recordBodyPath, Pages.RecordBody, param, null);
+// }
 
-PageConfiguration fetchGuideCategoryPageConfig(String param) {
-  return PageConfiguration.param('GuideCategoryDetails',
-      guideCategoryDetailsPath, Pages.GuideCategoryDetails, param, null);
-}
+// PageConfiguration fetchGuideCategoryPageConfig(String param) {
+//   return PageConfiguration.param('GuideCategoryDetails',
+//       guideCategoryDetailsPath, Pages.GuideCategoryDetails, param, null);
+// }
 
-PageConfiguration fetchGuideArticlePageConfig(String param) {
-  return PageConfiguration.param(
-      'GuideArticle', guideArticlePath, Pages.GuideArticle, param, null);
-}
+// PageConfiguration fetchGuideArticlePageConfig(String param) {
+//   return PageConfiguration.param(
+//       'GuideArticle', guideArticlePath, Pages.GuideArticle, param, null);
+// }
