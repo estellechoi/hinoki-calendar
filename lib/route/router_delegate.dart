@@ -2,21 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'pages.dart';
 import '../store/app_state.dart';
-import '../views/unknown_view.dart';
-import '../views/login_view.dart';
-import '../views/home_view.dart';
-import '../views/feed_view.dart';
-import '../views/guides_view.dart';
-import '../views/record_view.dart';
-import '../views/menu_view.dart';
-import '../views/record/record_body.dart';
-import '../views/guides/guide_category.dart';
-import '../views/guides/guide_article.dart';
 
 // Configutaion for each route
 // * PopNavigatorRouterDelegateMixin : lets remove pages, requires navigator key
-class AppRouterDelegate extends RouterDelegate<PageConfiguration>
-    with ChangeNotifier, PopNavigatorRouterDelegateMixin<PageConfiguration> {
+class AppRouterDelegate extends RouterDelegate<PageAction>
+    with ChangeNotifier, PopNavigatorRouterDelegateMixin<PageAction> {
   @override
   final GlobalKey<NavigatorState> navigatorKey;
 
@@ -49,9 +39,8 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
 
   // called when route information change is detected
   // current means the topmost page (_pages.last)
-  @override
-  PageConfiguration get currentConfiguration =>
-      _pages.last.arguments as PageConfiguration;
+  // @override
+  // PageAction get currentConfiguration => _pages.last.arguments as PageAction;
 
   // public getter
   List<MaterialPage> get pages => List.unmodifiable(_pages);
@@ -90,187 +79,110 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
     return Future.value(false);
   }
 
-  // Material Page
-  MaterialPage _createPage(Widget child, PageConfiguration pageConfig) {
+  MaterialPage _createPage(PageConfiguration pageConfig) {
     return MaterialPage(
-        child: child,
+        child: pageConfig.widget,
         // key: Key(pageConfig.name),
         name: pageConfig.path,
         arguments: pageConfig);
   }
 
-  void _addPageData(Widget child, PageConfiguration pageConfig) {
+  void _addPageData(PageConfiguration pageConfig) {
     print('=============================================');
     print('[FUNC CALL] AppRouterDelegate._addPageData');
     print('=============================================');
     print('');
 
-    _pages.add(_createPage(child, pageConfig));
-
-    // if has some param
-    // appState.setRouteParam(pageConfig.param);
+    _pages.add(_createPage(pageConfig));
   }
 
-  void addPage(PageConfiguration pageConfig) {
+  void addPage(PageAction pageAction) {
     print('=============================================');
     print('[FUNC CALL] AppRouterDelegate.addPage');
     print('=============================================');
-    print('pageConfig.name : ${pageConfig.name}');
-    print('pageConfig.param : ${pageConfig.param}');
+    print('');
+
+    print('=============================================');
+    print('* Page Name : ${pageAction.pageConfig.name}');
+    print('* Page Action Param : ${pageAction.param}');
     print('=============================================');
     print('');
 
     final shouldAddPage = _pages.isEmpty ||
-        (_pages.last.arguments as PageConfiguration).page != pageConfig.page;
+        (_pages.last.arguments as PageConfiguration).page !=
+            pageAction.pageConfig.page;
+
+    print('=============================================');
+    print('* Should Add Page : $shouldAddPage');
+    print('=============================================');
+    print('');
 
     if (shouldAddPage) {
-      switch (pageConfig.page) {
-        case Pages.Login:
-          _addPageData(LoginView(), loginPageConfig);
-          break;
-        case Pages.Home:
-          _addPageData(HomeView(), homePageConfig);
-          break;
-        case Pages.Feed:
-          _addPageData(FeedView(), feedPageConfig);
-          break;
-        case Pages.Guides:
-          _addPageData(GuidesView(), guidesPageConfig);
-          break;
-        case Pages.Record:
-          _addPageData(RecordView(), recordPageConfig);
-          break;
-        case Pages.Menu:
-          _addPageData(MenuView(), menuPageConfig);
-          break;
-        case Pages.RecordBody:
-          _addPageData(RecordBody(), pageConfig);
-          break;
-        case Pages.GuideCategoryDetails:
-          _addPageData(GuideCategoryDetails(), pageConfig);
-          break;
-        case Pages.GuideArticle:
-          _addPageData(GuideArticle(), pageConfig);
-          break;
-        default:
-          _addPageData(UnknownView(), PageConfiguration.unknown());
-          break;
+      if (Pages.values.contains(pageAction.pageConfig.page)) {
+        appState.routeState.routeParam = pageAction.param;
+        _addPageData(pageAction.pageConfig);
+      } else {
+        _addPageData(PageConfiguration.unknown());
       }
     }
   }
 
   // modifying pages
-  void replaceAll(PageConfiguration pageConfig) {
+  void replaceAll(PageAction pageAction) {
     print('=============================================');
     print('[FUNC CALL] AppRouterDelegate.replaceAll');
     print('=============================================');
     print('');
 
-    setNewRoutePath(pageConfig);
+    setNewRoutePath(pageAction);
   }
 
-  void replace(PageConfiguration pageConfig) {
+  void replace(PageAction pageAction) {
     if (_pages.isNotEmpty) {
       _pages.removeLast();
     }
-    addPage(pageConfig);
+    addPage(pageAction);
   }
 
-  void setPath(List<MaterialPage> path) {
-    _pages.clear();
-    _pages.addAll(path);
-  }
-
-  void push(PageConfiguration pageConfig) {
-    addPage(pageConfig);
-  }
-
-  void pushWidget(Widget? child, PageConfiguration pageConfig) {
-    if (child != null) _addPageData(child, pageConfig);
-  }
-
-  void addAll(List<PageConfiguration>? routes) {
-    if (routes != null) {
-      _pages.clear();
-      routes.forEach((route) {
-        addPage(route);
-      });
-    }
-  }
-
-  // _setPageAction
-  void _setPageAction(PageAction action) {
-    switch (action.page.page) {
-      case Pages.Login:
-        loginPageConfig.currentPageAction = action;
-        break;
-      case Pages.Home:
-        homePageConfig.currentPageAction = action;
-        break;
-      case Pages.Feed:
-        feedPageConfig.currentPageAction = action;
-        break;
-      case Pages.Guides:
-        guidesPageConfig.currentPageAction = action;
-        break;
-      case Pages.Record:
-        recordPageConfig.currentPageAction = action;
-        break;
-      case Pages.Menu:
-        menuPageConfig.currentPageAction = action;
-        break;
-      case Pages.RecordBody:
-        action.page.currentPageAction = action;
-        break;
-      case Pages.GuideArticle:
-        action.page.currentPageAction = action;
-        break;
-      default:
-        break;
-    }
+  void push(PageAction pageAction) {
+    addPage(pageAction);
   }
 
   List<Page> buildPages() {
     print('=============================================');
     print('[FUNC CALL] AppRouterDelegate.buildPages');
-    print('* Current Action : ${appState.routeState.currentPageAction.state}');
     print('=============================================');
     print('');
 
-    switch (appState.routeState.currentPageAction.state) {
+    final PageAction pageAction = appState.routeState.currentPageAction;
+
+    print('=============================================');
+    print('* Page State : ${pageAction.pageState}');
+    print('* Page : ${pageAction.pageConfig.page}');
+    print('* Page Name : ${pageAction.pageConfig.name}');
+    print('* Page is Unknown : ${pageAction.pageConfig.isUnknown}');
+    print('=============================================');
+    print('');
+
+    switch (pageAction.pageState) {
       case PageState.none:
         break;
       case PageState.addPage:
-        _setPageAction(appState.routeState.currentPageAction);
-        addPage(appState.routeState.currentPageAction.page);
+        addPage(pageAction);
         break;
       case PageState.pop:
-        pop(appState.routeState.currentPageAction.result);
+        pop(pageAction);
         break;
       case PageState.replace:
         // 6
-        _setPageAction(appState.routeState.currentPageAction);
-        replace(appState.routeState.currentPageAction.page);
+        replace(pageAction);
         break;
       case PageState.replaceAll:
         // 7
-        _setPageAction(appState.routeState.currentPageAction);
-        replaceAll(appState.routeState.currentPageAction.page);
-        break;
-      case PageState.addWidget:
-        // 8
-        _setPageAction(appState.routeState.currentPageAction);
-        pushWidget(appState.routeState.currentPageAction.widget,
-            appState.routeState.currentPageAction.page);
-        break;
-      case PageState.addAll:
-        // 9
-        addAll(appState.routeState.currentPageAction.pages);
+        replaceAll(pageAction);
         break;
     }
 
-    // appState.resetrouteState.currentPageAction();
-    // _pages should be List<MaterialPage> with key and child
     return List.of(_pages);
   }
 
@@ -288,20 +200,25 @@ class AppRouterDelegate extends RouterDelegate<PageConfiguration>
 
   // handles the routing when user enters URL in the browser
   @override
-  Future<void> setNewRoutePath(PageConfiguration pageConfig) {
+  Future<void> setNewRoutePath(PageAction pageAction) {
     print('=============================================');
     print('[FUNC CALL] AppRouterDelegate.setNewRoutePath');
-    print('=============================================');
-    print('pageConfig.name : ${pageConfig.name}');
+    print('* Page Name : ${pageAction.pageConfig.name}');
     print('=============================================');
     print('');
 
     final shouldAddPage = _pages.isEmpty ||
-        (_pages.last.arguments as PageConfiguration).page != pageConfig.page;
+        (_pages.last.arguments as PageConfiguration).page !=
+            pageAction.pageConfig.page;
+
+    print('=============================================');
+    print('* should Add Page : $shouldAddPage');
+    print('=============================================');
+    print('');
 
     if (shouldAddPage) {
       _pages.clear();
-      addPage(pageConfig);
+      addPage(pageAction);
     }
 
     return SynchronousFuture(null);

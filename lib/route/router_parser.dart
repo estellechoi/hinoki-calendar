@@ -68,8 +68,8 @@ class AppRouteInformationParser
         return recordPageConfig;
       case menuPath:
         return menuPageConfig;
-      case recordPath:
-        return recordBodyPageConfig;
+      // case recordPath:
+      //   return recordBodyPageConfig;
       default:
         return PageConfiguration.unknown();
     }
@@ -96,9 +96,9 @@ class AppRouteInformationParser
         return const RouteInformation(location: recordPath);
       case Pages.Menu:
         return const RouteInformation(location: menuPath);
-      case Pages.RecordBody:
-        String param = pageConfig.param == null ? '' : '/${pageConfig.param}';
-        return RouteInformation(location: recordBodyPath + param);
+      // case Pages.RecordBody:
+      //   String param = pageConfig.param == null ? '' : '/${pageConfig.param}';
+      //   return RouteInformation(location: recordBodyPath + param);
       default:
         return const RouteInformation(location: unknownPath);
     }

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/route/pages.dart';
 import '../route/pages.dart';
-import '../api/config.dart' as config;
 
 class RouteState {
-  PageAction _currentPageAction = PageAction(page: homePageConfig);
+  PageAction _currentPageAction =
+      PageAction(pageState: PageState.addPage, pageConfig: homePageConfig);
   PageAction get currentPageAction => _currentPageAction;
   set currentPageAction(PageAction action) {
     _currentPageAction = action;

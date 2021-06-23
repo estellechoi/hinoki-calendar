@@ -191,23 +191,6 @@ class AppState extends ChangeNotifier {
     }
   }
 
-  // routeState mutating
-  // void setRouteParam(String? param) {
-  //   routeState.routeParam = param;
-
-  //   print('=============================================');
-  //   print('[FUNC CALL] AppState.setRouteParam');
-  //   print('=============================================');
-  //   print('');
-
-  //   print('=============================================');
-  //   print('notifyListeners');
-  //   print('=============================================');
-  //   print('');
-
-  //   notifyListeners();
-  // }
-
   void goHomeView() {
     print('=============================================');
     print('[FUNC CALL] AppState.goHomeView');
@@ -215,7 +198,7 @@ class AppState extends ChangeNotifier {
     print('');
 
     routeState.currentPageAction =
-        PageAction(state: PageState.replaceAll, page: homePageConfig);
+        PageAction(pageState: PageState.replaceAll, pageConfig: homePageConfig);
 
     print('=============================================');
     print('notifyListeners');
@@ -226,8 +209,8 @@ class AppState extends ChangeNotifier {
   }
 
   void goLoginView() {
-    routeState.currentPageAction =
-        PageAction(state: PageState.replaceAll, page: loginPageConfig);
+    routeState.currentPageAction = PageAction(
+        pageState: PageState.replaceAll, pageConfig: loginPageConfig);
 
     print('=============================================');
     print('[FUNC CALL] AppState.goLoginView');
@@ -253,24 +236,24 @@ class AppState extends ChangeNotifier {
 
     switch (index) {
       case 0:
-        routeState.currentPageAction =
-            PageAction(state: PageState.replaceAll, page: homePageConfig);
+        routeState.currentPageAction = PageAction(
+            pageState: PageState.replaceAll, pageConfig: homePageConfig);
         break;
       case 1:
-        routeState.currentPageAction =
-            PageAction(state: PageState.replaceAll, page: feedPageConfig);
+        routeState.currentPageAction = PageAction(
+            pageState: PageState.replaceAll, pageConfig: feedPageConfig);
         break;
       case 2:
-        routeState.currentPageAction =
-            PageAction(state: PageState.replaceAll, page: recordPageConfig);
+        routeState.currentPageAction = PageAction(
+            pageState: PageState.replaceAll, pageConfig: recordPageConfig);
         break;
       case 3:
-        routeState.currentPageAction =
-            PageAction(state: PageState.replaceAll, page: guidesPageConfig);
+        routeState.currentPageAction = PageAction(
+            pageState: PageState.replaceAll, pageConfig: guidesPageConfig);
         break;
       case 4:
-        routeState.currentPageAction =
-            PageAction(state: PageState.replaceAll, page: menuPageConfig);
+        routeState.currentPageAction = PageAction(
+            pageState: PageState.replaceAll, pageConfig: menuPageConfig);
         break;
     }
 
@@ -284,9 +267,9 @@ class AppState extends ChangeNotifier {
 
   void goBack(dynamic result) {
     routeState.currentPageAction = PageAction(
-        state: PageState.pop,
-        page: routeState.currentPageAction.page,
-        result: result);
+      pageState: PageState.pop,
+      pageConfig: routeState.currentPageAction.pageConfig,
+    );
 
     print('=============================================');
     print('[FUNC CALL] AppState.goBack');
@@ -303,7 +286,7 @@ class AppState extends ChangeNotifier {
 
   void pushNavigation(PageConfiguration pageConfig) {
     routeState.currentPageAction =
-        PageAction(state: PageState.addPage, page: pageConfig);
+        PageAction(pageState: PageState.addPage, pageConfig: pageConfig);
 
     print('=============================================');
     print('[FUNC CALL] AppState.pushNavigation');

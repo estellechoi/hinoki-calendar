@@ -185,7 +185,7 @@ class _RecordViewState extends State<RecordView> {
   }
 
   void _goRecordBody(String date) {
-    appState.pushNavigation(fetchRecordBodyPageConfig(date));
+    // appState.pushNavigation(fetchRecordBodyPageConfig(date));
 
     // how to get return data when the pushed nav popped ?
   }

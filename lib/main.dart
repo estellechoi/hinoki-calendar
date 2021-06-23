@@ -62,7 +62,8 @@ class _MyAppState extends State<MyApp> {
 
     // AppRouteDelegate
     _routerDelegate = AppRouterDelegate(_appState);
-    _routerDelegate.setNewRoutePath(homePageConfig);
+    _routerDelegate.setNewRoutePath(
+        PageAction(pageState: PageState.addPage, pageConfig: homePageConfig));
 
     // AppRouteInformationParser
     _routeInformationParser = AppRouteInformationParser(_appState);
